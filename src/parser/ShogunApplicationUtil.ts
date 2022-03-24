@@ -13,8 +13,6 @@ import {
   ProjectionLike
 } from 'ol/proj';
 
-// import { DateTime } from 'luxon';
-
 import { UrlUtil } from '@terrestris/base-util/dist/UrlUtil/UrlUtil';
 
 import ProjectionUtil from '@terrestris/ol-util/dist/ProjectionUtil/ProjectionUtil';
@@ -26,7 +24,6 @@ import Layer from '../model/Layer';
 import LayerService from '../service/LayerService';
 
 // TODO Make base path configurable
-// TODO Make JSON fields configurable
 const layerService = new LayerService();
 
 class ShogunApplicationUtil {
@@ -125,10 +122,10 @@ class ShogunApplicationUtil {
       return await this.parseWMTSLayer(layer, projection);
     } else if (layer.type === 'WMS') {
       return this.parseImageLayer(layer);
-    } else if (layer.type === 'TILEWMS' || layer.type === 'WMSTime') {
+    } else if (layer.type === 'TILEWMS') {
       return this.parseTileLayer(layer, projection);
     } else {
-      throw new Error('Currently only WMTS, WMS, TILEWMS and WMSTime layers are supported.');
+      throw new Error('Currently only WMTS, WMS and TILEWMS layers are supported.');
     }
   }
 
@@ -141,33 +138,21 @@ class ShogunApplicationUtil {
     const {
       url,
       layerNames,
-      // requestWithTiled,
-      // transparent = true,
       attribution,
-      // timeFormat,
       legendUrl,
-      // startDate,
-      // endDate,
       tileSize = 256,
       tileOrigin,
       resolutions
     } = sourceConfig || {};
 
     const {
-      // opacity,
       hoverable,
       searchable,
-      // searchConfig,
       propertyConfig,
-      // hoverTemplate,
       minResolution,
-      // className,
       crossOrigin,
       maxResolution,
-      // hideLegendInPrint
     } = clientConfig || {};
-
-    // const defaultFormat = timeFormat || 'YYYY-MM-DD';
 
     let tileGrid;
     if (tileSize && resolutions && tileOrigin) {
@@ -185,40 +170,23 @@ class ShogunApplicationUtil {
       projection,
       params: {
         'LAYERS': layerNames
-        // 'TILED': requestWithTiled,
-        // 'TRANSPARENT': transparent
       },
       crossOrigin
     });
 
-    if (layer.type === 'WMSTime') {
-      // source.getParams().TIME = DateTime.now().toFormat(defaultFormat);
-    }
-
     const tileLayer = new OlTileLayer({
       source,
-      // opacity,
       minResolution,
       maxResolution
-      // className
     });
 
     tileLayer.set('shogunId', layer.id);
     tileLayer.set('name', layer.name);
     tileLayer.set('hoverable', hoverable);
-    // tileLayer.set('hoverTemplate', hoverTemplate);
     tileLayer.set('type', layer.type);
     tileLayer.set('legendUrl', legendUrl);
-    // tileLayer.set('timeFormat', defaultFormat);
     tileLayer.set('searchable', searchable);
-    // tileLayer.set('searchConfig', searchConfig);
     tileLayer.set('propertyConfig', propertyConfig);
-    // tileLayer.set('hideLegendInPrint', hideLegendInPrint);
-
-    if (layer.type === 'WMSTime') {
-      // tileLayer.set('startDate', startDate ? DateTime.fromISO(startDate).toFormat(defaultFormat) : undefined);
-      // tileLayer.set('endDate', endDate ? DateTime.fromISO(endDate).toFormat(defaultFormat) : undefined);
-    }
 
     return tileLayer;
   }
@@ -232,15 +200,10 @@ class ShogunApplicationUtil {
     } = layer.sourceConfig;
 
     const {
-      // opacity,
       hoverable,
-      // hoverTemplate,
       crossOrigin,
-      // className,
       searchable,
-      // searchConfig,
       propertyConfig,
-      // hideLegendInPrint
     } = layer.clientConfig;
 
     const source = new OlImageWMS({
@@ -254,21 +217,16 @@ class ShogunApplicationUtil {
     });
 
     const imageLayer = new OlImageLayer({
-      source,
-      // opacity,
-      // className
+      source
     });
 
     imageLayer.set('shogunId', layer.id);
     imageLayer.set('name', layer.name);
     imageLayer.set('hoverable', hoverable);
-    // imageLayer.set('hoverTemplate', hoverTemplate);
     imageLayer.set('type', layer.type);
     imageLayer.set('legendUrl', legendUrl);
     imageLayer.set('searchable', searchable);
-    // imageLayer.set('searchConfig', searchConfig);
     imageLayer.set('propertyConfig', propertyConfig);
-    // imageLayer.set('hideLegendInPrint', hideLegendInPrint);
 
     return imageLayer;
   }
@@ -282,13 +240,9 @@ class ShogunApplicationUtil {
     } = layer.sourceConfig || {};
 
     const {
-      // opacity,
       searchable,
-      // searchConfig,
       propertyConfig,
       crossOrigin,
-      // className,
-      // hideLegendInPrint
     } = layer.clientConfig || {};
 
     const wmtsCapabilitiesParser = new OlWMTSCapabilities();
@@ -326,18 +280,14 @@ class ShogunApplicationUtil {
     const wmtsLayer = new OlTileLayer({
       source,
       visible: false
-      // opacity,
-      // className
     });
 
     wmtsLayer.set('shogunId', layer.id);
     wmtsLayer.set('name', layer.name);
     wmtsLayer.set('type', layer.type);
     wmtsLayer.set('searchable', searchable);
-    // wmtsLayer.set('searchConfig', searchConfig);
     wmtsLayer.set('propertyConfig', propertyConfig);
     wmtsLayer.set('legendUrl', legendUrl);
-    // wmtsLayer.set('hideLegendInPrint', hideLegendInPrint);
 
     return wmtsLayer;
   }
