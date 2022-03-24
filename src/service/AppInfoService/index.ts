@@ -1,4 +1,4 @@
-import CsrfUtil from '@terrestris/base-util/dist/CsrfUtil/CsrfUtil';
+import { getCsrfTokenHeader } from '../../getCsrfTokenHeader';
 
 import { AppInfo } from '../../model/AppInfo';
 
@@ -7,7 +7,7 @@ export interface AppInfoServiceOpts {
 };
 
 export class AppInfoService {
-  path: string;
+  private path: string;
 
   constructor(opts: AppInfoServiceOpts = {
     url: '/info/app'
@@ -15,14 +15,15 @@ export class AppInfoService {
     this.path = opts.url;
   }
 
-  async getAppInfo(requestOpts: RequestInit = {
-    method: 'GET',
-    headers: {
-      'X-XSRF-TOKEN': CsrfUtil.getCsrfValueFromCookie()
-    }
-  }): Promise<AppInfo> {
+  async getAppInfo(fetchOpts?: RequestInit): Promise<AppInfo> {
     try {
-      const response = await fetch(this.path, requestOpts);
+      const response = await fetch(this.path, {
+        method: 'GET',
+        headers: {
+          ...getCsrfTokenHeader()
+        },
+        ...fetchOpts
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error status: ${response.status}`);

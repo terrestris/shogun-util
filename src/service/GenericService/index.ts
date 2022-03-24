@@ -1,36 +1,28 @@
-import CsrfUtil from '@terrestris/base-util/dist/CsrfUtil/CsrfUtil';
+import { getCsrfTokenHeader } from '../../getCsrfTokenHeader';
 
 import BaseEntity from '../../model/BaseEntity';
 
-export type ReplacerFunction = (key: string, value: any) => any;
-
 export interface GenericServiceOpts {
   basePath: string;
-  replacer?: ReplacerFunction;
 };
 
 export abstract class GenericService<T extends BaseEntity> {
 
-  clazz: string;
+  private basePath: string;
 
-  basePath: string;
-
-  replacer: ReplacerFunction | undefined;
-
-  constructor(x: new (...newArgs: any[]) => T, opts: GenericServiceOpts) {
-    this.clazz = x.name;
+  constructor(opts: GenericServiceOpts) {
     this.basePath = opts.basePath;
-    this.replacer = opts.replacer;
   }
 
-  async findAll(requestOpts: RequestInit = {
-    method: 'GET',
-    headers: {
-      'X-XSRF-TOKEN': CsrfUtil.getCsrfValueFromCookie()
-    }
-  }): Promise<T[]> {
+  async findAll(fetchOpts?: RequestInit): Promise<T[]> {
     try {
-      const response = await fetch(this.basePath, requestOpts);
+      const response = await fetch(this.basePath, {
+        method: 'GET',
+        headers: {
+          ...getCsrfTokenHeader()
+        },
+        ...fetchOpts
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error status: ${response.status}`);
@@ -44,14 +36,15 @@ export abstract class GenericService<T extends BaseEntity> {
     }
   }
 
-  async findOne(id: string | number, requestOpts: RequestInit = {
-    method: 'GET',
-    headers: {
-      'X-XSRF-TOKEN': CsrfUtil.getCsrfValueFromCookie()
-    }
-  }): Promise<T> {
+  async findOne(id: string | number, fetchOpts?: RequestInit): Promise<T> {
     try {
-      const response = await fetch(`${this.basePath}/${id}`, requestOpts);
+      const response = await fetch(`${this.basePath}/${id}`, {
+        method: 'GET',
+        headers: {
+          ...getCsrfTokenHeader()
+        },
+        ...fetchOpts
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error status: ${response.status}`);
@@ -65,16 +58,17 @@ export abstract class GenericService<T extends BaseEntity> {
     }
   }
 
-  async add(t: T, requestOpts: RequestInit = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-XSRF-TOKEN': CsrfUtil.getCsrfValueFromCookie()
-    },
-    body: JSON.stringify(t, this.replacer)
-  }): Promise<T> {
+  async add(t: T, fetchOpts?: RequestInit): Promise<T> {
     try {
-      const response = await fetch(this.basePath, requestOpts);
+      const response = await fetch(this.basePath, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getCsrfTokenHeader()
+        },
+        body: JSON.stringify(t),
+        ...fetchOpts
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error status: ${response.status}`);
@@ -88,16 +82,17 @@ export abstract class GenericService<T extends BaseEntity> {
     }
   }
 
-  async update(t: T, requestOpts: RequestInit = {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-XSRF-TOKEN': CsrfUtil.getCsrfValueFromCookie()
-    },
-    body: JSON.stringify(t, this.replacer)
-  }): Promise<T> {
+  async update(t: T, fetchOpts: RequestInit): Promise<T> {
     try {
-      const response = await fetch(`${this.basePath}/${t.id}`, requestOpts);
+      const response = await fetch(`${this.basePath}/${t.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getCsrfTokenHeader()
+        },
+        body: JSON.stringify(t),
+        ...fetchOpts
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error status: ${response.status}`);
@@ -111,16 +106,17 @@ export abstract class GenericService<T extends BaseEntity> {
     }
   }
 
-  async updatePartial(t: Partial<T>, requestOpts: RequestInit = {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-XSRF-TOKEN': CsrfUtil.getCsrfValueFromCookie()
-    },
-    body: JSON.stringify(t, this.replacer)
-  }): Promise<T> {
+  async updatePartial(t: Partial<T>, fetchOpts?: RequestInit): Promise<T> {
     try {
-      const response = await fetch(`${this.basePath}/${t.id}`, requestOpts);
+      const response = await fetch(`${this.basePath}/${t.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getCsrfTokenHeader()
+        },
+        body: JSON.stringify(t),
+        ...fetchOpts
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error status: ${response.status}`);
@@ -134,14 +130,15 @@ export abstract class GenericService<T extends BaseEntity> {
     }
   }
 
-  async delete(id: string | number, requestOpts: RequestInit = {
-    method: 'DELETE',
-    headers: {
-      'X-XSRF-TOKEN': CsrfUtil.getCsrfValueFromCookie()
-    }
-  }): Promise<T> {
+  async delete(id: string | number, fetchOpts?: RequestInit): Promise<T> {
     try {
-      const response = await fetch(`${this.basePath}/${id}`, requestOpts);
+      const response = await fetch(`${this.basePath}/${id}`, {
+        method: 'DELETE',
+        headers: {
+          ...getCsrfTokenHeader()
+        },
+        ...fetchOpts
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error status: ${response.status}`);

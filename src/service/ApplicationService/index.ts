@@ -2,12 +2,12 @@ import GenericService, { GenericServiceOpts } from '../GenericService';
 
 import Application from '../../model/Application';
 
-export class ApplicationService extends GenericService<Application> {
+export class ApplicationService<T extends Application> extends GenericService<T> {
 
   constructor(opts: GenericServiceOpts = {
     basePath: '/applications'
   }) {
-    super(Application, opts);
+    super(opts);
   }
 
 }

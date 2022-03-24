@@ -1,13 +1,12 @@
+import Layer from '../../model/Layer';
 import GenericService, { GenericServiceOpts } from '../GenericService';
 
-import Layer from '../../model/Layer';
-
-export class LayerService extends GenericService<Layer> {
+export class LayerService<T extends Layer> extends GenericService<T> {
 
   constructor(opts: GenericServiceOpts = {
-    basePath: '/layers'
+    basePath: '/users'
   }) {
-    super(Layer, opts);
+    super(opts);
   }
 
 }
