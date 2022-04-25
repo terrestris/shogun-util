@@ -1,4 +1,4 @@
-import { getCsrfTokenHeader } from '../../getCsrfTokenHeader';
+import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
 
 // TODO: Make this generic and more specific
 export interface GraphQLQueryObject {

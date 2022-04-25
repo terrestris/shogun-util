@@ -1,4 +1,4 @@
-import { getCsrfTokenHeader } from '../../getCsrfTokenHeader';
+import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
 
 export class AuthService {
   async logout(url: string = '/sso/logout', requestOpts?: RequestInit): Promise<void> {

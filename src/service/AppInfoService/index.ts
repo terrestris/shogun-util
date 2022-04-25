@@ -1,4 +1,4 @@
-import { getCsrfTokenHeader } from '../../getCsrfTokenHeader';
+import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
 
 import { AppInfo } from '../../model/AppInfo';
 
