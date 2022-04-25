@@ -38,7 +38,15 @@ export class GraphQLService {
         ...fetchOpts
       });
 
+      if (!response.ok) {
+        throw new Error(`HTTP error status: ${response.status}`);
+      }
+
       const responseJson = await response.json() as GraphQLResponse<T>;
+
+      if (responseJson.errors?.length > 0) {
+        throw new Error(`Error response: ${responseJson.errors}`);
+      }
 
       return responseJson;
     } catch (error) {
