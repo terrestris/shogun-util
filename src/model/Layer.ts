@@ -29,17 +29,17 @@ export interface DefaultLayerClientConfig {
 
 export interface LayerArgs extends BaseEntityArgs {
   name: string;
-  clientConfig: DefaultLayerClientConfig;
+  clientConfig?: DefaultLayerClientConfig;
   sourceConfig: DefaultLayerSourceConfig;
-  features: FeatureCollection;
+  features?: FeatureCollection;
   type: LayerType;
 }
 
 export default class Layer extends BaseEntity {
   name: string;
-  clientConfig: DefaultLayerClientConfig;
+  clientConfig?: DefaultLayerClientConfig;
   sourceConfig: DefaultLayerSourceConfig;
-  features: FeatureCollection;
+  features?: FeatureCollection;
   type: LayerType;
 
   constructor({id, created, modified, clientConfig, features, name, sourceConfig, type}: LayerArgs) {
