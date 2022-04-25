@@ -1,16 +1,14 @@
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
 
-// TODO: Make this generic and more specific
 export interface GraphQLQueryObject {
   query: string;
   variables?: {
     [key: string]: any;
   };
-  operation?: null;
 };
 
 export interface GraphQLResponse<T> {
-  data: T;
+  data: T[];
   errors?: any;
 };
 
