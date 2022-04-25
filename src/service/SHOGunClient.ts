@@ -1,17 +1,18 @@
-import Application from './model/Application';
-import Layer from './model/Layer';
-import User from './model/User';
+import Application from '../model/Application';
+import Layer from '../model/Layer';
+import User from '../model/User';
 
-import ShogunApplicationUtil from './parser/ShogunApplicationUtil';
-
-import AppInfoService from './service/AppInfoService';
-import ApplicationService from './service/ApplicationService';
-import AuthService from './service/AuthService';
-import GraphQLService from './service/GraphQLService';
-import LayerService from './service/LayerService';
-import UserService from './service/UserService';
+import AppInfoService from './AppInfoService';
+import ApplicationService from './ApplicationService';
+import AuthService from './AuthService';
+import GraphQLService from './GraphQLService';
+import LayerService from './LayerService';
+import UserService from './UserService';
 
 export interface SHOGunClientOpts {
+  /**
+   * The URL to the SHOGun instance, e.g. '/api'. The default is to '/'.
+   */
   url: string;
 }
 
@@ -19,7 +20,9 @@ export class SHOGunClient {
 
   private basePath: string;
 
-  constructor(opts: SHOGunClientOpts) {
+  constructor(opts: SHOGunClientOpts = {
+    url: '/'
+  }) {
     this.basePath = opts.url;
   }
 
@@ -47,10 +50,6 @@ export class SHOGunClient {
 
   auth() {
     return new AuthService();
-  }
-
-  parse() {
-    return new ShogunApplicationUtil();
   }
 
   graphql() {
