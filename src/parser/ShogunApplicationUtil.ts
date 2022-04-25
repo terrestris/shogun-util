@@ -21,34 +21,39 @@ import { MapUtil } from '@terrestris/ol-util/dist/MapUtil/MapUtil';
 import Application, { DefaultLayerTree } from '../model/Application';
 import Layer from '../model/Layer';
 
-import LayerService from '../service/LayerService';
+import SHOGunClient from '../service/SHOGunClient';
+import Logger from '@terrestris/base-util/dist/Logger';
 
-// TODO Make base path configurable
-const layerService = new LayerService();
+export interface ShogunApplicationUtilOpts {
+  client?: SHOGunClient;
+}
 
-class ShogunApplicationUtil {
+class ShogunApplicationUtil<T extends Application, S extends Layer> {
 
-  async parseMapView(application: Application, additionalOpts: ViewOptions): Promise<OlView> {
+  private client: SHOGunClient | undefined;
+
+  constructor(opts?: ShogunApplicationUtilOpts) {
+    // TODO Default client?
+    this.client = opts?.client;
+  }
+
+  async parseMapView(application: T, additionalOpts?: ViewOptions): Promise<OlView> {
     // TODO Should this be called here?
     ProjectionUtil.initProj4Definitions(null);
 
     const mapView = application.clientConfig?.mapView;
 
-    if (!mapView) {
-      throw new Error('No mapView given');
-    }
-
-    const projection = mapView.projection || 'EPSG:3857';
-    const zoom = mapView.zoom || 0;
-    const resolutions = mapView.resolutions;
+    const projection = mapView?.projection || 'EPSG:3857';
+    const zoom = mapView?.zoom || 0;
+    const resolutions = mapView?.resolutions || [];
 
     let center;
-    if (mapView.center && mapView.center.length === 2) {
+    if (mapView?.center && mapView.center.length === 2) {
       center = fromLonLat([mapView.center[0], mapView.center[1]], projection);
     }
 
     let extent;
-    if (mapView.extent && mapView.extent.length === 4) {
+    if (mapView?.extent && mapView.extent.length === 4) {
       const ll = fromLonLat([mapView.extent[0], mapView.extent[1]], projection);
       const ur = fromLonLat([mapView.extent[2], mapView.extent[3]], projection);
       extent = [
@@ -71,8 +76,12 @@ class ShogunApplicationUtil {
     return view;
   }
 
-  async parseLayerTree(application: Application, projection?: ProjectionLike) {
+  async parseLayerTree(application: T, projection?: ProjectionLike) {
     const layerTree = application.layerTree;
+
+    if (!layerTree) {
+      return;
+    }
 
     const nodes = await this.parseNodes(layerTree.children, projection);
 
@@ -91,7 +100,14 @@ class ShogunApplicationUtil {
       if (node.children) {
         collection.push(await this.parseFolder(node, projection));
       } else {
-        const layer: Layer = await layerService.findOne(node.layerId);
+        if (!this.client) {
+          Logger.warn(`Couldn\'t parse the layer with ID ${node.layerId} because no ` +
+            'SHOGunClient has been provided.');
+
+          continue;
+        }
+
+        const layer = await this.client.layer<S>().findOne(node.layerId);
 
         const olLayer = await this.parseLayer(layer, projection);
 
@@ -117,42 +133,72 @@ class ShogunApplicationUtil {
     return folder;
   }
 
-  async parseLayer(layer: Layer, projection?: ProjectionLike): Promise<OlLayerBase> {
+  async parseLayer(layer: S, projection?: ProjectionLike) {
+    if (layer.type === 'WMS') {
+      return this.parseImageLayer(layer);
+    }
+
+    if (layer.type === 'TILEWMS') {
+      return this.parseTileLayer(layer, projection);
+    }
+
     if (layer.type === 'WMTS') {
       return await this.parseWMTSLayer(layer, projection);
-    } else if (layer.type === 'WMS') {
-      return this.parseImageLayer(layer);
-    } else if (layer.type === 'TILEWMS') {
-      return this.parseTileLayer(layer, projection);
-    } else {
-      throw new Error('Currently only WMTS, WMS and TILEWMS layers are supported.');
     }
+
+    // TODO Support others
+    throw new Error('Currently only WMTS, WMS and TILEWMS layers are supported.');
   }
 
-  parseTileLayer(layer: Layer, projection?: ProjectionLike) {
+  parseImageLayer(layer: S) {
     const {
-      sourceConfig,
-      clientConfig
-    } = layer;
+      attribution,
+      url,
+      layerNames
+    } = layer.sourceConfig || {};
 
     const {
+      minResolution,
+      maxResolution,
+      crossOrigin
+    } = layer.clientConfig || {};
+
+    const source = new OlImageWMS({
+      url,
+      attributions: attribution,
+      params: {
+        'LAYERS': layerNames,
+        'TRANSPARENT': true
+      },
+      crossOrigin
+    });
+
+    const imageLayer = new OlImageLayer({
+      source,
+      minResolution,
+      maxResolution
+    });
+
+    this.setLayerProperties(imageLayer, layer);
+
+    return imageLayer;
+  }
+
+  parseTileLayer(layer: S, projection?: ProjectionLike) {
+    const {
+      attribution,
       url,
       layerNames,
-      attribution,
-      legendUrl,
       tileSize = 256,
       tileOrigin,
       resolutions
-    } = sourceConfig || {};
+    } = layer.sourceConfig || {};
 
     const {
-      hoverable,
-      searchable,
-      propertyConfig,
       minResolution,
-      crossOrigin,
       maxResolution,
-    } = clientConfig || {};
+      crossOrigin
+    } = layer.clientConfig || {};
 
     let tileGrid;
     if (tileSize && resolutions && tileOrigin) {
@@ -180,69 +226,22 @@ class ShogunApplicationUtil {
       maxResolution
     });
 
-    tileLayer.set('shogunId', layer.id);
-    tileLayer.set('name', layer.name);
-    tileLayer.set('hoverable', hoverable);
-    tileLayer.set('type', layer.type);
-    tileLayer.set('legendUrl', legendUrl);
-    tileLayer.set('searchable', searchable);
-    tileLayer.set('propertyConfig', propertyConfig);
+    this.setLayerProperties(tileLayer, layer);
 
     return tileLayer;
   }
 
-  parseImageLayer(layer: Layer) {
-    const {
-      attribution,
-      legendUrl,
-      url,
-      layerNames,
-    } = layer.sourceConfig;
-
-    const {
-      hoverable,
-      crossOrigin,
-      searchable,
-      propertyConfig,
-    } = layer.clientConfig;
-
-    const source = new OlImageWMS({
-      url,
-      attributions: attribution,
-      params: {
-        'LAYERS': layerNames,
-        'TRANSPARENT': true
-      },
-      crossOrigin
-    });
-
-    const imageLayer = new OlImageLayer({
-      source
-    });
-
-    imageLayer.set('shogunId', layer.id);
-    imageLayer.set('name', layer.name);
-    imageLayer.set('hoverable', hoverable);
-    imageLayer.set('type', layer.type);
-    imageLayer.set('legendUrl', legendUrl);
-    imageLayer.set('searchable', searchable);
-    imageLayer.set('propertyConfig', propertyConfig);
-
-    return imageLayer;
-  }
-
-  async parseWMTSLayer(layer: Layer, projection: ProjectionLike = 'EPSG:3857') {
+  async parseWMTSLayer(layer: S, projection: ProjectionLike = 'EPSG:3857') {
     const {
       attribution,
       url,
-      layerNames,
-      legendUrl
+      layerNames
     } = layer.sourceConfig || {};
 
     const {
-      searchable,
-      propertyConfig,
-      crossOrigin,
+      minResolution,
+      maxResolution,
+      crossOrigin
     } = layer.clientConfig || {};
 
     const wmtsCapabilitiesParser = new OlWMTSCapabilities();
@@ -279,15 +278,11 @@ class ShogunApplicationUtil {
 
     const wmtsLayer = new OlTileLayer({
       source,
-      visible: false
+      minResolution,
+      maxResolution
     });
 
-    wmtsLayer.set('shogunId', layer.id);
-    wmtsLayer.set('name', layer.name);
-    wmtsLayer.set('type', layer.type);
-    wmtsLayer.set('searchable', searchable);
-    wmtsLayer.set('propertyConfig', propertyConfig);
-    wmtsLayer.set('legendUrl', legendUrl);
+    this.setLayerProperties(wmtsLayer, layer);
 
     return wmtsLayer;
   }
@@ -298,6 +293,16 @@ class ShogunApplicationUtil {
         MapUtil.roundScale(MapUtil.getScaleForResolution(res, projUnit)
         ))
       .reverse();
+  }
+
+  private setLayerProperties(olLayer: OlLayerBase, layer: S) {
+    olLayer.set('shogunId', layer.id);
+    olLayer.set('name', layer.name);
+    olLayer.set('type', layer.type);
+    olLayer.set('searchable', layer.clientConfig?.searchable);
+    olLayer.set('propertyConfig', layer.clientConfig?.propertyConfig);
+    olLayer.set('legendUrl', layer.sourceConfig.legendUrl);
+    olLayer.set('hoverable', layer.clientConfig?.hoverable);
   }
 }
 
