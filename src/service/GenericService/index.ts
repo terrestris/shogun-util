@@ -82,7 +82,7 @@ export abstract class GenericService<T extends BaseEntity> {
     }
   }
 
-  async update(t: T, fetchOpts: RequestInit): Promise<T> {
+  async update(t: T, fetchOpts?: RequestInit): Promise<T> {
     try {
       const response = await fetch(`${this.basePath}/${t.id}`, {
         method: 'PUT',
