@@ -2,9 +2,6 @@
   "name": "@terrestris/shogun-util",
   "version": "1.0.0",
   "keywords": [],
-  "files": [
-    "dist"
-  ],
   "bugs": {
     "url": "https://github.com/terrestris/shogun-util/issues"
   },
@@ -21,10 +18,15 @@
       "url": "https://github.com/dnlkoch"
     }
   ],
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "lint": "eslint -c .eslintrc.js --ext .ts src/ && tsc --noEmit --project tsconfig.json",
+    "build": "tsc -p tsconfig.json",
+    "check": "npm run typecheck && npm run lint && npm test",
+    "lint": "eslint -c .eslintrc.js --ext .ts src/",
     "test": "jest --coverage",
-    "build": "tsc -p tsconfig.json"
+    "typecheck": "tsc --noEmit --project tsconfig.json"
   },
   "dependencies": {
     "@terrestris/base-util": "^1.0.1",
