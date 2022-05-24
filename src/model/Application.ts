@@ -4,6 +4,13 @@ import {
   DefaultLayerSourceConfig
 } from './Layer';
 
+export interface DefaultApplicationTheme {
+  primaryColor?: string;
+  secondaryColor?: string;
+  complementaryColor?: string;
+  logoPath?: string;
+}
+
 export interface DefaultApplicationToolConfig {
   name: string;
   config: any;
@@ -31,7 +38,8 @@ export interface DefaultMapView {
 
 export interface DefaultApplicationClientConfig {
   mapView: DefaultMapView;
-  description: string;
+  description?: string;
+  theme?: DefaultApplicationTheme;
 }
 
 export interface ApplicationArgs extends BaseEntityArgs {
