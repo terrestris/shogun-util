@@ -29,7 +29,7 @@ describe('GraphQLService', () => {
   it('returns the expected entity', async () => {
     const expected: User[] = [{
       id: 1,
-      keycloakId: '123456789'
+      authProviderId: '123456789'
     }];
 
     const response = {
