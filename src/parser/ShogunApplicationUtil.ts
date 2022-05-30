@@ -7,11 +7,15 @@ import OlImageLayer from 'ol/layer/Image';
 import OlLayerBase from 'ol/layer/Base';
 import OlLayerGroup from 'ol/layer/Group';
 import OlTileGrid from 'ol/tilegrid/TileGrid';
+import OlSourceVector from 'ol/source/Vector';
 import OlWMTSCapabilities from 'ol/format/WMTSCapabilities';
+import OlFormatGeoJSON from 'ol/format/GeoJSON';
+import OlLayerVector from 'ol/layer/Vector';
 import {
   fromLonLat,
   ProjectionLike
 } from 'ol/proj';
+import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
 
 import { UrlUtil } from '@terrestris/base-util/dist/UrlUtil/UrlUtil';
 
@@ -107,6 +111,7 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
           continue;
         }
 
+        // TODO Fetch via graphlQL (multiple at once)
         const layer = await this.client.layer<S>().findOne(node.layerId);
 
         const olLayer = await this.parseLayer(layer, projection);
@@ -146,8 +151,12 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
       return await this.parseWMTSLayer(layer, projection);
     }
 
-    // TODO Support others
-    throw new Error('Currently only WMTS, WMS and TILEWMS layers are supported.');
+    if (layer.type === 'WFS') {
+      return this.parseWFSLayer(layer, projection);
+    }
+
+    // TODO Add support for VECTORTILE, XYZ and WMSTime
+    throw new Error('Currently only WMTS, WMS, TILEWMS and WFS layers are supported.');
   }
 
   parseImageLayer(layer: S) {
@@ -184,7 +193,7 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
     return imageLayer;
   }
 
-  parseTileLayer(layer: S, projection?: ProjectionLike) {
+  parseTileLayer(layer: S, projection: ProjectionLike = 'EPSG:3857') {
     const {
       attribution,
       url,
@@ -215,7 +224,8 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
       attributions: attribution,
       projection,
       params: {
-        'LAYERS': layerNames
+        'LAYERS': layerNames,
+        'TRANSPARENT': true
       },
       crossOrigin
     });
@@ -285,6 +295,48 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
     this.setLayerProperties(wmtsLayer, layer);
 
     return wmtsLayer;
+  }
+
+  parseWFSLayer(layer: S, projection: ProjectionLike = 'EPSG:3857') {
+    const {
+      attribution,
+      url,
+      layerNames
+    } = layer.sourceConfig || {};
+
+    const {
+      minResolution,
+      maxResolution
+    } = layer.clientConfig || {};
+
+    const source = new OlSourceVector({
+      format: new OlFormatGeoJSON(),
+      attributions: attribution,
+      url: extent => {
+        const params = UrlUtil.objectToRequestString({
+          SERVICE: 'WFS',
+          VERSION: '2.0.0',
+          REQUEST: 'GetFeature',
+          TYPENAMES: layerNames,
+          OUTPUTFORMAT: 'application/json',
+          SRSNAME: projection,
+          BBOX: `${extent.join(',')},${projection}`
+        });
+
+        return `${url}${url.endsWith('?') ? '' : '?'}${params}`;
+      },
+      strategy: olStrategyBbox
+    });
+
+    const vectorLayer = new OlLayerVector({
+      source,
+      minResolution,
+      maxResolution
+    });
+
+    this.setLayerProperties(vectorLayer, layer);
+
+    return vectorLayer;
   }
 
   getMapScales(resolutions: number[], projUnit: string = 'm'): number[] {
