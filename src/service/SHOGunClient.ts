@@ -1,12 +1,14 @@
 import Application from '../model/Application';
+import Group, { ProviderGroupDetails } from '../model/Group';
 import Layer from '../model/Layer';
-import User from '../model/User';
+import User, { ProviderUserDetails } from '../model/User';
 
 import AppInfoService from './AppInfoService';
 import ApplicationService from './ApplicationService';
 import AuthService from './AuthService';
 import CacheService from './CacheService';
 import GraphQLService from './GraphQLService';
+import GroupService from './GroupService';
 import LayerService from './LayerService';
 import UserService from './UserService';
 
@@ -51,8 +53,14 @@ export class SHOGunClient {
     });
   }
 
-  user<T extends User>() {
-    return new UserService<T>({
+  group<T extends Group<S>, S extends ProviderGroupDetails>() {
+    return new GroupService<T, S>({
+      basePath: `${this.basePath}groups`
+    });
+  }
+
+  user<T extends User<S>, S extends ProviderUserDetails>() {
+    return new UserService<T, S>({
       basePath: `${this.basePath}users`
     });
   }
