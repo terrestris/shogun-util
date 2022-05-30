@@ -2,7 +2,8 @@ export const successResponse = (data?: any): Partial<Response> => {
   return {
     ok: true,
     status: 200,
-    json: () => Promise.resolve(data)
+    json: () => Promise.resolve(data),
+    blob: () => Promise.resolve(new Blob())
   };
 };
 
