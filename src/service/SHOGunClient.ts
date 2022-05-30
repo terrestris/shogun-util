@@ -5,6 +5,7 @@ import User from '../model/User';
 import AppInfoService from './AppInfoService';
 import ApplicationService from './ApplicationService';
 import AuthService from './AuthService';
+import CacheService from './CacheService';
 import GraphQLService from './GraphQLService';
 import LayerService from './LayerService';
 import UserService from './UserService';
@@ -24,6 +25,12 @@ export class SHOGunClient {
     url: '/'
   }) {
     this.basePath = opts.url;
+  }
+
+  cache() {
+    return new CacheService({
+      basePath: `${this.basePath}cache`
+    });
   }
 
   info() {
