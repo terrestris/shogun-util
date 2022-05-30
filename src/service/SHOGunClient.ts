@@ -27,7 +27,9 @@ export class SHOGunClient {
   }
 
   info() {
-    return new AppInfoService();
+    return new AppInfoService({
+      basePath: `${this.basePath}info`
+    });
   }
 
   application<T extends Application>() {
@@ -49,11 +51,15 @@ export class SHOGunClient {
   }
 
   auth() {
-    return new AuthService();
+    return new AuthService({
+      basePath: `${this.basePath}sso`
+    });
   }
 
   graphql() {
-    return new GraphQLService();
+    return new GraphQLService({
+      basePath: `${this.basePath}graphql`
+    });
   }
 
 }

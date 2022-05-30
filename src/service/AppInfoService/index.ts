@@ -3,21 +3,21 @@ import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
 import { AppInfo } from '../../model/AppInfo';
 
 export interface AppInfoServiceOpts {
-  url: string;
+  basePath: string;
 };
 
 export class AppInfoService {
-  private path: string;
+  private basePath: string;
 
   constructor(opts: AppInfoServiceOpts = {
-    url: '/info/app'
+    basePath: '/info'
   }) {
-    this.path = opts.url;
+    this.basePath = opts.basePath;
   }
 
   async getAppInfo(fetchOpts?: RequestInit): Promise<AppInfo> {
     try {
-      const response = await fetch(this.path, {
+      const response = await fetch(`${this.basePath}/app`, {
         method: 'GET',
         headers: {
           ...getCsrfTokenHeader()

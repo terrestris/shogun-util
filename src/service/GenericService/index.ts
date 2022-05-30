@@ -8,7 +8,7 @@ export interface GenericServiceOpts {
 
 export abstract class GenericService<T extends BaseEntity> {
 
-  private basePath: string;
+  basePath: string;
 
   constructor(opts: GenericServiceOpts) {
     this.basePath = opts.basePath;

@@ -24,7 +24,7 @@ describe('AppInfoService', () => {
     expect(AppInfoService).toBeDefined();
   });
 
-  it('findAll GET', async () => {
+  it('has set the correct defaults (getAppInfo)', async () => {
     fetchMock = fetchSpy(successResponse([]));
 
     await service.getAppInfo();
