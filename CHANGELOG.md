@@ -1,3 +1,15 @@
+# 1.0.0 (2022-05-31)
+
+
+### Bug Fixes
+
+* Update README ([7819cc0](https://github.com/terrestris/shogun-util/commit/7819cc01f1037e2c6349fb6a75f0665a3bd0782c))
+
+
+### Features
+
+* Add DefaultApplicationTheme and make description optional ([893bdd3](https://github.com/terrestris/shogun-util/commit/893bdd31c52d65496e6ef8cf29f085393ba53c4a))
+
 # 1.0.0 (2022-05-30)
 
 
