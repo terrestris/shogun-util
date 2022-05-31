@@ -20,11 +20,11 @@ describe('AppInfoService', () => {
     }
   });
 
-  it('is is defined', () => {
+  it('is defined', () => {
     expect(AppInfoService).toBeDefined();
   });
 
-  it('findAll GET', async () => {
+  it('has set the correct defaults (getAppInfo)', async () => {
     fetchMock = fetchSpy(successResponse([]));
 
     await service.getAppInfo();

@@ -9,10 +9,14 @@ import GraphQLService from './GraphQLService';
 import AppInfoService from './AppInfoService';
 import LayerService from './LayerService';
 import UserService from './UserService';
+import GroupService from './GroupService';
 
 import fetchSpy, { successResponse } from '../spec/fetchSpy';
 
 import SHOGunClient from './SHOGunClient';
+import CacheService from './CacheService';
+import FileService from './FileService';
+import ImageFileService from './ImageFileService';
 
 export interface MyDefaultApplicationClientConfig extends DefaultApplicationClientConfig {
   newField: number;
@@ -37,9 +41,7 @@ describe('SHOGunClient', () => {
   let client: SHOGunClient;
 
   beforeEach(() => {
-    client = new SHOGunClient({
-      url: '/'
-    });
+    client = new SHOGunClient();
   });
 
   afterEach(() => {
@@ -64,6 +66,10 @@ describe('SHOGunClient', () => {
     expect(client.info() instanceof AppInfoService).toBeTruthy();
     expect(client.layer() instanceof LayerService).toBeTruthy();
     expect(client.user() instanceof UserService).toBeTruthy();
+    expect(client.group() instanceof GroupService).toBeTruthy();
+    expect(client.cache() instanceof CacheService).toBeTruthy();
+    expect(client.file() instanceof FileService).toBeTruthy();
+    expect(client.imagefile() instanceof ImageFileService).toBeTruthy();
   });
 
   it('can be extended', async () => {

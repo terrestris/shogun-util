@@ -13,22 +13,22 @@ export interface GraphQLResponse<T> {
 };
 
 export interface GraphQLServiceOpts {
-  url: string;
+  basePath: string;
 };
 
 export class GraphQLService {
 
-  private url: string;
+  private basePath: string;
 
   constructor(opts: GraphQLServiceOpts = {
-    url: '/graphql'
+    basePath: '/graphql'
   }) {
-    this.url = opts.url;
+    this.basePath = opts.basePath;
   }
 
   async sendQuery<T>(query: GraphQLQueryObject, fetchOpts?: RequestInit): Promise<GraphQLResponse<T>> {
     try {
-      const response = await fetch(this.url, {
+      const response = await fetch(this.basePath, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

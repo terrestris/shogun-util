@@ -1,9 +1,21 @@
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
 
+export interface AuthServiceOpts {
+  basePath: string;
+};
+
 export class AuthService {
-  async logout(url: string = '/sso/logout', requestOpts?: RequestInit): Promise<void> {
+  private basePath: string;
+
+  constructor(opts: AuthServiceOpts = {
+    basePath: '/sso'
+  }) {
+    this.basePath = opts.basePath;
+  }
+
+  async logout(requestOpts?: RequestInit): Promise<void> {
     try {
-      const response = await fetch(url, {
+      const response = await fetch(`${this.basePath}/logout`, {
         method: 'POST',
         credentials: 'same-origin',
         headers: {

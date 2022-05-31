@@ -1,9 +1,42 @@
 import BaseEntity, { BaseEntityArgs } from './BaseEntity';
 
-export interface KeycloakRepresentation {
-  self?: any;
+export interface ProviderUserDetails {}
+
+export interface KeycloakCredentialRepresentation {
   id?: string;
-  origin?: any;
+  type?: string;
+  userLabel?: string;
+  createdDate?: number;
+  secretData?: string;
+  credentialData?: string;
+  priority?: number;
+  value?: string;
+  temporary?: boolean;
+}
+
+export interface KeycloakFederatedIdentityRepresentation {
+  identityProvider?: string;
+  userId?: string;
+  userName?: string;
+}
+
+export interface KeycloakUserConsentRepresentation {
+  clientId?: string;
+  grantedClientScopes?: string[];
+  createdDate?: number;
+  lastUpdatedDate?: number;
+}
+
+export interface KeycloakSocialLinkRepresentation {
+  socialProvider?: string;
+  socialUserId?: string;
+  socialUsername?: string;
+}
+
+export interface KeycloakUserRepresentation extends ProviderUserDetails {
+  self?: string;
+  id?: string;
+  origin?: string;
   createdTimestamp?: number;
   username?: string;
   enabled?: boolean;
@@ -14,45 +47,47 @@ export interface KeycloakRepresentation {
   email?: string;
   federationLink?: string;
   serviceAccountClientId?: string;
-  attributes?: any;
-  credentials?: any;
-  disableableCredentialTypes?: any[];
-  requiredActions?: any[];
-  federatedIdentities?: any;
-  realmRoles?: any;
-  clientRoles?: any;
-  clientConsents?: any;
+  attributes?: {
+    [key: string]: string[];
+  };
+  credentials?: KeycloakCredentialRepresentation[];
+  disableableCredentialTypes?: string[];
+  requiredActions?: string[];
+  federatedIdentities?: KeycloakFederatedIdentityRepresentation[];
+  realmRoles?: string[];
+  clientRoles?: {
+    [key: string]: string[];
+  };
+  clientConsents?: KeycloakUserConsentRepresentation[];
   notBefore?: number;
-  applicationRoles?: any;
-  socialLinks?: any;
-  groups?: any;
+  applicationRoles?: {
+    [key: string]: string[];
+  };
+  socialLinks?: KeycloakSocialLinkRepresentation[];
+  groups?: string[];
   access?: {
-    manageGroupMembership?: boolean;
-    view?: boolean;
-    mapRoles?: boolean;
-    impersonate?: boolean;
-    manage?: boolean;
+    [key: string]: boolean;
   };
 }
 
-export interface UserArgs extends BaseEntityArgs {
-  keycloakId?: string;
-  keycloakRepresentation?: KeycloakRepresentation;
+export interface UserArgs<T extends ProviderUserDetails = KeycloakUserRepresentation> extends BaseEntityArgs {
+  authProviderId?: string;
+  providerDetails?: T;
   details?: any;
   clientConfig?: any;
 }
 
-export default class User extends BaseEntity {
-  keycloakId?: string;
-  keycloakRepresentation?: KeycloakRepresentation;
+export default class User<T extends ProviderUserDetails = KeycloakUserRepresentation> extends BaseEntity {
+  authProviderId?: string;
+  providerDetails?: T;
   details?: any;
   clientConfig?: any;
 
-  constructor({ id, created, modified, details, clientConfig, keycloakId, keycloakRepresentation }: UserArgs) {
+  constructor({ id, created, modified, details, clientConfig, authProviderId, providerDetails }: UserArgs<T>) {
     super({ id, created, modified });
 
-    this.keycloakId = keycloakId;
-    this.keycloakRepresentation = keycloakRepresentation;
+    this.authProviderId = authProviderId;
+    this.providerDetails = providerDetails;
     this.details = details;
     this.clientConfig = clientConfig;
   }

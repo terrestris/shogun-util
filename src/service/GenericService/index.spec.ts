@@ -45,11 +45,11 @@ describe('GenericService', () => {
     }
   });
 
-  it('is is defined', () => {
+  it('is defined', () => {
     expect(GenericService).toBeDefined();
   });
 
-  it('findAll GET', async () => {
+  it('sends all required parameters to return all entities (findAll)', async () => {
     fetchMock = fetchSpy(successResponse([]));
 
     await service.findAll();
@@ -80,10 +80,10 @@ describe('GenericService', () => {
     await expect(service.findAll()).rejects.toThrow();
   });
 
-  it('findOne GET', async () => {
+  it('sends all required parameters to return a single entity (findOne)', async () => {
     fetchMock = fetchSpy(successResponse([]));
 
-    const resp = await service.findOne(1);
+    await service.findOne(1);
 
     expect(fetchMock).toHaveBeenCalledWith('/dummy/1', {
       headers: {},
@@ -109,10 +109,10 @@ describe('GenericService', () => {
     await expect(service.findOne(1)).rejects.toThrow();
   });
 
-  it('add POST', async () => {
+  it('sends all required parameter to create an entity (add)', async () => {
     fetchMock = fetchSpy(successResponse([]));
 
-    const resp = await service.add({dummyField: 'dummyValue'});
+    await service.add({dummyField: 'dummyValue'});
 
     expect(fetchMock).toHaveBeenCalledWith('/dummy', {
       body: '{\"dummyField\":\"dummyValue\"}',
@@ -141,7 +141,7 @@ describe('GenericService', () => {
     await expect(service.add({dummyField: 'dummyValue'})).rejects.toThrow();
   });
 
-  it('delete DELETE', async () => {
+  it('sends all required parameters to delete an entity (delete)', async () => {
     fetchMock = fetchSpy(successResponse([]));
 
     const resp = await service.delete(1);
@@ -152,7 +152,7 @@ describe('GenericService', () => {
     });
   });
 
-  it('delete', async () => {
+  it('returns the deleted entity (delete)', async () => {
     const response = {
       id: 1
     };
@@ -170,10 +170,10 @@ describe('GenericService', () => {
     await expect(service.delete(1)).rejects.toThrow();
   });
 
-  it('update PUT', async () => {
+  it('sends all required parameters to update an entity (update)', async () => {
     fetchMock = fetchSpy(successResponse([]));
 
-    const resp = await service.update({id: 1, dummyField: 'dummyValue'});
+    await service.update({id: 1, dummyField: 'dummyValue'});
 
     expect(fetchMock).toHaveBeenCalledWith('/dummy/1', {
       body: '{\"id\":1,\"dummyField\":\"dummyValue\"}',
@@ -184,7 +184,7 @@ describe('GenericService', () => {
     });
   });
 
-  it('update', async () => {
+  it('returns the updated entity (update)', async () => {
     const response = {
       id: 1
     };
@@ -202,10 +202,10 @@ describe('GenericService', () => {
     await expect(service.update({dummyField: 'dummyValue'})).rejects.toThrow();
   });
 
-  it('updatePartial PATCH', async () => {
+  it('sends all required parameters to partially update an entity (updatePartial)', async () => {
     fetchMock = fetchSpy(successResponse([]));
 
-    const resp = await service.updatePartial({id: 1, dummyField: 'dummyValue'});
+    await service.updatePartial({id: 1, dummyField: 'dummyValue'});
 
     expect(fetchMock).toHaveBeenCalledWith('/dummy/1', {
       body: '{\"id\":1,\"dummyField\":\"dummyValue\"}',
@@ -216,7 +216,7 @@ describe('GenericService', () => {
     });
   });
 
-  it('updatePartial', async () => {
+  it('returns the updated entity (updatePartial)', async () => {
     const response = {
       id: 1
     };
