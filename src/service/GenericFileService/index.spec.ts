@@ -45,11 +45,11 @@ describe('GenericFileService', () => {
     }
   });
 
-  it('is is defined', () => {
+  it('is defined', () => {
     expect(GenericFileService).toBeDefined();
   });
 
-  it('findAll GET', async () => {
+  it('sends all required parameters to return all entities (findAll)', async () => {
     fetchMock = fetchSpy(successResponse([]));
 
     await service.findAll();
@@ -80,10 +80,10 @@ describe('GenericFileService', () => {
     await expect(service.findAll()).rejects.toThrow();
   });
 
-  it('findOne GET', async () => {
+  it('sends all required parameters to return a single entity (findOne)', async () => {
     fetchMock = fetchSpy(successResponse([]));
 
-    const resp = await service.findOne('db5f69fa-e8f6-42a6-a305-d2555d7d4d08');
+    await service.findOne('db5f69fa-e8f6-42a6-a305-d2555d7d4d08');
 
     expect(fetchMock).toHaveBeenCalledWith('/dummy/db5f69fa-e8f6-42a6-a305-d2555d7d4d08', {
       headers: {},
@@ -107,19 +107,39 @@ describe('GenericFileService', () => {
     await expect(service.findOne('db5f69fa-e8f6-42a6-a305-d2555d7d4d08')).rejects.toThrow();
   });
 
-  it('add POST', async () => {
+  it('sends all required parameter to create an entity (upload)', async () => {
     fetchMock = fetchSpy(successResponse([]));
+    const file = new File([''], 'filename', {type: 'text/html'});
 
-    const resp = await service.upload(new File([''], 'filename', {type: 'text/html'}));
+    await service.upload(file);
+
+    const body = new FormData();
+    body.append('file', file);
 
     expect(fetchMock).toHaveBeenCalledWith('/dummy/upload', {
-      body: new FormData(),
+      body: body,
       headers: {},
       method: 'POST'
     });
   });
 
-  it('returns the created entity (add)', async () => {
+  it('sends all required parameter to create an entity on disk (upload)', async () => {
+    fetchMock = fetchSpy(successResponse([]));
+    const file = new File([''], 'filename', {type: 'text/html'});
+
+    await service.upload(file, true);
+
+    const body = new FormData();
+    body.append('file', file);
+
+    expect(fetchMock).toHaveBeenCalledWith('/dummy/uploadToFileSystem', {
+      body: body,
+      headers: {},
+      method: 'POST'
+    });
+  });
+
+  it('returns the created entity (upload)', async () => {
     const response = {
       id: 1
     };
@@ -131,16 +151,16 @@ describe('GenericFileService', () => {
     expect(resp).toEqual(response);
   });
 
-  it('throws an error if an entity couldn\'t be created (add)', async () => {
+  it('throws an error if an entity couldn\'t be created (upload)', async () => {
     fetchMock = fetchSpy(failureResponse());
 
     await expect(service.upload(new File([''], 'filename', {type: 'text/html'}))).rejects.toThrow();
   });
 
-  it('delete DELETE', async () => {
+  it('sends all required parameters to delete an entity (delete)', async () => {
     fetchMock = fetchSpy(successResponse([]));
 
-    const resp = await service.delete('db5f69fa-e8f6-42a6-a305-d2555d7d4d08');
+    await service.delete('db5f69fa-e8f6-42a6-a305-d2555d7d4d08');
 
     expect(fetchMock).toHaveBeenCalledWith('/dummy/db5f69fa-e8f6-42a6-a305-d2555d7d4d08', {
       headers: {},
@@ -148,7 +168,7 @@ describe('GenericFileService', () => {
     });
   });
 
-  it('delete', async () => {
+  it('returns the deleted entity (delete)', async () => {
     const response = {
       id: 1
     };

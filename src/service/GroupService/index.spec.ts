@@ -9,12 +9,16 @@ describe('GroupService', () => {
     service = new GroupService<Group<KeycloakGroupRepresentation>, KeycloakGroupRepresentation>();
   });
 
-  it('is is defined', () => {
+  it('is defined', () => {
     expect(GroupService).toBeDefined();
   });
 
   it('extends the GenericService', () => {
     expect(service instanceof GenericService).toBeTruthy();
+  });
+
+  it('has set the correct default path', () => {
+    expect(service.basePath).toEqual('/groups');
   });
 
 });

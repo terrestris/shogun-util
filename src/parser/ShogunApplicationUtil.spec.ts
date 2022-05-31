@@ -29,7 +29,7 @@ describe('ShogunApplicationUtil', () => {
     }
   });
 
-  it('is is defined', () => {
+  it('is defined', () => {
     expect(ShogunApplicationUtil).toBeDefined();
   });
 

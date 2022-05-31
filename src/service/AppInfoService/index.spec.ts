@@ -20,7 +20,7 @@ describe('AppInfoService', () => {
     }
   });
 
-  it('is is defined', () => {
+  it('is defined', () => {
     expect(AppInfoService).toBeDefined();
   });
 
