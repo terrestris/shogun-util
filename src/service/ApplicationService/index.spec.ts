@@ -10,12 +10,16 @@ describe('ApplicationService', () => {
     service = new ApplicationService<Application>();
   });
 
-  it('is is defined', () => {
+  it('is defined', () => {
     expect(ApplicationService).toBeDefined();
   });
 
   it('extends the GenericService', () => {
     expect(service instanceof GenericService).toBeTruthy();
+  });
+
+  it('has set the correct default path', () => {
+    expect(service.basePath).toEqual('/applications');
   });
 
 });

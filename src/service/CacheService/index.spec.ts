@@ -20,11 +20,11 @@ describe('AppInfoService', () => {
     }
   });
 
-  it('is is defined', () => {
+  it('is defined', () => {
     expect(CacheService).toBeDefined();
   });
 
-  it('has set the correct defaults (evictCache)', async () => {
+  it('sends all required parameters to evict the cache (evictCache)', async () => {
     fetchMock = fetchSpy(successResponse([]));
 
     await service.evictCache();
@@ -33,14 +33,6 @@ describe('AppInfoService', () => {
       headers: {},
       method: 'POST'
     });
-  });
-
-  it('calls the evict cache endpoint (evictCache)', async () => {
-    fetchMock = fetchSpy(successResponse());
-
-    await service.evictCache();
-
-    expect(true).toEqual(true);
   });
 
   it('throws an error if the application info couldn\'t be fetched (evictCache)', async () => {

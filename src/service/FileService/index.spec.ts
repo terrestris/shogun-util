@@ -9,12 +9,16 @@ describe('FileService', () => {
     service = new FileService<File>();
   });
 
-  it('is is defined', () => {
+  it('is defined', () => {
     expect(FileService).toBeDefined();
   });
 
   it('extends the GenericFileService', () => {
     expect(service instanceof GenericFileService).toBeTruthy();
+  });
+
+  it('has set the correct default path', () => {
+    expect(service.basePath).toEqual('/files');
   });
 
 });

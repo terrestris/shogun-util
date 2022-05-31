@@ -41,9 +41,7 @@ describe('SHOGunClient', () => {
   let client: SHOGunClient;
 
   beforeEach(() => {
-    client = new SHOGunClient({
-      url: '/'
-    });
+    client = new SHOGunClient();
   });
 
   afterEach(() => {

@@ -20,11 +20,11 @@ describe('AuthService', () => {
     }
   });
 
-  it('is is defined', () => {
+  it('is defined', () => {
     expect(AuthService).toBeDefined();
   });
 
-  it('logout POST', async () => {
+  it('sends all required parameters to logout (logout)', async () => {
     fetchMock = fetchSpy(successResponse([]));
 
     await service.logout();
@@ -36,7 +36,7 @@ describe('AuthService', () => {
     });
   });
 
-  it('throws an error if the application info couldn\'t be fetched (getAppInfo)', async () => {
+  it('throws an error if the application info couldn\'t be fetched (logout)', async () => {
     fetchMock = fetchSpy(failureResponse());
 
     await expect(service.logout()).rejects.toThrow();

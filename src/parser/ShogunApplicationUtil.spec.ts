@@ -32,7 +32,7 @@ describe('AuthService', () => {
     }
   });
 
-  it('is is defined', () => {
+  it('is defined', () => {
     expect(ShogunApplicationUtil).toBeDefined();
   });
 

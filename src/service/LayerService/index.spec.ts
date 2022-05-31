@@ -9,12 +9,16 @@ describe('LayerService', () => {
     service = new LayerService<Layer>();
   });
 
-  it('is is defined', () => {
+  it('is defined', () => {
     expect(LayerService).toBeDefined();
   });
 
   it('extends the GenericService', () => {
     expect(service instanceof GenericService).toBeTruthy();
+  });
+
+  it('has set the correct default path', () => {
+    expect(service.basePath).toEqual('/layers');
   });
 
 });

@@ -9,12 +9,16 @@ describe('UserService', () => {
     service = new UserService();
   });
 
-  it('is is defined', () => {
+  it('is defined', () => {
     expect(UserService).toBeDefined();
   });
 
   it('extends the GenericService', () => {
     expect(service instanceof GenericService).toBeTruthy();
+  });
+
+  it('has set the correct default path', () => {
+    expect(service.basePath).toEqual('/users');
   });
 
 });
