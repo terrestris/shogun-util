@@ -17,6 +17,7 @@ import SHOGunClient from './SHOGunClient';
 import CacheService from './CacheService';
 import FileService from './FileService';
 import ImageFileService from './ImageFileService';
+import OpenAPIService from './OpenAPIService';
 
 export interface MyDefaultApplicationClientConfig extends DefaultApplicationClientConfig {
   newField: number;
@@ -70,6 +71,7 @@ describe('SHOGunClient', () => {
     expect(client.cache() instanceof CacheService).toBeTruthy();
     expect(client.file() instanceof FileService).toBeTruthy();
     expect(client.imagefile() instanceof ImageFileService).toBeTruthy();
+    expect(client.openapi() instanceof OpenAPIService).toBeTruthy();
   });
 
   it('can be extended', async () => {

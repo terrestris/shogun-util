@@ -16,6 +16,7 @@ import GraphQLService from './GraphQLService';
 import GroupService from './GroupService';
 import ImageFileService from './ImageFileService';
 import LayerService from './LayerService';
+import OpenAPIService from './OpenAPIService';
 import UserService from './UserService';
 
 export interface SHOGunClientOpts {
@@ -109,6 +110,13 @@ export class SHOGunClient {
   graphql() {
     return new GraphQLService({
       basePath: `${this.basePath}graphql`,
+      keycloak: this.keycloak
+    });
+  }
+
+  openapi() {
+    return new OpenAPIService({
+      basePath: `${this.basePath}v2`,
       keycloak: this.keycloak
     });
   }
