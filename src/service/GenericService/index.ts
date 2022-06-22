@@ -140,7 +140,7 @@ export abstract class GenericService<T extends BaseEntity> {
     }
   }
 
-  async delete(id: string | number, fetchOpts?: RequestInit): Promise<T> {
+  async delete(id: string | number, fetchOpts?: RequestInit): Promise<void> {
     try {
       const response = await fetch(`${this.basePath}/${id}`, {
         method: 'DELETE',
@@ -153,10 +153,6 @@ export abstract class GenericService<T extends BaseEntity> {
       if (!response.ok) {
         throw new Error(`HTTP error status: ${response.status}`);
       }
-
-      const json: T = await response.json();
-
-      return json;
     } catch (error) {
       throw new Error(`Error while deleting an entity: ${error}`);
     }
