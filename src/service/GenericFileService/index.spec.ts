@@ -168,16 +168,10 @@ describe('GenericFileService', () => {
     });
   });
 
-  it('returns the deleted entity (delete)', async () => {
-    const response = {
-      id: 1
-    };
+  it('returns undefined/void (delete)', async () => {
+    fetchMock = fetchSpy(successResponse());
 
-    fetchMock = fetchSpy(successResponse(response));
-
-    const resp = await service.delete('db5f69fa-e8f6-42a6-a305-d2555d7d4d08');
-
-    expect(resp).toEqual(response);
+    await expect(service.delete('db5f69fa-e8f6-42a6-a305-d2555d7d4d08')).resolves.toBe(undefined);
   });
 
   it('throws an error if an entity couldn\'t be deleted (delete)', async () => {

@@ -152,16 +152,10 @@ describe('GenericService', () => {
     });
   });
 
-  it('returns the deleted entity (delete)', async () => {
-    const response = {
-      id: 1
-    };
+  it('returns undefined/void (delete)', async () => {
+    fetchMock = fetchSpy(successResponse());
 
-    fetchMock = fetchSpy(successResponse(response));
-
-    const resp = await service.delete(1);
-
-    expect(resp).toEqual(response);
+    await expect(service.delete(1)).resolves.toBe(undefined);
   });
 
   it('throws an error if an entity couldn\'t be deleted (delete)', async () => {

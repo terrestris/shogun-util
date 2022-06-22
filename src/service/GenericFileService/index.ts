@@ -93,7 +93,7 @@ export abstract class GenericFileService<T extends SHOGunFile> {
     }
   }
 
-  async delete(fileUuid: string, fetchOpts?: RequestInit): Promise<T> {
+  async delete(fileUuid: string, fetchOpts?: RequestInit): Promise<void> {
     try {
       const response = await fetch(`${this.basePath}/${fileUuid}`, {
         method: 'DELETE',
@@ -106,10 +106,6 @@ export abstract class GenericFileService<T extends SHOGunFile> {
       if (!response.ok) {
         throw new Error(`HTTP error status: ${response.status}`);
       }
-
-      const json: T = await response.json();
-
-      return json;
     } catch (error) {
       throw new Error(`Error while deleting an entity: ${error}`);
     }
