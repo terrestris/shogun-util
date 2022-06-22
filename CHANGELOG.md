@@ -1,3 +1,18 @@
+# [1.2.0](https://github.com/terrestris/shogun-util/compare/v1.1.0...v1.2.0) (2022-06-22)
+
+
+### Bug Fixes
+
+* remove obsolute window namespace ([ff0726b](https://github.com/terrestris/shogun-util/commit/ff0726bfb35d2f194d5223d5cec19d2a70c49573))
+
+
+### Features
+
+* add getBearerTokenHeader util ([0930303](https://github.com/terrestris/shogun-util/commit/0930303457133bc2af168d302e49d6c3fe419c12))
+* Add OpenAPIService ([f7b6e5f](https://github.com/terrestris/shogun-util/commit/f7b6e5f257fd987d01ececa67f3893879b67b0ec))
+* applies the keycloak access token to each request ([1fba0a7](https://github.com/terrestris/shogun-util/commit/1fba0a7dd73e35754dff265aecbbfadc85fce7e9))
+* send bearer token for WMS Image, ImageTile and WFS (same-origin) requests ([c534377](https://github.com/terrestris/shogun-util/commit/c53437727e8e04ba022b585bf71d2934095129b5))
+
 # [1.1.0](https://github.com/terrestris/shogun-util/compare/v1.0.1...v1.1.0) (2022-06-20)
 
 
