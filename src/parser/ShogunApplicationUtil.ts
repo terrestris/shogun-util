@@ -431,7 +431,7 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
         return;
       }
 
-      imageElement.src = window.URL.createObjectURL(await response.blob());
+      imageElement.src = URL.createObjectURL(await response.blob());
     } catch (error) {
       Logger.error('Error while loading WMS: ', error);
     }
