@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/terrestris/shogun-util/compare/v1.2.0...v1.2.1) (2022-06-22)
+
+
+### Bug Fixes
+
+* delete operation do not return any content ([9d2edf1](https://github.com/terrestris/shogun-util/commit/9d2edf1aa11caece4367fe5b7648415fb411e826))
+
 # [1.2.0](https://github.com/terrestris/shogun-util/compare/v1.1.0...v1.2.0) (2022-06-22)
 
 
