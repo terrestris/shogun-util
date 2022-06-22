@@ -1,3 +1,6 @@
+import Keycloak from 'keycloak-js';
+
+import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
 
 export interface GraphQLQueryObject {
@@ -14,16 +17,20 @@ export interface GraphQLResponse<T> {
 
 export interface GraphQLServiceOpts {
   basePath: string;
+  keycloak?: Keycloak;
 };
 
 export class GraphQLService {
 
   private basePath: string;
 
+  private keycloak?: Keycloak;
+
   constructor(opts: GraphQLServiceOpts = {
     basePath: '/graphql'
   }) {
     this.basePath = opts.basePath;
+    this.keycloak = opts.keycloak;
   }
 
   async sendQuery<T>(query: GraphQLQueryObject, fetchOpts?: RequestInit): Promise<GraphQLResponse<T>> {
@@ -32,7 +39,8 @@ export class GraphQLService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          ...getCsrfTokenHeader()
+          ...getCsrfTokenHeader(),
+          ...getBearerTokenHeader(this.keycloak)
         },
         body: JSON.stringify(query),
         ...fetchOpts

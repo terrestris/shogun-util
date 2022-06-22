@@ -1,17 +1,24 @@
+import Keycloak from 'keycloak-js';
+
+import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
 
 import BaseEntity from '../../model/BaseEntity';
 
 export interface GenericServiceOpts {
   basePath: string;
+  keycloak?: Keycloak;
 };
 
 export abstract class GenericService<T extends BaseEntity> {
 
   basePath: string;
 
+  keycloak?: Keycloak;
+
   constructor(opts: GenericServiceOpts) {
     this.basePath = opts.basePath;
+    this.keycloak = opts.keycloak;
   }
 
   async findAll(fetchOpts?: RequestInit): Promise<T[]> {
@@ -19,7 +26,7 @@ export abstract class GenericService<T extends BaseEntity> {
       const response = await fetch(this.basePath, {
         method: 'GET',
         headers: {
-          ...getCsrfTokenHeader()
+          ...getBearerTokenHeader(this.keycloak)
         },
         ...fetchOpts
       });
@@ -41,7 +48,7 @@ export abstract class GenericService<T extends BaseEntity> {
       const response = await fetch(`${this.basePath}/${id}`, {
         method: 'GET',
         headers: {
-          ...getCsrfTokenHeader()
+          ...getBearerTokenHeader(this.keycloak)
         },
         ...fetchOpts
       });
@@ -64,7 +71,8 @@ export abstract class GenericService<T extends BaseEntity> {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          ...getCsrfTokenHeader()
+          ...getCsrfTokenHeader(),
+          ...getBearerTokenHeader(this.keycloak)
         },
         body: JSON.stringify(t),
         ...fetchOpts
@@ -88,7 +96,8 @@ export abstract class GenericService<T extends BaseEntity> {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          ...getCsrfTokenHeader()
+          ...getCsrfTokenHeader(),
+          ...getBearerTokenHeader(this.keycloak)
         },
         body: JSON.stringify(t),
         ...fetchOpts
@@ -112,7 +121,8 @@ export abstract class GenericService<T extends BaseEntity> {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          ...getCsrfTokenHeader()
+          ...getCsrfTokenHeader(),
+          ...getBearerTokenHeader(this.keycloak)
         },
         body: JSON.stringify(t),
         ...fetchOpts
@@ -135,7 +145,7 @@ export abstract class GenericService<T extends BaseEntity> {
       const response = await fetch(`${this.basePath}/${id}`, {
         method: 'DELETE',
         headers: {
-          ...getCsrfTokenHeader()
+          ...getBearerTokenHeader(this.keycloak)
         },
         ...fetchOpts
       });

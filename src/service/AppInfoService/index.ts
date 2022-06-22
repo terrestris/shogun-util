@@ -1,18 +1,25 @@
-import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
+import Keycloak from 'keycloak-js';
+
+import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 
 import { AppInfo } from '../../model/AppInfo';
 
 export interface AppInfoServiceOpts {
   basePath: string;
+  keycloak?: Keycloak;
 };
 
 export class AppInfoService {
+
   private basePath: string;
+
+  private keycloak?: Keycloak;
 
   constructor(opts: AppInfoServiceOpts = {
     basePath: '/info'
   }) {
     this.basePath = opts.basePath;
+    this.keycloak = opts.keycloak;
   }
 
   async getAppInfo(fetchOpts?: RequestInit): Promise<AppInfo> {
@@ -20,7 +27,7 @@ export class AppInfoService {
       const response = await fetch(`${this.basePath}/app`, {
         method: 'GET',
         headers: {
-          ...getCsrfTokenHeader()
+          ...getBearerTokenHeader(this.keycloak)
         },
         ...fetchOpts
       });

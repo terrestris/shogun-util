@@ -1,4 +1,4 @@
-import OlView, { ViewOptions } from 'ol/View';
+import OlView, { ViewOptions as OlViewOptions } from 'ol/View';
 import OlTileWMS from 'ol/source/TileWMS';
 import OlTileLayer from 'ol/layer/Tile';
 import OlImageWMS from 'ol/source/ImageWMS';
@@ -11,13 +11,20 @@ import OlSourceVector from 'ol/source/Vector';
 import OlWMTSCapabilities from 'ol/format/WMTSCapabilities';
 import OlFormatGeoJSON from 'ol/format/GeoJSON';
 import OlLayerVector from 'ol/layer/Vector';
+import OlImageTile from 'ol/ImageTile';
+import OlTile from 'ol/Tile';
+import OlImage from 'ol/Image';
+import OlGeometry from 'ol/geom/Geometry';
+import OlFeature from 'ol/Feature';
+import { Extent as OlExtent } from 'ol/extent';
 import {
   fromLonLat,
-  ProjectionLike
+  ProjectionLike as OlProjectionLike
 } from 'ol/proj';
 import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
 
 import { UrlUtil } from '@terrestris/base-util/dist/UrlUtil/UrlUtil';
+import Logger from '@terrestris/base-util/dist/Logger';
 
 import ProjectionUtil from '@terrestris/ol-util/dist/ProjectionUtil/ProjectionUtil';
 import { MapUtil } from '@terrestris/ol-util/dist/MapUtil/MapUtil';
@@ -26,7 +33,8 @@ import Application, { DefaultLayerTree } from '../model/Application';
 import Layer from '../model/Layer';
 
 import SHOGunClient from '../service/SHOGunClient';
-import Logger from '@terrestris/base-util/dist/Logger';
+
+import { getBearerTokenHeader } from '../security/getBearerTokenHeader';
 
 export interface ShogunApplicationUtilOpts {
   client?: SHOGunClient;
@@ -41,7 +49,7 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
     this.client = opts?.client;
   }
 
-  async parseMapView(application: T, additionalOpts?: ViewOptions): Promise<OlView> {
+  async parseMapView(application: T, additionalOpts?: OlViewOptions): Promise<OlView> {
     // TODO Should this be called here?
     ProjectionUtil.initProj4Definitions(null);
 
@@ -80,7 +88,7 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
     return view;
   }
 
-  async parseLayerTree(application: T, projection?: ProjectionLike) {
+  async parseLayerTree(application: T, projection?: OlProjectionLike) {
     const layerTree = application.layerTree;
 
     if (!layerTree) {
@@ -97,7 +105,7 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
     return tree;
   }
 
-  async parseNodes(nodes: DefaultLayerTree[], projection?: ProjectionLike) {
+  async parseNodes(nodes: DefaultLayerTree[], projection?: OlProjectionLike) {
     const collection: OlLayerBase[] = [];
 
     for (const node of nodes) {
@@ -125,7 +133,7 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
     return collection;
   }
 
-  async parseFolder(el: DefaultLayerTree, projection?: ProjectionLike) {
+  async parseFolder(el: DefaultLayerTree, projection?: OlProjectionLike) {
     const layers = await this.parseNodes(el.children, projection);
 
     const folder = new OlLayerGroup({
@@ -138,7 +146,7 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
     return folder;
   }
 
-  async parseLayer(layer: S, projection?: ProjectionLike) {
+  async parseLayer(layer: S, projection?: OlProjectionLike) {
     if (layer.type === 'WMS') {
       return this.parseImageLayer(layer);
     }
@@ -179,7 +187,8 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
         'LAYERS': layerNames,
         'TRANSPARENT': true
       },
-      crossOrigin
+      crossOrigin,
+      imageLoadFunction: this.bearerTokenLoadFunction
     });
 
     const imageLayer = new OlImageLayer({
@@ -193,7 +202,7 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
     return imageLayer;
   }
 
-  parseTileLayer(layer: S, projection: ProjectionLike = 'EPSG:3857') {
+  parseTileLayer(layer: S, projection: OlProjectionLike = 'EPSG:3857') {
     const {
       attribution,
       url,
@@ -227,7 +236,8 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
         'LAYERS': layerNames,
         'TRANSPARENT': true
       },
-      crossOrigin
+      crossOrigin,
+      tileLoadFunction: this.bearerTokenLoadFunction
     });
 
     const tileLayer = new OlTileLayer({
@@ -241,7 +251,7 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
     return tileLayer;
   }
 
-  async parseWMTSLayer(layer: S, projection: ProjectionLike = 'EPSG:3857') {
+  async parseWMTSLayer(layer: S, projection: OlProjectionLike = 'EPSG:3857') {
     const {
       attribution,
       url,
@@ -297,7 +307,7 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
     return wmtsLayer;
   }
 
-  parseWFSLayer(layer: S, projection: ProjectionLike = 'EPSG:3857') {
+  parseWFSLayer(layer: S, projection: OlProjectionLike = 'EPSG:3857') {
     const {
       attribution,
       url,
@@ -312,20 +322,19 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
     const source = new OlSourceVector({
       format: new OlFormatGeoJSON(),
       attributions: attribution,
-      url: extent => {
-        const params = UrlUtil.objectToRequestString({
-          SERVICE: 'WFS',
-          VERSION: '2.0.0',
-          REQUEST: 'GetFeature',
-          TYPENAMES: layerNames,
-          OUTPUTFORMAT: 'application/json',
-          SRSNAME: projection,
-          BBOX: `${extent.join(',')},${projection}`
+      strategy: olStrategyBbox,
+      loader: (extent, resolution, proj, success, failure) => {
+        this.bearerTokenLoadFunctionVector({
+          source,
+          url,
+          layerNames,
+          extent,
+          resolution,
+          projection,
+          success,
+          failure
         });
-
-        return `${url}${url.endsWith('?') ? '' : '?'}${params}`;
-      },
-      strategy: olStrategyBbox
+      }
     });
 
     const vectorLayer = new OlLayerVector({
@@ -355,6 +364,77 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
     olLayer.set('propertyConfig', layer.clientConfig?.propertyConfig);
     olLayer.set('legendUrl', layer.sourceConfig.legendUrl);
     olLayer.set('hoverable', layer.clientConfig?.hoverable);
+  }
+
+  private async bearerTokenLoadFunctionVector(opts: {
+    source: OlSourceVector;
+    url: string;
+    layerNames: string;
+    extent: OlExtent;
+    resolution: number;
+    projection: OlProjectionLike;
+    success?: (features: OlFeature<OlGeometry>[]) => void;
+    failure?: () => void;
+  }) {
+    try {
+      const params = UrlUtil.objectToRequestString({
+        SERVICE: 'WFS',
+        VERSION: '2.0.0',
+        REQUEST: 'GetFeature',
+        TYPENAMES: opts.layerNames,
+        OUTPUTFORMAT: 'application/json',
+        SRSNAME: opts.projection,
+        BBOX: `${opts.extent.join(',')},${opts.projection}`
+      });
+
+      const wfsUrl = `${opts.url}${opts.url.endsWith('?') ? '' : '?'}${params}`;
+
+      const response = await fetch(wfsUrl, {
+        headers: {
+          ...getBearerTokenHeader(this.client?.getKeycloak())
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('No successful response');
+      }
+
+      const features = opts.source.getFormat()?.readFeatures(await response.json());
+      if (features) {
+        opts.source.addFeatures(features as OlFeature<OlGeometry>[]);
+      }
+
+      if (opts.success) {
+        opts.success(features as OlFeature<OlGeometry>[]);
+      }
+    } catch (error) {
+      opts.source.removeLoadedExtent(opts.extent);
+      if (opts.failure) {
+        opts.failure();
+      }
+      Logger.error('Error loading WFS: ', error);
+    }
+  }
+
+  private async bearerTokenLoadFunction(imageTile: OlTile | OlImage, src: string) {
+    try {
+      const response = await fetch(src, {
+        headers: {
+          ...getBearerTokenHeader(this.client?.getKeycloak())
+        }
+      });
+
+      const imageElement = (imageTile as OlImageTile).getImage() as HTMLImageElement;
+
+      if (!response.ok) {
+        imageElement.src = src;
+        return;
+      }
+
+      imageElement.src = URL.createObjectURL(await response.blob());
+    } catch (error) {
+      Logger.error('Error while loading WMS: ', error);
+    }
   }
 }
 

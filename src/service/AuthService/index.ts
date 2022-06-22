@@ -1,16 +1,24 @@
+import Keycloak from 'keycloak-js';
+
+import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
 
 export interface AuthServiceOpts {
   basePath: string;
+  keycloak?: Keycloak;
 };
 
 export class AuthService {
+
   private basePath: string;
+
+  private keycloak?: Keycloak;
 
   constructor(opts: AuthServiceOpts = {
     basePath: '/sso'
   }) {
     this.basePath = opts.basePath;
+    this.keycloak = opts.keycloak;
   }
 
   async logout(requestOpts?: RequestInit): Promise<void> {
@@ -19,7 +27,8 @@ export class AuthService {
         method: 'POST',
         credentials: 'same-origin',
         headers: {
-          ...getCsrfTokenHeader()
+          ...getCsrfTokenHeader(),
+          ...getBearerTokenHeader(this.keycloak)
         },
         ...requestOpts
       });
