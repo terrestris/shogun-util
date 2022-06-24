@@ -1,3 +1,22 @@
+# [2.0.0](https://github.com/terrestris/shogun-util/compare/v1.2.1...v2.0.0) (2022-06-24)
+
+
+### Bug Fixes
+
+* set KeycloakGroupRepresentation as default type argument ([ddd07dd](https://github.com/terrestris/shogun-util/commit/ddd07ddb6f1539a138fcaf3d1eff600c361b1e99))
+
+
+### Styles
+
+* rename ShogunApplicationUtil to SHOGunApplicationUtil ([d3ece9c](https://github.com/terrestris/shogun-util/commit/d3ece9c1a465916fd959a33e4012b86befba565d))
+* rename SHOGunClient to SHOGunAPIClient and cache services after first creation ([6fb1b0b](https://github.com/terrestris/shogun-util/commit/6fb1b0b877920ee9e5e071de34d77da97e0eab03))
+
+
+### BREAKING CHANGES
+
+* Renames ShogunApplicationUtil to SHOGunApplicationUtil
+* Renames the SHOGunClient to SHOGunAPIClient
+
 ## [1.2.1](https://github.com/terrestris/shogun-util/compare/v1.2.0...v1.2.1) (2022-06-22)
 
 
