@@ -36,15 +36,15 @@ import SHOGunAPIClient from '../service/SHOGunAPIClient';
 
 import { getBearerTokenHeader } from '../security/getBearerTokenHeader';
 
-export interface ShogunApplicationUtilOpts {
+export interface SHOGunApplicationUtilOpts {
   client?: SHOGunAPIClient;
 }
 
-class ShogunApplicationUtil<T extends Application, S extends Layer> {
+class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
   private client: SHOGunAPIClient | undefined;
 
-  constructor(opts?: ShogunApplicationUtilOpts) {
+  constructor(opts?: SHOGunApplicationUtilOpts) {
     // TODO Default client?
     this.client = opts?.client;
   }
@@ -438,4 +438,4 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
   }
 }
 
-export default ShogunApplicationUtil;
+export default SHOGunApplicationUtil;

@@ -12,14 +12,14 @@ import { getUid } from 'ol/util';
 import Application from '../model/Application';
 import Layer from '../model/Layer';
 
-import ShogunApplicationUtil from './ShogunApplicationUtil';
+import SHOGunApplicationUtil from './SHOGunApplicationUtil';
 
-describe('ShogunApplicationUtil', () => {
+describe('SHOGunApplicationUtil', () => {
   let fetchMock: jest.SpyInstance;
-  let util: ShogunApplicationUtil<Application, Layer>;
+  let util: SHOGunApplicationUtil<Application, Layer>;
 
   beforeEach(() => {
-    util = new ShogunApplicationUtil<Application, Layer>();
+    util = new SHOGunApplicationUtil<Application, Layer>();
   });
 
   afterEach(() => {
@@ -30,7 +30,7 @@ describe('ShogunApplicationUtil', () => {
   });
 
   it('is defined', () => {
-    expect(ShogunApplicationUtil).toBeDefined();
+    expect(SHOGunApplicationUtil).toBeDefined();
   });
 
   it('creates a mapView', async () => {
