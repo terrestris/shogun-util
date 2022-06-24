@@ -13,7 +13,7 @@ import GroupService from './GroupService';
 
 import fetchSpy, { successResponse } from '../spec/fetchSpy';
 
-import SHOGunClient from './SHOGunClient';
+import SHOGunAPIClient from './SHOGunAPIClient';
 import CacheService from './CacheService';
 import FileService from './FileService';
 import ImageFileService from './ImageFileService';
@@ -37,12 +37,12 @@ export default class MyApplication extends Application {
   }
 }
 
-describe('SHOGunClient', () => {
+describe('SHOGunAPIClient', () => {
   let fetchMock: jest.SpyInstance;
-  let client: SHOGunClient;
+  let client: SHOGunAPIClient;
 
   beforeEach(() => {
-    client = new SHOGunClient();
+    client = new SHOGunAPIClient();
   });
 
   afterEach(() => {
@@ -53,7 +53,7 @@ describe('SHOGunClient', () => {
   });
 
   it('is defined', () => {
-    expect(SHOGunClient).toBeDefined();
+    expect(SHOGunAPIClient).toBeDefined();
   });
 
   it('can be instantiated', async () => {
