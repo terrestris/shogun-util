@@ -32,19 +32,19 @@ import { MapUtil } from '@terrestris/ol-util/dist/MapUtil/MapUtil';
 import Application, { DefaultLayerTree } from '../model/Application';
 import Layer from '../model/Layer';
 
-import SHOGunClient from '../service/SHOGunClient';
+import SHOGunAPIClient from '../service/SHOGunAPIClient';
 
 import { getBearerTokenHeader } from '../security/getBearerTokenHeader';
 
-export interface ShogunApplicationUtilOpts {
-  client?: SHOGunClient;
+export interface SHOGunApplicationUtilOpts {
+  client?: SHOGunAPIClient;
 }
 
-class ShogunApplicationUtil<T extends Application, S extends Layer> {
+class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
-  private client: SHOGunClient | undefined;
+  private client: SHOGunAPIClient | undefined;
 
-  constructor(opts?: ShogunApplicationUtilOpts) {
+  constructor(opts?: SHOGunApplicationUtilOpts) {
     // TODO Default client?
     this.client = opts?.client;
   }
@@ -438,4 +438,4 @@ class ShogunApplicationUtil<T extends Application, S extends Layer> {
   }
 }
 
-export default ShogunApplicationUtil;
+export default SHOGunApplicationUtil;
