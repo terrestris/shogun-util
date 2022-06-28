@@ -36,6 +36,10 @@ import SHOGunAPIClient from '../service/SHOGunAPIClient';
 
 import { getBearerTokenHeader } from '../security/getBearerTokenHeader';
 
+
+import {
+  allLayersByIds
+} from '../graphqlqueries/Layers';
 export interface SHOGunApplicationUtilOpts {
   client?: SHOGunAPIClient;
 }
@@ -95,49 +99,75 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       return;
     }
 
-    const nodes = await this.parseNodes(layerTree.children, projection);
+    if (!this.client) {
+      Logger.warn('Cannot parse the layers in layertree because no ' +
+        'SHOGunClient has been provided.');
+      return;
+    }
 
-    const tree = new OlLayerGroup({
-      layers: nodes.reverse(),
-      visible: layerTree.checked
-    });
+    let applicationLayerIds: number[] = this.getLayerIds(layerTree.children);
 
-    return tree;
+    if (applicationLayerIds.length > 0) {
+      try {
+        const { allLayersByIds: layers } = await this.client.graphql().sendQuery<Layer>({
+          query: allLayersByIds,
+          variables: {
+            ids: applicationLayerIds
+          }
+        });
+        if (layerTree.children) {
+          const nodes = await this.parseNodes(layerTree.children, layers, projection);
+
+          const tree = new OlLayerGroup({
+            layers: nodes.reverse(),
+            visible: layerTree.checked
+          });
+          return tree;
+        }
+      } catch (e) {
+        Logger.warn('Could not parse the layer tree: ' + e);
+        return new OlLayerGroup();
+      }
+    }
+    return new OlLayerGroup();
   }
 
-  async parseNodes(nodes: DefaultLayerTree[], projection?: OlProjectionLike) {
+  getLayerIds(nodes: DefaultLayerTree[], ids?: number[]) {
+    let layerIds: number[] = ids ?? [];
+
+    for (const node of nodes) {
+      if (node.children?.length > 0) {
+        this.getLayerIds(node.children, layerIds);
+      } else {
+        layerIds.push(node.layerId);
+      }
+    }
+    return layerIds;
+  }
+
+  async parseNodes(nodes: DefaultLayerTree[], layers: Layer[], projection?: OlProjectionLike) {
     const collection: OlLayerBase[] = [];
 
     for (const node of nodes) {
-      if (node.children) {
-        collection.push(await this.parseFolder(node, projection));
+      if (node.children?.length > 0) {
+        collection.push(await this.parseFolder(node, layers, projection));
       } else {
-        if (!this.client) {
-          Logger.warn(`Couldn\'t parse the layer with ID ${node.layerId} because no ` +
-            'SHOGunClient has been provided.');
-
-          continue;
+        const layerNode = layers.find(l => l.id === node.layerId);
+        if (layerNode) {
+          const olLayer = await this.parseLayer(layerNode as S, projection);
+          olLayer.setVisible(node.checked);
+          collection.push(olLayer);
         }
-
-        // TODO Fetch via graphlQL (multiple at once)
-        const layer = await this.client.layer<S>().findOne(node.layerId);
-
-        const olLayer = await this.parseLayer(layer, projection);
-
-        olLayer.setVisible(node.checked);
-
-        collection.push(olLayer);
       }
     }
-
     return collection;
   }
 
-  async parseFolder(el: DefaultLayerTree, projection?: OlProjectionLike) {
-    const layers = await this.parseNodes(el.children, projection);
+  async parseFolder(el: DefaultLayerTree, layers: Layer[], projection?: OlProjectionLike) {
+    const layersInFolder = await this.parseNodes(el.children, layers, projection);
 
     const folder = new OlLayerGroup({
-      layers: layers.reverse(),
+      layers: layersInFolder.reverse(),
       visible: el.checked
     });
 
