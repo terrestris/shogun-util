@@ -11,7 +11,9 @@ export interface GraphQLQueryObject {
 };
 
 export interface GraphQLResponse<T> {
-  data: T[];
+  data: {
+    [key: string]: T[];
+  };
   errors?: any;
 };
 
@@ -33,7 +35,7 @@ export class GraphQLService {
     this.keycloak = opts.keycloak;
   }
 
-  async sendQuery<T>(query: GraphQLQueryObject, fetchOpts?: RequestInit): Promise<GraphQLResponse<T>> {
+  async sendQuery<T>(query: GraphQLQueryObject, fetchOpts?: RequestInit): Promise<{[key: string]: T[]}> {
     try {
       const response = await fetch(this.basePath, {
         method: 'POST',
@@ -46,17 +48,17 @@ export class GraphQLService {
         ...fetchOpts
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error status: ${response.status}`);
+      if (!response?.ok) {
+        throw new Error(`HTTP error status: ${response?.status}`);
       }
 
-      const responseJson = await response.json() as GraphQLResponse<T>;
+      const {data, errors } = await response.json() as GraphQLResponse<T>;
 
-      if (responseJson.errors?.length > 0) {
-        throw new Error(`Error response: ${responseJson.errors}`);
+      if (errors?.length > 0) {
+        throw new Error(`Error response: ${errors}`);
       }
 
-      return responseJson;
+      return data;
     } catch (error) {
       throw new Error(`Error while requesting GraphQL: ${error}`);
     }

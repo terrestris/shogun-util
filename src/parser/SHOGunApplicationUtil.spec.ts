@@ -9,17 +9,20 @@ import OlTileGrid from 'ol/tilegrid/TileGrid';
 import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
 import { getUid } from 'ol/util';
 
-import Application from '../model/Application';
+import Application, { DefaultLayerTree } from '../model/Application';
 import Layer from '../model/Layer';
 
 import SHOGunApplicationUtil from './SHOGunApplicationUtil';
+import SHOGunAPIClient from '../service/SHOGunAPIClient';
 
 describe('SHOGunApplicationUtil', () => {
   let fetchMock: jest.SpyInstance;
   let util: SHOGunApplicationUtil<Application, Layer>;
 
   beforeEach(() => {
-    util = new SHOGunApplicationUtil<Application, Layer>();
+    util = new SHOGunApplicationUtil<Application, Layer>({
+      client: new SHOGunAPIClient()
+    });
   });
 
   afterEach(() => {
@@ -44,16 +47,75 @@ describe('SHOGunApplicationUtil', () => {
   it('parseLayerTree', async () => {
     const myApplication: Application = {
       layerTree: {
+        title: 'ROOT',
         checked: true,
         layerId: 1909,
-        title: 'ROOT',
-        children: []
+        children: [{
+          title: 'Layer 1',
+          checked: true,
+          layerId: 1,
+          children: []
+        }]
       }
     };
 
-    const mapView = await util.parseLayerTree(myApplication);
+    const layerTree = await util.parseLayerTree(myApplication);
 
-    expect(mapView).toBeDefined();
+    expect(layerTree).toBeDefined();
+  });
+
+  it('properly gathers IDs of configured layers in layertree (getLayerIds)', () => {
+
+    const myLayerTree: DefaultLayerTree = {
+      title: 'My Layer Tree',
+      checked: true,
+      layerId: 12345,
+      children: [{
+        title: 'Layer Folder 1',
+        checked: false,
+        layerId: 111,
+        children: [
+          {
+            title: 'Layer 1',
+            checked: false,
+            layerId: 1,
+            children: []
+          },
+          {
+            title: 'Layer 2',
+            checked: false,
+            layerId: 2,
+            children: []
+          }
+        ]
+      }, {
+        title: 'Layer Folder 2',
+        checked: false,
+        layerId: 222,
+        children: [
+          {
+            title: 'Layer 3',
+            layerId: 3,
+            checked: false,
+            children: []
+          },
+          {
+            title: 'Layer 4',
+            layerId: 4,
+            checked: false,
+            children: []
+          }
+        ]
+      }, {
+        title: 'Layer 5',
+        layerId: 5,
+        checked: true,
+        children: []
+      }]
+    };
+    const layerIds = util.getLayerIds(myLayerTree.children);
+    const expectedIds = [1, 2, 3, 4, 5];
+    expect(layerIds).toEqual(expect.arrayContaining(expectedIds));
   });
 
   it('is capable to parse a WMS layer (parseImageLayer)', async () => {
