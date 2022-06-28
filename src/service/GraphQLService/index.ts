@@ -12,7 +12,7 @@ export interface GraphQLQueryObject {
 
 export interface GraphQLResponse<T> {
   data: {
-    [key: string]: T[]
+    [key: string]: T[];
   };
   errors?: any;
 };
