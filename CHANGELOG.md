@@ -1,3 +1,26 @@
+# [3.0.0](https://github.com/terrestris/shogun-util/compare/v2.0.0...v3.0.0) (2022-06-28)
+
+
+### Bug Fixes
+
+* add missing semicolon ([4b64c03](https://github.com/terrestris/shogun-util/commit/4b64c03a5915fc8a8e55fa2e678c8474a4899626))
+* fix test ([916e397](https://github.com/terrestris/shogun-util/commit/916e397d09c2adf99190da03e9c3f324290dd409))
+* fix typing ([8fee58f](https://github.com/terrestris/shogun-util/commit/8fee58ffed8baa04efadc35f637fb22a6ef05c67))
+* rename variable ([f241206](https://github.com/terrestris/shogun-util/commit/f241206d54391bd1073aca9f089ca727a7ce2569))
+
+
+### Features
+
+* add test for getLayerIds method ([309f38f](https://github.com/terrestris/shogun-util/commit/309f38f3e7cfbbe099d2a2430a1061e306e740af))
+* request application layers in bundle ([715caad](https://github.com/terrestris/shogun-util/commit/715caad708260be3dda25e38eeb299a00be4d79e))
+* return data from response ([8c02fe2](https://github.com/terrestris/shogun-util/commit/8c02fe2082829d8f5745a3d936dc0af96c47db0f))
+
+
+### BREAKING CHANGES
+
+* Methods `parseNodes` and `parseFolder` are expecting a mandatory array of layer entities as second argument
+* Changes return value of `sendQuery` method from `Promise<GraphQlResponse<T>> to `Promise<[key: string]: T[]>
+
 # [2.0.0](https://github.com/terrestris/shogun-util/compare/v1.2.1...v2.0.0) (2022-06-24)
 
 
