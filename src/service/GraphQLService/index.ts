@@ -11,7 +11,9 @@ export interface GraphQLQueryObject {
 };
 
 export interface GraphQLResponse<T> {
-  data: T[];
+  data: {
+    [key: string]: T[]
+  };
   errors?: any;
 };
 
@@ -33,7 +35,7 @@ export class GraphQLService {
     this.keycloak = opts.keycloak;
   }
 
-  async sendQuery<T>(query: GraphQLQueryObject, fetchOpts?: RequestInit): Promise<any> {
+  async sendQuery<T>(query: GraphQLQueryObject, fetchOpts?: RequestInit): Promise<{[key: string]: T[]}> {
     try {
       const response = await fetch(this.basePath, {
         method: 'POST',
