@@ -36,10 +36,10 @@ import SHOGunAPIClient from '../service/SHOGunAPIClient';
 
 import { getBearerTokenHeader } from '../security/getBearerTokenHeader';
 
-
 import {
   allLayersByIds
 } from '../graphqlqueries/Layers';
+
 export interface SHOGunApplicationUtilOpts {
   client?: SHOGunAPIClient;
 }
@@ -105,14 +105,14 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       return;
     }
 
-    let applicationLayerIds: number[] = this.getLayerIds(layerTree.children);
+    let layerIds: number[] = this.getLayerIds(layerTree.children);
 
-    if (applicationLayerIds.length > 0) {
+    if (layerIds.length > 0) {
       try {
         const { allLayersByIds: layers } = await this.client.graphql().sendQuery<Layer>({
           query: allLayersByIds,
           variables: {
-            ids: applicationLayerIds
+            ids: layerIds
           }
         });
         if (layerTree.children) {
