@@ -54,8 +54,7 @@ describe('GraphQLService', () => {
 
     const result = await service.sendQuery<User>(graphqlQuery);
 
-    expect(result.errors).toBeUndefined();
-    expect(result.data).toEqual(expected);
+    expect(result).toEqual(expected);
   });
 
   it('throws an error if the endpoint returns an errenous status code', async () => {
