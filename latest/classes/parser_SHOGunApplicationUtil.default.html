@@ -42,6 +42,7 @@
 <h3 class="tsd-index-heading">Methods</h3>
 <div class="tsd-index-list"><a href="parser_SHOGunApplicationUtil.default.html#bearerTokenLoadFunction" class="tsd-index-link tsd-kind-method tsd-parent-kind-class"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="#FF4DB8" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="12" id="icon-2048-path"></rect><path d="M9.162 16V7.24H10.578L11.514 10.072C11.602 10.328 11.674 10.584 11.73 10.84C11.794 11.088 11.842 11.28 11.874 11.416C11.906 11.28 11.954 11.088 12.018 10.84C12.082 10.584 12.154 10.324 12.234 10.06L13.122 7.24H14.538V16H13.482V12.82C13.482 12.468 13.49 12.068 13.506 11.62C13.53 11.172 13.558 10.716 13.59 10.252C13.622 9.78 13.654 9.332 13.686 8.908C13.726 8.476 13.762 8.1 13.794 7.78L12.366 12.16H11.334L9.894 7.78C9.934 8.092 9.97 8.456 10.002 8.872C10.042 9.28 10.078 9.716 10.11 10.18C10.142 10.636 10.166 11.092 10.182 11.548C10.206 12.004 10.218 12.428 10.218 12.82V16H9.162Z" fill="var(--color-text)" id="icon-2048-text"></path></svg><span>bearer<wbr/>Token<wbr/>Load<wbr/>Function</span></a>
 <a href="parser_SHOGunApplicationUtil.default.html#bearerTokenLoadFunctionVector" class="tsd-index-link tsd-kind-method tsd-parent-kind-class"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-2048-path"></use><use href="#icon-2048-text"></use></svg><span>bearer<wbr/>Token<wbr/>Load<wbr/>Function<wbr/>Vector</span></a>
+<a href="parser_SHOGunApplicationUtil.default.html#getLayerIds" class="tsd-index-link tsd-kind-method tsd-parent-kind-class"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-2048-path"></use><use href="#icon-2048-text"></use></svg><span>get<wbr/>Layer<wbr/>Ids</span></a>
 <a href="parser_SHOGunApplicationUtil.default.html#getMapScales" class="tsd-index-link tsd-kind-method tsd-parent-kind-class"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-2048-path"></use><use href="#icon-2048-text"></use></svg><span>get<wbr/>Map<wbr/>Scales</span></a>
 <a href="parser_SHOGunApplicationUtil.default.html#parseFolder" class="tsd-index-link tsd-kind-method tsd-parent-kind-class"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-2048-path"></use><use href="#icon-2048-text"></use></svg><span>parse<wbr/>Folder</span></a>
 <a href="parser_SHOGunApplicationUtil.default.html#parseImageLayer" class="tsd-index-link tsd-kind-method tsd-parent-kind-class"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-2048-path"></use><use href="#icon-2048-text"></use></svg><span>parse<wbr/>Image<wbr/>Layer</span></a>
@@ -81,7 +82,7 @@
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagPrivate">Private</code> <span>client</span><a href="#client" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">client<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="service_SHOGunAPIClient.SHOGunAPIClient.html" class="tsd-signature-type" data-tsd-kind="Class">SHOGunAPIClient</a></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/terrestris/shogun-util/blob/16a4822/src/parser/SHOGunApplicationUtil.ts#L45">parser/SHOGunApplicationUtil.ts:45</a></li></ul></aside></section></section>
+<li>Defined in <a href="https://github.com/terrestris/shogun-util/blob/22fec71/src/parser/SHOGunApplicationUtil.ts#L49">parser/SHOGunApplicationUtil.ts:49</a></li></ul></aside></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Methods</h2>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="bearerTokenLoadFunction" class="tsd-anchor"></a>
@@ -142,6 +143,20 @@
 <h5>features: <span class="tsd-signature-type">Feature</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Geometry</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4></li></ul></li></ul></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4></li></ul></section>
+<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="getLayerIds" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>get<wbr/>Layer<wbr/>Ids</span><a href="#getLayerIds" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
+<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+<li class="tsd-signature" id="getLayerIds.getLayerIds-1">get<wbr/>Layer<wbr/>Ids<span class="tsd-signature-symbol">(</span>nodes<span class="tsd-signature-symbol">: </span><a href="../interfaces/model_Application.DefaultLayerTree.html" class="tsd-signature-type" data-tsd-kind="Interface">DefaultLayerTree</a><span class="tsd-signature-symbol">[]</span>, ids<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></li></ul>
+<ul class="tsd-descriptions">
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5>nodes: <a href="../interfaces/model_Application.DefaultLayerTree.html" class="tsd-signature-type" data-tsd-kind="Interface">DefaultLayerTree</a><span class="tsd-signature-symbol">[]</span></h5></li>
+<li>
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> ids: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h4></li></ul></section>
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="getMapScales" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>get<wbr/>Map<wbr/>Scales</span><a href="#getMapScales" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -159,7 +174,7 @@
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="parseFolder" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>parse<wbr/>Folder</span><a href="#parseFolder" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-<li class="tsd-signature" id="parseFolder.parseFolder-1">parse<wbr/>Folder<span class="tsd-signature-symbol">(</span>el<span class="tsd-signature-symbol">: </span><a href="../interfaces/model_Application.DefaultLayerTree.html" class="tsd-signature-type" data-tsd-kind="Interface">DefaultLayerTree</a>, projection<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ProjectionLike</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">LayerGroup</span><span class="tsd-signature-symbol">&gt;</span></li></ul>
+<li class="tsd-signature" id="parseFolder.parseFolder-1">parse<wbr/>Folder<span class="tsd-signature-symbol">(</span>el<span class="tsd-signature-symbol">: </span><a href="../interfaces/model_Application.DefaultLayerTree.html" class="tsd-signature-type" data-tsd-kind="Interface">DefaultLayerTree</a>, layers<span class="tsd-signature-symbol">: </span><a href="model_Layer.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">[]</span>, projection<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ProjectionLike</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">LayerGroup</span><span class="tsd-signature-symbol">&gt;</span></li></ul>
 <ul class="tsd-descriptions">
 <li class="tsd-description">
 <div class="tsd-parameters">
@@ -167,6 +182,8 @@
 <ul class="tsd-parameter-list">
 <li>
 <h5>el: <a href="../interfaces/model_Application.DefaultLayerTree.html" class="tsd-signature-type" data-tsd-kind="Interface">DefaultLayerTree</a></h5></li>
+<li>
+<h5>layers: <a href="model_Layer.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">[]</span></h5></li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> projection: <span class="tsd-signature-type">ProjectionLike</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">LayerGroup</span><span class="tsd-signature-symbol">&gt;</span></h4></li></ul></section>
@@ -227,7 +244,7 @@
 <section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class"><a id="parseNodes" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>parse<wbr/>Nodes</span><a href="#parseNodes" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-<li class="tsd-signature" id="parseNodes.parseNodes-1">parse<wbr/>Nodes<span class="tsd-signature-symbol">(</span>nodes<span class="tsd-signature-symbol">: </span><a href="../interfaces/model_Application.DefaultLayerTree.html" class="tsd-signature-type" data-tsd-kind="Interface">DefaultLayerTree</a><span class="tsd-signature-symbol">[]</span>, projection<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ProjectionLike</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">BaseLayer</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li></ul>
+<li class="tsd-signature" id="parseNodes.parseNodes-1">parse<wbr/>Nodes<span class="tsd-signature-symbol">(</span>nodes<span class="tsd-signature-symbol">: </span><a href="../interfaces/model_Application.DefaultLayerTree.html" class="tsd-signature-type" data-tsd-kind="Interface">DefaultLayerTree</a><span class="tsd-signature-symbol">[]</span>, layers<span class="tsd-signature-symbol">: </span><a href="model_Layer.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">[]</span>, projection<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ProjectionLike</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">BaseLayer</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li></ul>
 <ul class="tsd-descriptions">
 <li class="tsd-description">
 <div class="tsd-parameters">
@@ -235,6 +252,8 @@
 <ul class="tsd-parameter-list">
 <li>
 <h5>nodes: <a href="../interfaces/model_Application.DefaultLayerTree.html" class="tsd-signature-type" data-tsd-kind="Interface">DefaultLayerTree</a><span class="tsd-signature-symbol">[]</span></h5></li>
+<li>
+<h5>layers: <a href="model_Layer.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">[]</span></h5></li>
 <li>
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> projection: <span class="tsd-signature-type">ProjectionLike</span></h5></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">BaseLayer</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4></li></ul></section>
@@ -315,6 +334,7 @@
 <ul>
 <li class="current"><a href="../modules.html">@terrestris/shogun-<wbr/>util</a>
 <ul>
+<li class="tsd-kind-module"><a href="../modules/graphqlqueries_Layers.html">graphqlqueries/<wbr/>Layers</a></li>
 <li class="tsd-kind-module"><a href="../modules/model_AppInfo.html">model/<wbr/>App<wbr/>Info</a></li>
 <li class="tsd-kind-module"><a href="../modules/model_Application.html">model/<wbr/>Application</a></li>
 <li class="tsd-kind-module"><a href="../modules/model_BaseEntity.html">model/<wbr/>Base<wbr/>Entity</a></li>
@@ -350,6 +370,7 @@
 <li class="tsd-kind-property tsd-parent-kind-class"><a href="parser_SHOGunApplicationUtil.default.html#client" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg>client</a></li>
 <li class="tsd-kind-method tsd-parent-kind-class"><a href="parser_SHOGunApplicationUtil.default.html#bearerTokenLoadFunction" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-2048-path"></use><use href="#icon-2048-text"></use></svg>bearer<wbr/>Token<wbr/>Load<wbr/>Function</a></li>
 <li class="tsd-kind-method tsd-parent-kind-class"><a href="parser_SHOGunApplicationUtil.default.html#bearerTokenLoadFunctionVector" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-2048-path"></use><use href="#icon-2048-text"></use></svg>bearer<wbr/>Token<wbr/>Load<wbr/>Function<wbr/>Vector</a></li>
+<li class="tsd-kind-method tsd-parent-kind-class"><a href="parser_SHOGunApplicationUtil.default.html#getLayerIds" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-2048-path"></use><use href="#icon-2048-text"></use></svg>get<wbr/>Layer<wbr/>Ids</a></li>
 <li class="tsd-kind-method tsd-parent-kind-class"><a href="parser_SHOGunApplicationUtil.default.html#getMapScales" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-2048-path"></use><use href="#icon-2048-text"></use></svg>get<wbr/>Map<wbr/>Scales</a></li>
 <li class="tsd-kind-method tsd-parent-kind-class"><a href="parser_SHOGunApplicationUtil.default.html#parseFolder" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-2048-path"></use><use href="#icon-2048-text"></use></svg>parse<wbr/>Folder</a></li>
 <li class="tsd-kind-method tsd-parent-kind-class"><a href="parser_SHOGunApplicationUtil.default.html#parseImageLayer" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-2048-path"></use><use href="#icon-2048-text"></use></svg>parse<wbr/>Image<wbr/>Layer</a></li>
