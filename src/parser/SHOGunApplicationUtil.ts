@@ -44,6 +44,9 @@ export interface SHOGunApplicationUtilOpts {
   client?: SHOGunAPIClient;
 }
 
+export type ParsedLayer = OlImageLayer<OlImageWMS> | OlTileLayer<OlTileWMS |
+  OlSourceWMTS> | OlLayerVector<OlSourceVector> | undefined;
+
 class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
   private client: SHOGunAPIClient | undefined;
@@ -118,6 +121,10 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         if (layerTree.children) {
           const nodes = await this.parseNodes(layerTree.children, layers, projection);
 
+          if (!nodes) {
+            return;
+          }
+
           const tree = new OlLayerGroup({
             layers: nodes.reverse(),
             visible: layerTree.checked
@@ -150,11 +157,18 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
     for (const node of nodes) {
       if (node.children?.length > 0) {
-        collection.push(await this.parseFolder(node, layers, projection));
+        const folder = await this.parseFolder(node, layers, projection);
+        if (!folder) {
+          return;
+        }
+        collection.push(folder);
       } else {
         const layerNode = layers.find(l => l.id === node.layerId);
         if (layerNode) {
-          const olLayer = await this.parseLayer(layerNode as S, projection);
+          const olLayer: ParsedLayer = await this.parseLayer(layerNode as S, projection);
+          if (!olLayer) {
+            return;
+          }
           olLayer.setVisible(node.checked);
           collection.push(olLayer);
         }
@@ -166,6 +180,10 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
   async parseFolder(el: DefaultLayerTree, layers: Layer[], projection?: OlProjectionLike) {
     const layersInFolder = await this.parseNodes(el.children, layers, projection);
 
+    if (!layersInFolder) {
+      return;
+    }
+
     const folder = new OlLayerGroup({
       layers: layersInFolder.reverse(),
       visible: el.checked
@@ -176,25 +194,31 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     return folder;
   }
 
-  async parseLayer(layer: S, projection?: OlProjectionLike) {
+  async parseLayer(layer: S, projection?: OlProjectionLike): Promise<ParsedLayer> {
+    let parsedLayer: ParsedLayer;
     if (layer.type === 'WMS') {
-      return this.parseImageLayer(layer);
+      parsedLayer = this.parseImageLayer(layer);
     }
 
     if (layer.type === 'TILEWMS') {
-      return this.parseTileLayer(layer, projection);
+      parsedLayer = this.parseTileLayer(layer, projection);
     }
 
     if (layer.type === 'WMTS') {
-      return await this.parseWMTSLayer(layer, projection);
+      parsedLayer = await this.parseWMTSLayer(layer, projection);
     }
 
     if (layer.type === 'WFS') {
-      return this.parseWFSLayer(layer, projection);
+      parsedLayer = this.parseWFSLayer(layer, projection);
     }
 
-    // TODO Add support for VECTORTILE, XYZ and WMSTime
-    throw new Error('Currently only WMTS, WMS, TILEWMS and WFS layers are supported.');
+    if (!parsedLayer) {
+      // TODO Add support for VECTORTILE, XYZ and WMSTime
+      throw new Error('Currently only WMTS, WMS, TILEWMS and WFS layers are supported.');
+    }
+
+    parsedLayer.set('layerConfig', layer);
+    return parsedLayer;
   }
 
   parseImageLayer(layer: S) {

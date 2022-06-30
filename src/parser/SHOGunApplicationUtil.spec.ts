@@ -176,6 +176,7 @@ describe('SHOGunApplicationUtil', () => {
     expected.set('propertyConfig', myLayer.clientConfig?.propertyConfig);
     expected.set('legendUrl', myLayer.sourceConfig.legendUrl);
     expected.set('hoverable', myLayer.clientConfig?.hoverable);
+    expected.set('layerConfig', myLayer);
 
     expect(JSON.stringify(layer)).toEqual(JSON.stringify(expected));
   });
@@ -242,6 +243,7 @@ describe('SHOGunApplicationUtil', () => {
     expected.set('propertyConfig', myLayer.clientConfig?.propertyConfig);
     expected.set('legendUrl', myLayer.sourceConfig.legendUrl);
     expected.set('hoverable', myLayer.clientConfig?.hoverable);
+    expected.set('layerConfig', myLayer);
 
     expect(JSON.stringify(layer)).toEqual(JSON.stringify(expected));
   });
@@ -282,6 +284,7 @@ describe('SHOGunApplicationUtil', () => {
     expected.set('propertyConfig', myLayer.clientConfig?.propertyConfig);
     expected.set('legendUrl', myLayer.sourceConfig.legendUrl);
     expected.set('hoverable', myLayer.clientConfig?.hoverable);
+    expected.set('layerConfig', myLayer);
 
     // @ts-ignore
     // eslint-disable-next-line camelcase
