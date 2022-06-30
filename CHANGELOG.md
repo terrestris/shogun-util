@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/terrestris/shogun-util/compare/v3.0.0...v3.1.0) (2022-06-30)
+
+
+### Features
+
+* configurable transparent parameter ([66a97d8](https://github.com/terrestris/shogun-util/commit/66a97d8b6d4e55176c7ae50c957c876ecea742f7))
+
 # [3.0.0](https://github.com/terrestris/shogun-util/compare/v2.0.0...v3.0.0) (2022-06-28)
 
 
