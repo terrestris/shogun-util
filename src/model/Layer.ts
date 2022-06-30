@@ -2,6 +2,10 @@ import { FeatureCollection } from 'geojson';
 import BaseEntity, { BaseEntityArgs } from './BaseEntity';
 import LayerType from './enum/LayerType';
 
+export interface DefaultRequestParams {
+  transparent?: boolean;
+}
+
 export interface DefaultLayerSourceConfig {
   url: string;
   layerNames: string;
@@ -10,7 +14,7 @@ export interface DefaultLayerSourceConfig {
   tileOrigin?: [number, number];
   resolutions?: number[];
   attribution?: string;
-  transparent?: boolean;
+  requestParams?: DefaultRequestParams;
 }
 
 export interface DefaultLayerPropertyConfig {
