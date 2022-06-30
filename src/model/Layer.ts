@@ -10,6 +10,7 @@ export interface DefaultLayerSourceConfig {
   tileOrigin?: [number, number];
   resolutions?: number[];
   attribution?: string;
+  transparent?: boolean;
 }
 
 export interface DefaultLayerPropertyConfig {
