@@ -3,7 +3,7 @@ import BaseEntity, { BaseEntityArgs } from './BaseEntity';
 import LayerType from './enum/LayerType';
 
 export interface DefaultRequestParams {
-  transparent?: boolean;
+  [key: string]: string | number | boolean;
 }
 
 export interface DefaultLayerSourceConfig {
