@@ -202,7 +202,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       attribution,
       url,
       layerNames,
-      transparent
+      requestParams
     } = layer.sourceConfig || {};
 
     const {
@@ -216,7 +216,10 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       attributions: attribution,
       params: {
         'LAYERS': layerNames,
-        'TRANSPARENT': transparent !== undefined ? transparent : true
+        'TRANSPARENT':
+          requestParams?.transparent !== undefined
+            ? requestParams?.transparent
+            : true
       },
       crossOrigin,
       imageLoadFunction: this.bearerTokenLoadFunction
@@ -241,7 +244,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       tileSize = 256,
       tileOrigin,
       resolutions,
-      transparent
+      requestParams
     } = layer.sourceConfig || {};
 
     const {
@@ -266,7 +269,10 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       projection,
       params: {
         'LAYERS': layerNames,
-        'TRANSPARENT': transparent !== undefined ? transparent : true
+        'TRANSPARENT':
+          requestParams?.transparent !== undefined
+            ? requestParams?.transparent
+            : true
       },
       crossOrigin,
       tileLoadFunction: this.bearerTokenLoadFunction
@@ -396,7 +402,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     olLayer.set('propertyConfig', layer.clientConfig?.propertyConfig);
     olLayer.set('legendUrl', layer.sourceConfig.legendUrl);
     olLayer.set('hoverable', layer.clientConfig?.hoverable);
-    olLayer.set('transparent', layer.sourceConfig?.transparent);
+    olLayer.set('transparent', layer.sourceConfig?.requestParams?.transparent);
   }
 
   private async bearerTokenLoadFunctionVector(opts: {
