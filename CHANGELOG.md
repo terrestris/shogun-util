@@ -1,3 +1,10 @@
+## [3.1.1](https://github.com/terrestris/shogun-util/compare/v3.1.0...v3.1.1) (2022-07-01)
+
+
+### Bug Fixes
+
+* move transparent param to requestParam map ([f9d18f8](https://github.com/terrestris/shogun-util/commit/f9d18f8d03a69ab62aa7901f2465c68bddeeaff9))
+
 # [3.1.0](https://github.com/terrestris/shogun-util/compare/v3.0.0...v3.1.0) (2022-06-30)
 
 
