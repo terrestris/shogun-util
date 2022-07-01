@@ -1,3 +1,10 @@
+## [3.1.2](https://github.com/terrestris/shogun-util/compare/v3.1.1...v3.1.2) (2022-07-01)
+
+
+### Bug Fixes
+
+* allows custom request params ([f1bebd0](https://github.com/terrestris/shogun-util/commit/f1bebd0b40ac39c0967fd508ead9553b68090aaa))
+
 ## [3.1.1](https://github.com/terrestris/shogun-util/compare/v3.1.0...v3.1.1) (2022-07-01)
 
 
