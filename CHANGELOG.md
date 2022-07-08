@@ -1,3 +1,10 @@
+## [3.1.3](https://github.com/terrestris/shogun-util/compare/v3.1.2...v3.1.3) (2022-07-08)
+
+
+### Bug Fixes
+
+* set correct scope ([53bd6e8](https://github.com/terrestris/shogun-util/commit/53bd6e8ac876b2eeeda7636a21fab7786ee92624))
+
 ## [3.1.2](https://github.com/terrestris/shogun-util/compare/v3.1.1...v3.1.2) (2022-07-01)
 
 
