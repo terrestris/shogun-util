@@ -219,7 +219,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         ...requestParams
       },
       crossOrigin,
-      imageLoadFunction: this.bearerTokenLoadFunction
+      imageLoadFunction: this.bearerTokenLoadFunction.bind(this)
     });
 
     const imageLayer = new OlImageLayer({
@@ -269,7 +269,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         ...requestParams
       },
       crossOrigin,
-      tileLoadFunction: this.bearerTokenLoadFunction
+      tileLoadFunction: this.bearerTokenLoadFunction.bind(this)
     });
 
     const tileLayer = new OlTileLayer({
