@@ -15,7 +15,7 @@ export interface DefaultLayerSourceConfig {
   resolutions?: number[];
   attribution?: string;
   requestParams?: DefaultRequestParams;
-  bearerToken?: boolean;
+  useBearerToken?: boolean;
 }
 
 export interface DefaultLayerPropertyConfig {
