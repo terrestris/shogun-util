@@ -410,7 +410,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     projection: OlProjectionLike;
     success?: (features: OlFeature<OlGeometry>[]) => void;
     failure?: () => void;
-  }, bearerToken: boolean = true) {
+  }, bearerToken: boolean = false) {
     try {
       const params = UrlUtil.objectToRequestString({
         SERVICE: 'WFS',
@@ -451,7 +451,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     }
   }
 
-  private async bearerTokenLoadFunction(imageTile: OlTile | OlImage, src: string, bearerToken: boolean = true) {
+  private async bearerTokenLoadFunction(imageTile: OlTile | OlImage, src: string, bearerToken: boolean = false) {
     try {
       const response = await fetch(src, {
         headers: bearerToken ? {
