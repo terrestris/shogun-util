@@ -202,6 +202,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       attribution,
       url,
       layerNames,
+      useBearerToken,
       requestParams = {'TRANSPARENT': true}
     } = layer.sourceConfig || {};
 
@@ -219,7 +220,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         ...requestParams
       },
       crossOrigin,
-      imageLoadFunction: this.bearerTokenLoadFunction.bind(this)
+      imageLoadFunction: (imageTile, src) => this.bearerTokenLoadFunction(imageTile, src, useBearerToken)
     });
 
     const imageLayer = new OlImageLayer({
@@ -238,6 +239,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       attribution,
       url,
       layerNames,
+      useBearerToken,
       tileSize = 256,
       tileOrigin,
       resolutions,
@@ -269,7 +271,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         ...requestParams
       },
       crossOrigin,
-      tileLoadFunction: this.bearerTokenLoadFunction.bind(this)
+      tileLoadFunction: (imageTile, src) => this.bearerTokenLoadFunction(imageTile, src, useBearerToken)
     });
 
     const tileLayer = new OlTileLayer({
@@ -343,7 +345,8 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     const {
       attribution,
       url,
-      layerNames
+      layerNames,
+      useBearerToken
     } = layer.sourceConfig || {};
 
     const {
@@ -365,7 +368,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
           projection,
           success,
           failure
-        });
+        }, useBearerToken);
       }
     });
 
@@ -407,7 +410,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     projection: OlProjectionLike;
     success?: (features: OlFeature<OlGeometry>[]) => void;
     failure?: () => void;
-  }) {
+  }, useBearerToken: boolean = false) {
     try {
       const params = UrlUtil.objectToRequestString({
         SERVICE: 'WFS',
@@ -422,9 +425,9 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       const wfsUrl = `${opts.url}${opts.url.endsWith('?') ? '' : '?'}${params}`;
 
       const response = await fetch(wfsUrl, {
-        headers: {
+        headers: useBearerToken ? {
           ...getBearerTokenHeader(this.client?.getKeycloak())
-        }
+        } : {}
       });
 
       if (!response.ok) {
@@ -448,12 +451,12 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     }
   }
 
-  private async bearerTokenLoadFunction(imageTile: OlTile | OlImage, src: string) {
+  private async bearerTokenLoadFunction(imageTile: OlTile | OlImage, src: string, useBearerToken: boolean = false) {
     try {
       const response = await fetch(src, {
-        headers: {
+        headers: useBearerToken ? {
           ...getBearerTokenHeader(this.client?.getKeycloak())
-        }
+        } : {}
       });
 
       const imageElement = (imageTile as OlImageTile).getImage() as HTMLImageElement;
