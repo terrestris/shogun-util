@@ -48,7 +48,7 @@ export interface ApplicationArgs extends BaseEntityArgs {
   clientConfig?: DefaultApplicationClientConfig;
   layerTree?: DefaultLayerTree;
   layerConfig?: DefaultApplicationLayerConfig;
-  toolConfig?: DefaultApplicationToolConfig;
+  toolConfig?: DefaultApplicationToolConfig[];
 }
 
 export default class Application extends BaseEntity {
@@ -57,7 +57,7 @@ export default class Application extends BaseEntity {
   clientConfig?: DefaultApplicationClientConfig;
   layerTree?: DefaultLayerTree;
   layerConfig?: DefaultApplicationLayerConfig;
-  toolConfig?: DefaultApplicationToolConfig;
+  toolConfig?: DefaultApplicationToolConfig[];
 
   constructor({
     id,
