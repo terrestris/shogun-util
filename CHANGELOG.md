@@ -1,3 +1,10 @@
+## [3.2.1](https://github.com/terrestris/shogun-util/compare/v3.2.0...v3.2.1) (2022-08-01)
+
+
+### Bug Fixes
+
+* set toolConfig to an array ([6fe532a](https://github.com/terrestris/shogun-util/commit/6fe532ac5d9d7570124f35e98d305db61a2a7844))
+
 # [3.2.0](https://github.com/terrestris/shogun-util/compare/v3.1.3...v3.2.0) (2022-08-01)
 
 
