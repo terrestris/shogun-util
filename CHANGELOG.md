@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/terrestris/shogun-util/compare/v3.1.3...v3.2.0) (2022-08-01)
+
+
+### Features
+
+* add husky commintlint ([e607936](https://github.com/terrestris/shogun-util/commit/e6079362015f7d70daff6c27d88dcbf4930ec8a6))
+
 ## [3.1.3](https://github.com/terrestris/shogun-util/compare/v3.1.2...v3.1.3) (2022-07-08)
 
 
