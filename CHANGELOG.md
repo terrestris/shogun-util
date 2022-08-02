@@ -1,3 +1,10 @@
+## [3.2.2](https://github.com/terrestris/shogun-util/compare/v3.2.1...v3.2.2) (2022-08-02)
+
+
+### Bug Fixes
+
+* set useBearerToken as property of the layer ([d2c1033](https://github.com/terrestris/shogun-util/commit/d2c10334c10eccaa74bec9d2ded66b972d468cbf))
+
 ## [3.2.1](https://github.com/terrestris/shogun-util/compare/v3.2.0...v3.2.1) (2022-08-01)
 
 
