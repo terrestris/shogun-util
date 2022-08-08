@@ -19,12 +19,12 @@ export interface KeycloakGroupRepresentation extends ProviderGroupDetails {
   };
 }
 
-export interface GroupArgs<T extends ProviderGroupDetails> extends BaseEntityArgs {
+export interface GroupArgs<T extends ProviderGroupDetails = KeycloakGroupRepresentation> extends BaseEntityArgs {
   authProviderId?: string;
   providerDetails?: T;
 }
 
-export default class Group<T extends ProviderGroupDetails> extends BaseEntity {
+export default class Group<T extends ProviderGroupDetails = KeycloakGroupRepresentation> extends BaseEntity {
   authProviderId?: string;
   providerDetails?: T;
 
