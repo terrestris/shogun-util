@@ -1,3 +1,15 @@
+# [3.3.0](https://github.com/terrestris/shogun-util/compare/v3.2.2...v3.3.0) (2022-08-09)
+
+
+### Bug Fixes
+
+* provide a default type for the group provider details ([f6d3c67](https://github.com/terrestris/shogun-util/commit/f6d3c6747e38a40baa75d93426e82ba1aab7b940))
+
+
+### Features
+
+* initialize the PermissionService ([3e60913](https://github.com/terrestris/shogun-util/commit/3e60913de057a792c67693443f90d81055c9274a))
+
 ## [3.2.2](https://github.com/terrestris/shogun-util/compare/v3.2.1...v3.2.2) (2022-08-02)
 
 
