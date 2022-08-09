@@ -4,19 +4,25 @@ import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
 
 import BaseEntity from '../../model/BaseEntity';
+import PermissionService from '../PermissionService';
 
 export interface GenericServiceOpts {
   basePath: string;
   keycloak?: Keycloak;
 };
 
-export abstract class GenericService<T extends BaseEntity> {
+export abstract class GenericService<T extends BaseEntity> extends PermissionService {
 
   basePath: string;
 
   keycloak?: Keycloak;
 
   constructor(opts: GenericServiceOpts) {
+    super({
+      basePath: opts.basePath,
+      keycloak: opts.keycloak
+    });
+
     this.basePath = opts.basePath;
     this.keycloak = opts.keycloak;
   }
@@ -37,7 +43,7 @@ export abstract class GenericService<T extends BaseEntity> {
 
       const json: T[] = await response.json();
 
-      return json ;
+      return json;
     } catch (error) {
       throw new Error(`Error while requesting all entities: ${error}`);
     }
