@@ -14,6 +14,7 @@ export interface DefaultLayerSourceConfig {
   tileOrigin?: [number, number];
   resolutions?: number[];
   attribution?: string;
+  matrixSet?: string;
   requestParams?: DefaultRequestParams;
   useBearerToken?: boolean;
 }
