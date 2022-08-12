@@ -7,6 +7,7 @@ import OlImageLayer from 'ol/layer/Image';
 import OlLayerBase from 'ol/layer/Base';
 import OlLayerGroup from 'ol/layer/Group';
 import OlTileGrid from 'ol/tilegrid/TileGrid';
+import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceVector from 'ol/source/Vector';
 import OlWMTSCapabilities from 'ol/format/WMTSCapabilities';
 import OlFormatGeoJSON from 'ol/format/GeoJSON';
@@ -203,7 +204,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       url,
       layerNames,
       useBearerToken,
-      requestParams = {'TRANSPARENT': true}
+      requestParams = { 'TRANSPARENT': true }
     } = layer.sourceConfig || {};
 
     const {
@@ -243,7 +244,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       tileSize = 256,
       tileOrigin,
       resolutions,
-      requestParams = {'TRANSPARENT': true}
+      requestParams = { 'TRANSPARENT': true }
     } = layer.sourceConfig || {};
 
     const {
@@ -289,7 +290,8 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     const {
       attribution,
       url,
-      layerNames
+      layerNames,
+      matrixSet
     } = layer.sourceConfig || {};
 
     const {
@@ -313,22 +315,59 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         `reading the WMTS GetCapabilities: ${error}`);
     }
 
-    const options = optionsFromCapabilities(capabilities, {
+    let optionsConfig: Object = {
       layer: layerNames,
       projection: projection
-    });
+    };
+
+    if (matrixSet) {
+      optionsConfig = {
+        matrixSet,
+        ...optionsConfig
+      };
+    }
+
+    const options = optionsFromCapabilities(capabilities, optionsConfig);
 
     if (!options) {
       throw new Error('Could not get the options from the capabilities');
     }
 
+    const tileGrid = options.tileGrid;
+
+    if (!tileGrid || !(tileGrid instanceof OlTileGridWMTS)) {
+      throw new Error('Cannot build WMTS source without a valid tileGrid instance');
+    }
+
+    // update matrix sizes since these can differ from default set (Math.pow(2, x)),
+    // which is usually used with EPSG:3857 based tile grids
+    const resolutions: number[] = tileGrid.getResolutions();
+    const minZoom = tileGrid.getMinZoom();
+    const matrixSizes = new Array(length);
+    const origins = new Array(length);
+    const tileSizes = new Array(length);
+    for (let zoomLevel = minZoom; zoomLevel < resolutions?.length; ++zoomLevel) {
+      matrixSizes[zoomLevel] = tileGrid.getFullTileRange(zoomLevel).getSize();
+      origins[zoomLevel] = tileGrid.getOrigin(zoomLevel);
+      tileSizes[zoomLevel] = tileGrid.getTileSize(zoomLevel);
+    }
+
     const source = new OlSourceWMTS({
       ...options,
       ...{
+        tileGrid: new OlTileGridWMTS({
+          resolutions: tileGrid.getResolutions(),
+          matrixIds: tileGrid.getMatrixIds(),
+          sizes: matrixSizes,
+          origins,
+          tileSizes
+        }),
         attributions: attribution,
         crossOrigin
       }
     });
+
+    source.set('matrixSizes', matrixSizes);
 
     const wmtsLayer = new OlTileLayer({
       source,
