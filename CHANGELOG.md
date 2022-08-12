@@ -1,3 +1,10 @@
+# [3.4.0](https://github.com/terrestris/shogun-util/compare/v3.3.0...v3.4.0) (2022-08-12)
+
+
+### Features
+
+* enhance parsing of wmts layers: provide matrixSet name and compute matrix sizes manually ([fc8709f](https://github.com/terrestris/shogun-util/commit/fc8709fe3a217c9cbc55970af9f4428ae74150bc))
+
 # [3.3.0](https://github.com/terrestris/shogun-util/compare/v3.2.2...v3.3.0) (2022-08-09)
 
 
