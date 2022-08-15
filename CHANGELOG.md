@@ -1,3 +1,10 @@
+## [3.4.1](https://github.com/terrestris/shogun-util/compare/v3.4.0...v3.4.1) (2022-08-15)
+
+
+### Bug Fixes
+
+* fix init of proj4 definitions ([7b57292](https://github.com/terrestris/shogun-util/commit/7b57292369100292a38b567842f7d616678c796a))
+
 # [3.4.0](https://github.com/terrestris/shogun-util/compare/v3.3.0...v3.4.0) (2022-08-12)
 
 
