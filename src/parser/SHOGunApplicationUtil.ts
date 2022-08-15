@@ -27,7 +27,7 @@ import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
 import { UrlUtil } from '@terrestris/base-util/dist/UrlUtil/UrlUtil';
 import Logger from '@terrestris/base-util/dist/Logger';
 
-import ProjectionUtil from '@terrestris/ol-util/dist/ProjectionUtil/ProjectionUtil';
+import ProjectionUtil, { defaultProj4CrsDefinitions } from '@terrestris/ol-util/dist/ProjectionUtil/ProjectionUtil';
 import { MapUtil } from '@terrestris/ol-util/dist/MapUtil/MapUtil';
 
 import Application, { DefaultLayerTree } from '../model/Application';
@@ -55,8 +55,8 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
   }
 
   async parseMapView(application: T, additionalOpts?: OlViewOptions): Promise<OlView> {
-    // TODO Should this be called here?
-    ProjectionUtil.initProj4Definitions(null);
+
+    ProjectionUtil.initProj4Definitions(defaultProj4CrsDefinitions, false);
 
     const mapView = application.clientConfig?.mapView;
 
