@@ -53,7 +53,7 @@
     "@terrestris/eslint-config-typescript": "^3.0.0",
     "@types/geojson": "^7946.0.10",
     "@types/jest": "^28.1.6",
-    "@types/lodash": "^4.14.182",
+    "@types/lodash": "^4.14.183",
     "eslint": "^8.22.0",
     "husky": "^8.0.1",
     "jest": "^28.1.3",
