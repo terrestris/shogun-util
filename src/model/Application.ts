@@ -17,6 +17,7 @@ export interface DefaultApplicationToolConfig {
 }
 
 export interface DefaultApplicationLayerConfig {
+  layerId: number;
   clientConfig?: DefaultLayerClientConfig;
   sourceConfig?: DefaultLayerSourceConfig;
 }
