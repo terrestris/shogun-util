@@ -110,12 +110,17 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
     if (layerIds.length > 0) {
       try {
-        const { allLayersByIds: layers } = await this.client.graphql().sendQuery<Layer>({
+        const {
+          allLayersByIds: layers
+        } = await this.client.graphql().sendQuery<S>({
           query: allLayersByIds,
           variables: {
             ids: layerIds
           }
         });
+
+        this.mergeApplicationLayerConfigs(layers, application);
+
         if (layerTree.children) {
           const nodes = await this.parseNodes(layerTree.children, layers, projection);
 
@@ -146,7 +151,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     return layerIds;
   }
 
-  async parseNodes(nodes: DefaultLayerTree[], layers: Layer[], projection?: OlProjectionLike) {
+  async parseNodes(nodes: DefaultLayerTree[], layers: S[], projection?: OlProjectionLike) {
     const collection: OlLayerBase[] = [];
 
     for (const node of nodes) {
@@ -161,10 +166,11 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         }
       }
     }
+
     return collection;
   }
 
-  async parseFolder(el: DefaultLayerTree, layers: Layer[], projection?: OlProjectionLike) {
+  async parseFolder(el: DefaultLayerTree, layers: S[], projection?: OlProjectionLike) {
     const layersInFolder = await this.parseNodes(el.children, layers, projection);
 
     const folder = new OlLayerGroup({
@@ -430,7 +436,27 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       .reverse();
   }
 
-  private setLayerProperties(olLayer: OlLayerBase, layer: S) {
+  private mergeApplicationLayerConfigs(layers: S[], application: T): void {
+    application.layerConfig?.forEach(layerConfig => {
+      const layerCandidate = layers.find(layer => layer.id === layerConfig.layerId);
+
+      if (!layerCandidate) {
+        return;
+      }
+
+      layerCandidate.clientConfig = {
+        ...layerCandidate.clientConfig,
+        ...layerConfig.clientConfig
+      };
+
+      layerCandidate.sourceConfig = {
+        ...layerCandidate.sourceConfig,
+        ...layerConfig.sourceConfig
+      };
+    });
+  }
+
+  private setLayerProperties(olLayer: OlLayerBase, layer: S): void {
     olLayer.set('shogunId', layer.id);
     olLayer.set('name', layer.name);
     olLayer.set('type', layer.type);
