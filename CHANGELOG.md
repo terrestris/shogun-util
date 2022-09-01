@@ -1,3 +1,16 @@
+# [3.5.0](https://github.com/terrestris/shogun-util/compare/v3.4.1...v3.5.0) (2022-09-01)
+
+
+### Bug Fixes
+
+* apply newly introduced field layerId ([132dbd0](https://github.com/terrestris/shogun-util/commit/132dbd0e0dbb2a31d4416ef2425950d758315e5a))
+* set correct type for layerConfig ([84514e0](https://github.com/terrestris/shogun-util/commit/84514e0389d8b3aada19c4ba9275c3c84f04064a))
+
+
+### Features
+
+* apply application specific layer configurations if set ([d4c1df7](https://github.com/terrestris/shogun-util/commit/d4c1df78c5bf2db8dac961ef5a9984c8635d2ffd))
+
 ## [3.4.1](https://github.com/terrestris/shogun-util/compare/v3.4.0...v3.4.1) (2022-08-15)
 
 
