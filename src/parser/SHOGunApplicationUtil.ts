@@ -162,6 +162,9 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         if (layerNode) {
           const olLayer = await this.parseLayer(layerNode as S, projection);
           olLayer.setVisible(node.checked);
+          if (node.title) {
+            olLayer.set('name', node.title);
+          }
           collection.push(olLayer);
         }
       }
@@ -216,7 +219,8 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     const {
       minResolution,
       maxResolution,
-      crossOrigin
+      crossOrigin,
+      opacity
     } = layer.clientConfig || {};
 
     const source = new OlImageWMS({
@@ -233,7 +237,8 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     const imageLayer = new OlImageLayer({
       source,
       minResolution,
-      maxResolution
+      maxResolution,
+      opacity
     });
 
     this.setLayerProperties(imageLayer, layer);
@@ -256,7 +261,8 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     const {
       minResolution,
       maxResolution,
-      crossOrigin
+      crossOrigin,
+      opacity
     } = layer.clientConfig || {};
 
     let tileGrid;
@@ -284,7 +290,8 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     const tileLayer = new OlTileLayer({
       source,
       minResolution,
-      maxResolution
+      maxResolution,
+      opacity
     });
 
     this.setLayerProperties(tileLayer, layer);
@@ -303,7 +310,8 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     const {
       minResolution,
       maxResolution,
-      crossOrigin
+      crossOrigin,
+      opacity
     } = layer.clientConfig || {};
 
     const wmtsCapabilitiesParser = new OlWMTSCapabilities();
@@ -378,7 +386,8 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     const wmtsLayer = new OlTileLayer({
       source,
       minResolution,
-      maxResolution
+      maxResolution,
+      opacity
     });
 
     this.setLayerProperties(wmtsLayer, layer);
@@ -396,7 +405,8 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
     const {
       minResolution,
-      maxResolution
+      maxResolution,
+      opacity
     } = layer.clientConfig || {};
 
     const source = new OlSourceVector({
@@ -420,7 +430,8 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     const vectorLayer = new OlLayerVector({
       source,
       minResolution,
-      maxResolution
+      maxResolution,
+      opacity
     });
 
     this.setLayerProperties(vectorLayer, layer);
