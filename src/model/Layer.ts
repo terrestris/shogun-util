@@ -32,6 +32,7 @@ export interface DefaultLayerClientConfig {
   searchable?: boolean;
   propertyConfig?: DefaultLayerPropertyConfig[];
   crossOrigin?: string;
+  opacity?: number;
 }
 
 export interface LayerArgs extends BaseEntityArgs {
