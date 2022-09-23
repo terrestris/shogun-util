@@ -1,3 +1,10 @@
+# [3.6.0](https://github.com/terrestris/shogun-util/compare/v3.5.0...v3.6.0) (2022-09-23)
+
+
+### Features
+
+* release ([e17f68b](https://github.com/terrestris/shogun-util/commit/e17f68b244df153fe41e4516ff685f133fcfe25f))
+
 # [3.5.0](https://github.com/terrestris/shogun-util/compare/v3.4.1...v3.5.0) (2022-09-01)
 
 
