@@ -24,6 +24,8 @@ import {
 } from 'ol/proj';
 import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
 
+import _isFinite from 'lodash/isFinite';
+
 import { UrlUtil } from '@terrestris/base-util/dist/UrlUtil/UrlUtil';
 import Logger from '@terrestris/base-util/dist/Logger';
 
@@ -476,6 +478,9 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     olLayer.set('legendUrl', layer.sourceConfig.legendUrl);
     olLayer.set('hoverable', layer.clientConfig?.hoverable);
     olLayer.set('useBearerToken', layer.sourceConfig?.useBearerToken);
+    if (_isFinite(layer.clientConfig?.opacity)) {
+      olLayer.setOpacity(layer.clientConfig?.opacity ?? 1);
+    }
   }
 
   private async bearerTokenLoadFunctionVector(opts: {
