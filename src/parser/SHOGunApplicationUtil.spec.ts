@@ -135,6 +135,10 @@ describe('SHOGunApplicationUtil', () => {
           displayName: 'id',
           visible: true
         }],
+        downloadConfig: [{
+          downloadUrl: 'https://example.com/geo/ows?request=GetFeature&outputFormat=application%2Fjson',
+          formatName: 'GeoJSON'
+        }],
         searchable: true
       },
       sourceConfig: {
@@ -174,6 +178,7 @@ describe('SHOGunApplicationUtil', () => {
     expected.set('type', myLayer.type);
     expected.set('searchable', myLayer.clientConfig?.searchable);
     expected.set('propertyConfig', myLayer.clientConfig?.propertyConfig);
+    expected.set('downloadConfig', myLayer.clientConfig?.downloadConfig);
     expected.set('legendUrl', myLayer.sourceConfig.legendUrl);
     expected.set('hoverable', myLayer.clientConfig?.hoverable);
 
