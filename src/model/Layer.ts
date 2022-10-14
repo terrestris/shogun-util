@@ -25,6 +25,11 @@ export interface DefaultLayerPropertyConfig {
   visible?: boolean;
 }
 
+export interface DownloadConfig {
+  downloadUrl: string;
+  formatName?: string;
+}
+
 export interface DefaultLayerClientConfig {
   minResolution?: number;
   maxResolution?: number;
@@ -33,6 +38,7 @@ export interface DefaultLayerClientConfig {
   propertyConfig?: DefaultLayerPropertyConfig[];
   crossOrigin?: string;
   opacity?: number;
+  downloadConfig?: DownloadConfig[];
 }
 
 export interface LayerArgs extends BaseEntityArgs {

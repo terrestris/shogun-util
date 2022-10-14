@@ -473,6 +473,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     olLayer.set('type', layer.type);
     olLayer.set('searchable', layer.clientConfig?.searchable);
     olLayer.set('propertyConfig', layer.clientConfig?.propertyConfig);
+    olLayer.set('downloadConfig', layer.clientConfig?.downloadConfig);
     olLayer.set('legendUrl', layer.sourceConfig.legendUrl);
     olLayer.set('hoverable', layer.clientConfig?.hoverable);
     olLayer.set('useBearerToken', layer.sourceConfig?.useBearerToken);
