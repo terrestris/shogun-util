@@ -1,3 +1,15 @@
+# [3.7.0](https://github.com/terrestris/shogun-util/compare/v3.6.0...v3.7.0) (2022-10-14)
+
+
+### Bug Fixes
+
+* make formatName optional ([3129608](https://github.com/terrestris/shogun-util/commit/31296082b5cafc0069dfd3a14a8cdff0bd712fed))
+
+
+### Features
+
+* add downloadConfig to layer ([2105f5d](https://github.com/terrestris/shogun-util/commit/2105f5dfa0f4d96f0411b4ed7d3e66a5aad9662d))
+
 # [3.6.0](https://github.com/terrestris/shogun-util/compare/v3.5.0...v3.6.0) (2022-09-23)
 
 
