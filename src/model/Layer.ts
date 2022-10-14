@@ -27,7 +27,7 @@ export interface DefaultLayerPropertyConfig {
 
 export interface DownloadConfig {
   downloadUrl: string;
-  formatName: string;
+  formatName?: string;
 }
 
 export interface DefaultLayerClientConfig {
