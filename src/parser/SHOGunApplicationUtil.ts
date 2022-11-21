@@ -1,34 +1,35 @@
-import OlView, { ViewOptions as OlViewOptions } from 'ol/View';
-import OlTileWMS from 'ol/source/TileWMS';
-import OlTileLayer from 'ol/layer/Tile';
-import OlImageWMS from 'ol/source/ImageWMS';
-import OlSourceWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
-import OlImageLayer from 'ol/layer/Image';
+import { Extent as OlExtent } from 'ol/extent';
+import OlFeature from 'ol/Feature';
+import OlFormatGeoJSON from 'ol/format/GeoJSON';
+import OlWMTSCapabilities from 'ol/format/WMTSCapabilities';
+import OlGeometry from 'ol/geom/Geometry';
+import OlImage from 'ol/Image';
+import OlImageTile from 'ol/ImageTile';
 import OlLayerBase from 'ol/layer/Base';
 import OlLayerGroup from 'ol/layer/Group';
-import OlTileGrid from 'ol/tilegrid/TileGrid';
-import OlTileGridWMTS from 'ol/tilegrid/WMTS';
-import OlSourceVector from 'ol/source/Vector';
-import OlWMTSCapabilities from 'ol/format/WMTSCapabilities';
-import OlFormatGeoJSON from 'ol/format/GeoJSON';
+import OlImageLayer from 'ol/layer/Image';
+import OlTileLayer from 'ol/layer/Tile';
 import OlLayerVector from 'ol/layer/Vector';
-import OlImageTile from 'ol/ImageTile';
-import OlTile from 'ol/Tile';
-import OlImage from 'ol/Image';
-import OlGeometry from 'ol/geom/Geometry';
-import OlFeature from 'ol/Feature';
-import { Extent as OlExtent } from 'ol/extent';
+import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
 import {
   fromLonLat,
   ProjectionLike as OlProjectionLike
 } from 'ol/proj';
-import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
+import { Units } from 'ol/proj/Units';
+import OlImageWMS from 'ol/source/ImageWMS';
+import OlTileWMS from 'ol/source/TileWMS';
+import OlSourceVector from 'ol/source/Vector';
+import OlSourceWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
+import OlTile from 'ol/Tile';
+import OlTileGrid from 'ol/tilegrid/TileGrid';
+import OlTileGridWMTS from 'ol/tilegrid/WMTS';
+import OlView, { ViewOptions as OlViewOptions } from 'ol/View';
 
-import { UrlUtil } from '@terrestris/base-util/dist/UrlUtil/UrlUtil';
 import Logger from '@terrestris/base-util/dist/Logger';
+import { UrlUtil } from '@terrestris/base-util/dist/UrlUtil/UrlUtil';
 
-import ProjectionUtil, { defaultProj4CrsDefinitions } from '@terrestris/ol-util/dist/ProjectionUtil/ProjectionUtil';
 import { MapUtil } from '@terrestris/ol-util/dist/MapUtil/MapUtil';
+import ProjectionUtil, { defaultProj4CrsDefinitions } from '@terrestris/ol-util/dist/ProjectionUtil/ProjectionUtil';
 
 import Application, { DefaultLayerTree } from '../model/Application';
 import Layer from '../model/Layer';
@@ -213,7 +214,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       url,
       layerNames,
       useBearerToken,
-      requestParams = { 'TRANSPARENT': true }
+      requestParams = { TRANSPARENT: true }
     } = layer.sourceConfig || {};
 
     const {
@@ -227,7 +228,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       url,
       attributions: attribution,
       params: {
-        'LAYERS': layerNames,
+        LAYERS: layerNames,
         ...requestParams
       },
       crossOrigin,
@@ -255,7 +256,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       tileSize = 256,
       tileOrigin,
       resolutions,
-      requestParams = { 'TRANSPARENT': true }
+      requestParams = { TRANSPARENT: true }
     } = layer.sourceConfig || {};
 
     const {
@@ -280,7 +281,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       attributions: attribution,
       projection,
       params: {
-        'LAYERS': layerNames,
+        LAYERS: layerNames,
         ...requestParams
       },
       crossOrigin,
@@ -439,10 +440,10 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     return vectorLayer;
   }
 
-  getMapScales(resolutions: number[], projUnit: string = 'm'): number[] {
+  getMapScales(resolutions: number[], projUnit: Units = 'm'): number[] {
     return resolutions
       .map((res: number) =>
-        MapUtil.roundScale(MapUtil.getScaleForResolution(res, projUnit)
+        MapUtil.roundScale(MapUtil.getScaleForResolution(res, projUnit) as number
         ))
       .reverse();
   }
