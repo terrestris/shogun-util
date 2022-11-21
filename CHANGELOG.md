@@ -1,3 +1,21 @@
+# [4.0.0](https://github.com/terrestris/shogun-util/compare/v3.7.0...v4.0.0) (2022-11-21)
+
+
+### Bug Fixes
+
+* fix typing after ol and ol-util upgrade ([21ff5c4](https://github.com/terrestris/shogun-util/commit/21ff5c433788943a7cfdf39f2a007992d518354d))
+* get rid of unnecessary quotes ([91a4e86](https://github.com/terrestris/shogun-util/commit/91a4e8654c945d5a9e0fccd71d12c00456c10cf8))
+
+
+### chore
+
+* upgrade dependencies ([f354aeb](https://github.com/terrestris/shogun-util/commit/f354aebce6e6fa48e96cad27f0ecb7368b261b2e))
+
+
+### BREAKING CHANGES
+
+* Upgrade to ol v7.x
+
 # [3.7.0](https://github.com/terrestris/shogun-util/compare/v3.6.0...v3.7.0) (2022-10-14)
 
 
