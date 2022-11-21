@@ -439,10 +439,10 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     return vectorLayer;
   }
 
-  getMapScales(resolutions: number[], projUnit: string = 'm'): number[] {
+  getMapScales(resolutions: number[], projUnit: Units = 'm'): number[] {
     return resolutions
       .map((res: number) =>
-        MapUtil.roundScale(MapUtil.getScaleForResolution(res, projUnit)
+        MapUtil.roundScale(MapUtil.getScaleForResolution(res, projUnit) as number
         ))
       .reverse();
   }
