@@ -12,6 +12,6 @@ export const getBearerTokenHeader = (keycloak?: Keycloak): BearerTokenHeader | u
   }
 
   return {
-    'Authorization': `Bearer ${accessToken}`
+    Authorization: `Bearer ${accessToken}`
   };
 };

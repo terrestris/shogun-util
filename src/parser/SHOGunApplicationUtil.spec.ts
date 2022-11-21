@@ -157,8 +157,8 @@ describe('SHOGunApplicationUtil', () => {
         url: myLayer.sourceConfig.url,
         attributions: myLayer.sourceConfig.attribution,
         params: {
-          'LAYERS': myLayer.sourceConfig.layerNames,
-          'TRANSPARENT': true
+          LAYERS: myLayer.sourceConfig.layerNames,
+          TRANSPARENT: true
         },
         crossOrigin: myLayer.clientConfig?.crossOrigin
       }),
@@ -223,8 +223,8 @@ describe('SHOGunApplicationUtil', () => {
         }),
         attributions: myLayer.sourceConfig.attribution,
         params: {
-          'LAYERS': myLayer.sourceConfig.layerNames,
-          'TRANSPARENT': true
+          LAYERS: myLayer.sourceConfig.layerNames,
+          TRANSPARENT: true
         },
         crossOrigin: myLayer.clientConfig?.crossOrigin,
         projection: 'EPSG:3857'

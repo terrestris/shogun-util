@@ -43,7 +43,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/instance/user', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken'
       },
       method: 'GET'
     });
@@ -112,7 +112,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/instance/group', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken'
       },
       method: 'GET'
     });
@@ -181,7 +181,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/class/user', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken'
       },
       method: 'GET'
     });
@@ -231,7 +231,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/class/group', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken'
       },
       method: 'GET'
     });
@@ -281,7 +281,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/instance/user/10', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken'
       },
       method: 'GET'
     });
@@ -331,7 +331,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/instance/group/10', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken'
       },
       method: 'GET'
     });
@@ -381,7 +381,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/class/user/10', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken'
       },
       method: 'GET'
     });
@@ -431,7 +431,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/class/group/10', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken'
       },
       method: 'GET'
     });
@@ -481,7 +481,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/instance/user/10', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken',
+        Authorization: 'Bearer ThisIsNotAValidBearerToken',
         'Content-Type': 'application/json'
       },
       body: '{\"permission\":\"ADMIN\"}',
@@ -510,7 +510,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/instance/group/10', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken',
+        Authorization: 'Bearer ThisIsNotAValidBearerToken',
         'Content-Type': 'application/json'
       },
       body: '{\"permission\":\"ADMIN\"}',
@@ -539,7 +539,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/class/user/10', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken',
+        Authorization: 'Bearer ThisIsNotAValidBearerToken',
         'Content-Type': 'application/json'
       },
       body: '{\"permission\":\"ADMIN\"}',
@@ -568,7 +568,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/class/group/10', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken',
+        Authorization: 'Bearer ThisIsNotAValidBearerToken',
         'Content-Type': 'application/json'
       },
       body: '{\"permission\":\"ADMIN\"}',
@@ -597,7 +597,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/instance/user/10', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken'
       },
       method: 'DELETE'
     });
@@ -624,7 +624,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/instance/group/10', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken'
       },
       method: 'DELETE'
     });
@@ -651,7 +651,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/class/user/10', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken'
       },
       method: 'DELETE'
     });
@@ -678,7 +678,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/class/group/10', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken'
       },
       method: 'DELETE'
     });
@@ -705,7 +705,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/instance/user', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken'
       },
       method: 'DELETE'
     });
@@ -732,7 +732,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/instance/group', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken'
       },
       method: 'DELETE'
     });
@@ -759,7 +759,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/class/user', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken'
       },
       method: 'DELETE'
     });
@@ -786,7 +786,7 @@ describe('PermissionService', () => {
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/class/group', {
       headers: {
-        'Authorization': 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken'
       },
       method: 'DELETE'
     });

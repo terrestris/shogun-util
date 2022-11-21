@@ -214,7 +214,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       url,
       layerNames,
       useBearerToken,
-      requestParams = { 'TRANSPARENT': true }
+      requestParams = { TRANSPARENT: true }
     } = layer.sourceConfig || {};
 
     const {
@@ -228,7 +228,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       url,
       attributions: attribution,
       params: {
-        'LAYERS': layerNames,
+        LAYERS: layerNames,
         ...requestParams
       },
       crossOrigin,
@@ -256,7 +256,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       tileSize = 256,
       tileOrigin,
       resolutions,
-      requestParams = { 'TRANSPARENT': true }
+      requestParams = { TRANSPARENT: true }
     } = layer.sourceConfig || {};
 
     const {
@@ -281,7 +281,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       attributions: attribution,
       projection,
       params: {
-        'LAYERS': layerNames,
+        LAYERS: layerNames,
         ...requestParams
       },
       crossOrigin,
