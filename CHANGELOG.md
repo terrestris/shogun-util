@@ -1,3 +1,10 @@
+# [4.1.0](https://github.com/terrestris/shogun-util/compare/v4.0.0...v4.1.0) (2022-11-28)
+
+
+### Features
+
+* add support for layer type WMSTime ([a4a2a72](https://github.com/terrestris/shogun-util/commit/a4a2a726ea722cc3a93bacb4bea858822aff1a6b))
+
 # [4.0.0](https://github.com/terrestris/shogun-util/compare/v3.7.0...v4.0.0) (2022-11-21)
 
 
