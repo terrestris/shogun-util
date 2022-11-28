@@ -28,6 +28,7 @@ import OlView, { ViewOptions as OlViewOptions } from 'ol/View';
 import Logger from '@terrestris/base-util/dist/Logger';
 import { UrlUtil } from '@terrestris/base-util/dist/UrlUtil/UrlUtil';
 
+import CapabilitiesUtil from '@terrestris/ol-util/dist/CapabilitiesUtil/CapabilitiesUtil';
 import { MapUtil } from '@terrestris/ol-util/dist/MapUtil/MapUtil';
 import ProjectionUtil, { defaultProj4CrsDefinitions } from '@terrestris/ol-util/dist/ProjectionUtil/ProjectionUtil';
 
@@ -149,6 +150,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         layerIds.push(node.layerId);
       }
     }
+
     return layerIds;
   }
 
@@ -204,8 +206,12 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       return this.parseWFSLayer(layer, projection);
     }
 
-    // TODO Add support for VECTORTILE, XYZ and WMSTime
-    throw new Error('Currently only WMTS, WMS, TILEWMS and WFS layers are supported.');
+    if (layer.type === 'WMSTime') {
+      return await this.parseWMSTimeLayer(layer);
+    }
+
+    // TODO Add support for VECTORTILE and XYZ
+    throw new Error('Currently only WMTS, WMS, TILEWMS, WFS and WMSTime layers are supported.');
   }
 
   parseImageLayer(layer: S) {
@@ -214,7 +220,9 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       url,
       layerNames,
       useBearerToken,
-      requestParams = { TRANSPARENT: true }
+      requestParams = {
+        TRANSPARENT: true
+      }
     } = layer.sourceConfig || {};
 
     const {
@@ -256,7 +264,9 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       tileSize = 256,
       tileOrigin,
       resolutions,
-      requestParams = { TRANSPARENT: true }
+      requestParams = {
+        TRANSPARENT: true
+      }
     } = layer.sourceConfig || {};
 
     const {
@@ -330,7 +340,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         `reading the WMTS GetCapabilities: ${error}`);
     }
 
-    let optionsConfig: Object = {
+    let optionsConfig: any = {
       layer: layerNames,
       projection: projection
     };
@@ -438,6 +448,53 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     this.setLayerProperties(vectorLayer, layer);
 
     return vectorLayer;
+  }
+
+  async parseWMSTimeLayer(layer: S , projection: OlProjectionLike = 'EPSG:3857') {
+    const timeLayer = this.parseTileLayer(layer, projection);
+
+    const layerBaseUrl = layer.sourceConfig.url;
+    const wmsVersion = layer.sourceConfig.requestParams?.VERSION as string || '1.3.0';
+
+    const capabilitiesUrl = UrlUtil.createValidGetCapabilitiesRequest(
+      layerBaseUrl, 'WMS', wmsVersion);
+
+    const capabilities = await CapabilitiesUtil.getWmsCapabilities(capabilitiesUrl, {
+      headers: layer.sourceConfig.useBearerToken ? {
+        ...getBearerTokenHeader(this.client?.getKeycloak())
+      } : {}
+    });
+
+    const layerCapabilities = capabilities.Capability?.Layer?.Layer?.find((l: any) => {
+      const layerNameCandidates: string[] = [
+        layer.sourceConfig.layerNames,
+        layer.sourceConfig.layerNames.split(':')[1]
+      ].filter(name => name !== null);
+
+      return layerNameCandidates.includes(l.Name);
+    });
+
+    const dimension = layerCapabilities?.Dimension;
+
+    if (!dimension) {
+      return timeLayer;
+    }
+
+    const timeDimension = dimension.find((d: any) => d.name === 'time');
+
+    if (!timeDimension) {
+      return timeLayer;
+    }
+
+    timeLayer.set('dimension', timeDimension);
+
+    if (timeDimension.default) {
+      timeLayer.getSource()?.updateParams({
+        TIME: timeDimension.default
+      });
+    }
+
+    return timeLayer;
   }
 
   getMapScales(resolutions: number[], projUnit: Units = 'm'): number[] {
