@@ -1,3 +1,10 @@
+## [4.1.1](https://github.com/terrestris/shogun-util/compare/v4.1.0...v4.1.1) (2022-12-01)
+
+
+### Bug Fixes
+
+* revoke object urls when reloading tiles ([a827481](https://github.com/terrestris/shogun-util/commit/a827481f1ec029e44568c6a3a40bc16d02cdf8e7))
+
 # [4.1.0](https://github.com/terrestris/shogun-util/compare/v4.0.0...v4.1.0) (2022-11-28)
 
 
