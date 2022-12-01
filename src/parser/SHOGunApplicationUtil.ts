@@ -51,6 +51,8 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
   private client: SHOGunAPIClient | undefined;
 
+  private objectUrls: any = {};
+
   constructor(opts?: SHOGunApplicationUtilOpts) {
     // TODO Default client?
     this.client = opts?.client;
@@ -589,6 +591,9 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
   private async bearerTokenLoadFunction(imageTile: OlTile | OlImage, src: string, useBearerToken: boolean = false) {
     try {
+      if (this.objectUrls[src]) {
+        URL.revokeObjectURL(this.objectUrls[src]);
+      }
       const response = await fetch(src, {
         headers: useBearerToken ? {
           ...getBearerTokenHeader(this.client?.getKeycloak())
@@ -602,7 +607,8 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         return;
       }
 
-      imageElement.src = URL.createObjectURL(await response.blob());
+      this.objectUrls[src] = URL.createObjectURL(await response.blob());
+      imageElement.src = this.objectUrls[src];
     } catch (error) {
       Logger.error('Error while loading WMS: ', error);
     }
