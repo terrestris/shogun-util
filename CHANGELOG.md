@@ -1,3 +1,10 @@
+## [4.1.2](https://github.com/terrestris/shogun-util/compare/v4.1.1...v4.1.2) (2022-12-06)
+
+
+### Bug Fixes
+
+* use no-cors mode when requesting images ([3c0e9c8](https://github.com/terrestris/shogun-util/commit/3c0e9c8bfbf76c3f00c771e63843d69e84aa274c))
+
 ## [4.1.1](https://github.com/terrestris/shogun-util/compare/v4.1.0...v4.1.1) (2022-12-01)
 
 
