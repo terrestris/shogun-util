@@ -333,7 +333,9 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
     let capabilities;
     try {
-      const capabilitiesResponse = await fetch(capabilitiesUrl);
+      const capabilitiesResponse = await fetch(capabilitiesUrl, {
+        mode: 'no-cors'
+      });
       const capabilitiesResponseText = await capabilitiesResponse.text();
 
       capabilities = wmtsCapabilitiesParser.read(capabilitiesResponseText);
@@ -595,6 +597,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         URL.revokeObjectURL(this.objectUrls[src]);
       }
       const response = await fetch(src, {
+        mode: 'no-cors',
         headers: useBearerToken ? {
           ...getBearerTokenHeader(this.client?.getKeycloak())
         } : {}
