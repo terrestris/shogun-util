@@ -1,3 +1,10 @@
+## [4.1.3](https://github.com/terrestris/shogun-util/compare/v4.1.2...v4.1.3) (2022-12-07)
+
+
+### Bug Fixes
+
+* remove no-cors mode, otherwise authentication token won't be sent ([4989445](https://github.com/terrestris/shogun-util/commit/498944571dc2751507f5a26992b59f145443784a))
+
 ## [4.1.2](https://github.com/terrestris/shogun-util/compare/v4.1.1...v4.1.2) (2022-12-06)
 
 
