@@ -1,3 +1,10 @@
+## [4.1.4](https://github.com/terrestris/shogun-util/compare/v4.1.3...v4.1.4) (2022-12-08)
+
+
+### Bug Fixes
+
+* revert no-cors flag ([8a3496c](https://github.com/terrestris/shogun-util/commit/8a3496cd410c6ea6e288272eeb995612d80fd3d4))
+
 ## [4.1.3](https://github.com/terrestris/shogun-util/compare/v4.1.2...v4.1.3) (2022-12-07)
 
 
