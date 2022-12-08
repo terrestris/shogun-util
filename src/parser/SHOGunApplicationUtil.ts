@@ -333,9 +333,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
     let capabilities;
     try {
-      const capabilitiesResponse = await fetch(capabilitiesUrl, {
-        mode: 'no-cors'
-      });
+      const capabilitiesResponse = await fetch(capabilitiesUrl);
       const capabilitiesResponseText = await capabilitiesResponse.text();
 
       capabilities = wmtsCapabilitiesParser.read(capabilitiesResponseText);
