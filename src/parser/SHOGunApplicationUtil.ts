@@ -396,6 +396,19 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
     source.set('matrixSizes', matrixSizes);
 
+    let legendUrl = '';
+    capabilities.Contents?.Layer?.forEach((l: any) => {
+      if (l.Identifier === layerNames) {
+        l.Style?.forEach((s: any) => {
+          if (s.LegendURL) {
+            legendUrl = s.LegendURL[0].href;
+          }
+        });
+      }
+    });
+
+    source.set('legendUrl', legendUrl);
+
     const wmtsLayer = new OlTileLayer({
       source,
       minResolution,
