@@ -407,6 +407,8 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       }
     });
 
+    source.set('legendUrl', legendUrl);
+
     const wmtsLayer = new OlTileLayer({
       source,
       minResolution,
@@ -415,8 +417,6 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     });
 
     this.setLayerProperties(wmtsLayer, layer);
-
-    wmtsLayer.set('legendUrl', legendUrl);
 
     return wmtsLayer;
   }
