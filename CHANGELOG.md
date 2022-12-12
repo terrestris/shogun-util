@@ -1,3 +1,15 @@
+# [4.2.0](https://github.com/terrestris/shogun-util/compare/v4.1.4...v4.2.0) (2022-12-12)
+
+
+### Bug Fixes
+
+* sets the legendUrl on layer ([6f1743c](https://github.com/terrestris/shogun-util/commit/6f1743cce8df1dcd8b99fe1013bd40643b88ef20))
+
+
+### Features
+
+* set legendUrl for wmts layers ([a5d6a79](https://github.com/terrestris/shogun-util/commit/a5d6a7990989f216b6208eef1c4abca450deeb47))
+
 ## [4.1.4](https://github.com/terrestris/shogun-util/compare/v4.1.3...v4.1.4) (2022-12-08)
 
 
