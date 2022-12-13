@@ -1,3 +1,10 @@
+## [4.2.1](https://github.com/terrestris/shogun-util/compare/v4.2.0...v4.2.1) (2022-12-13)
+
+
+### Bug Fixes
+
+* sets legend url on source for wmts ([8331233](https://github.com/terrestris/shogun-util/commit/83312339f65a5fe0b1d78e2afe49a6c905beb662))
+
 # [4.2.0](https://github.com/terrestris/shogun-util/compare/v4.1.4...v4.2.0) (2022-12-12)
 
 
