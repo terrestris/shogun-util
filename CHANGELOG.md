@@ -1,3 +1,15 @@
+# [5.0.0](https://github.com/terrestris/shogun-util/compare/v4.2.1...v5.0.0) (2023-01-04)
+
+
+### Features
+
+* add support for OpenAPI version 3 ([1641a53](https://github.com/terrestris/shogun-util/commit/1641a538581b5ce3a041451a8d831c73748381ef))
+
+
+### BREAKING CHANGES
+
+* removed SwaggerDocs type and added version argument to getApiDocs()
+
 ## [4.2.1](https://github.com/terrestris/shogun-util/compare/v4.2.0...v4.2.1) (2022-12-13)
 
 
