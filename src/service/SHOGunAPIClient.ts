@@ -169,7 +169,7 @@ export class SHOGunAPIClient {
   openapi(): OpenAPIService {
     if (!this.openapiService) {
       this.openapiService = new OpenAPIService({
-        basePath: `${this.basePath}v2`,
+        basePath: `${this.basePath}`,
         keycloak: this.keycloak
       });
     }

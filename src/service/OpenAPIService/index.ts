@@ -2,25 +2,12 @@ import Keycloak from 'keycloak-js';
 
 import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 
-export interface SwaggerDocs {
-  basePath: string;
-  definitions: {
-    [key: string]: any;
-  };
-  host: string;
-  info: any;
-  paths: {
-    [key: string]: any;
-  };
-  securityDefinitions: {
-    [key: string]: any;
-  };
-  swagger: string;
-  tags: {
-    name: string;
-    description: string;
-  }[];
-}
+import {
+  OpenAPIV2,
+  OpenAPIV3
+} from 'openapi-types';
+
+export type OpenApiVersion = 'v2' | 'v3';
 
 export interface OpenAPIServiceOpts {
   basePath: string;
@@ -34,15 +21,16 @@ export class OpenAPIService {
   private keycloak?: Keycloak;
 
   constructor(opts: OpenAPIServiceOpts = {
-    basePath: '/v2'
+    basePath: '/'
   }) {
     this.basePath = opts.basePath;
     this.keycloak = opts.keycloak;
   }
 
-  async getApiDocs(fetchOpts?: RequestInit): Promise<SwaggerDocs> {
+  async getApiDocs(version: OpenApiVersion = 'v2', fetchOpts?: RequestInit):
+    Promise<OpenAPIV2.Document | OpenAPIV3.Document> {
     try {
-      const response = await fetch(`${this.basePath}/api-docs`, {
+      const response = await fetch(`${this.basePath}${version}/api-docs`, {
         method: 'GET',
         headers: {
           ...getBearerTokenHeader(this.keycloak)
@@ -56,7 +44,11 @@ export class OpenAPIService {
 
       const json = await response.json();
 
-      return json;
+      if (version === 'v3') {
+        return json as OpenAPIV3.Document;
+      }
+
+      return json as OpenAPIV2.Document;
     } catch (error) {
       throw new Error(`Error while requesting the swagger docs: ${error}`);
     }
