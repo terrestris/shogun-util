@@ -66,7 +66,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
     const projection = mapView?.projection || 'EPSG:3857';
     const zoom = mapView?.zoom || 0;
-    const resolutions = mapView?.resolutions || [];
+    const resolutions = mapView?.resolutions || undefined;
 
     let center;
     if (mapView?.center && mapView.center.length === 2) {
