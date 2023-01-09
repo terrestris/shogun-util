@@ -23,10 +23,10 @@ export interface DefaultApplicationLayerConfig {
 }
 
 export interface DefaultLayerTree {
-  title: string;
-  checked: boolean;
-  layerId: number;
-  children: DefaultLayerTree[];
+  title?: string;
+  checked?: boolean;
+  layerId?: number | string;
+  children?: DefaultLayerTree[];
 }
 
 export interface DefaultMapView {

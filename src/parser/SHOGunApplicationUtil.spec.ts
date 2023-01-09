@@ -78,14 +78,12 @@ describe('SHOGunApplicationUtil', () => {
           {
             title: 'Layer 1',
             checked: false,
-            layerId: 1,
-            children: []
+            layerId: 1
           },
           {
             title: 'Layer 2',
             checked: false,
-            layerId: 2,
-            children: []
+            layerId: 2
           }
         ]
       }, {
@@ -96,24 +94,21 @@ describe('SHOGunApplicationUtil', () => {
           {
             title: 'Layer 3',
             layerId: 3,
-            checked: false,
-            children: []
+            checked: false
           },
           {
             title: 'Layer 4',
             layerId: 4,
-            checked: false,
-            children: []
+            checked: false
           }
         ]
       }, {
         title: 'Layer 5',
         layerId: 5,
-        checked: true,
-        children: []
+        checked: true
       }]
     };
-    const layerIds = util.getLayerIds(myLayerTree.children);
+    const layerIds = util.getLayerIds(myLayerTree.children || []);
     const expectedIds = [1, 2, 3, 4, 5];
     expect(layerIds).toEqual(expect.arrayContaining(expectedIds));
   });

@@ -110,6 +110,11 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       return;
     }
 
+    if (!layerTree.children) {
+      Logger.warn('No children for the tree provided');
+      return;
+    }
+
     let layerIds: number[] = this.getLayerIds(layerTree.children);
 
     if (layerIds.length > 0) {
@@ -132,6 +137,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
             layers: nodes.reverse(),
             visible: layerTree.checked
           });
+
           return tree;
         }
       } catch (e) {
@@ -139,6 +145,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         return new OlLayerGroup();
       }
     }
+
     return new OlLayerGroup();
   }
 
@@ -146,7 +153,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     let layerIds: number[] = ids ?? [];
 
     for (const node of nodes) {
-      if (node.children?.length > 0) {
+      if (node.children && node.children.length > 0) {
         this.getLayerIds(node.children, layerIds);
       } else {
         layerIds.push(node.layerId);
@@ -160,13 +167,13 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     const collection: OlLayerBase[] = [];
 
     for (const node of nodes) {
-      if (node.children?.length > 0) {
+      if (node.children && node.children.length > 0) {
         collection.push(await this.parseFolder(node, layers, projection));
       } else {
         const layerNode = layers.find(l => l.id === node.layerId);
         if (layerNode) {
           const olLayer = await this.parseLayer(layerNode as S, projection);
-          olLayer.setVisible(node.checked);
+          olLayer.setVisible(node.checked || false);
           if (node.title) {
             olLayer.set('name', node.title);
           }
@@ -179,7 +186,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
   }
 
   async parseFolder(el: DefaultLayerTree, layers: S[], projection?: OlProjectionLike) {
-    const layersInFolder = await this.parseNodes(el.children, layers, projection);
+    const layersInFolder = await this.parseNodes(el.children || [], layers, projection);
 
     const folder = new OlLayerGroup({
       layers: layersInFolder.reverse(),
