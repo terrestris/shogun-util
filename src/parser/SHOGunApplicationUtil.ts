@@ -130,6 +130,9 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
         this.mergeApplicationLayerConfigs(layers, application);
 
+        const externalLayers = this.buildExternalLayers(application);
+        layers.push(...externalLayers);
+
         if (layerTree.children) {
           const nodes = await this.parseNodes(layerTree.children, layers, projection);
 
@@ -149,6 +152,49 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     return new OlLayerGroup();
   }
 
+  findNodeById(layerTree: DefaultLayerTree[], id: number | string): DefaultLayerTree | undefined {
+    for (const item of layerTree) {
+      if (item.children) {
+        return this.findNodeById(item.children, id);
+      }
+
+      if (item.layerId === id) {
+        return item;
+      }
+    }
+  };
+
+  buildExternalLayers(application: T): S[] {
+    const layers: S[] = [];
+
+    application.layerConfig?.forEach(layerConfig => {
+      if (Number.isFinite(layerConfig.layerId)) {
+        return;
+      }
+
+      if (!layerConfig.sourceConfig || !application.layerTree?.children) {
+        return;
+      }
+
+      const layerNode = this.findNodeById(application.layerTree.children, layerConfig.layerId);
+
+      if (!layerNode) {
+        return;
+      }
+
+      layers.push({
+        created: new Date(),
+        modified: new Date(),
+        name: layerNode.title,
+        type: 'WMS',
+        sourceConfig: layerConfig.sourceConfig,
+        clientConfig: layerConfig.clientConfig
+      } as S);
+    });
+
+    return layers;
+  }
+
   getLayerIds(nodes: DefaultLayerTree[], ids?: number[]) {
     let layerIds: number[] = ids ?? [];
 
@@ -156,7 +202,9 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       if (node.children && node.children.length > 0) {
         this.getLayerIds(node.children, layerIds);
       } else {
-        layerIds.push(node.layerId);
+        if (Number.isFinite(node.layerId)) {
+          layerIds.push(node.layerId as number);
+        }
       }
     }
 
