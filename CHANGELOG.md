@@ -1,3 +1,10 @@
+# [5.1.0](https://github.com/terrestris/shogun-util/compare/v5.0.0...v5.1.0) (2023-01-20)
+
+
+### Features
+
+* add support for legal information link config ([6f6f032](https://github.com/terrestris/shogun-util/commit/6f6f032d64a5a85ebbc401480fecfa90ec921c0e))
+
 # [5.0.0](https://github.com/terrestris/shogun-util/compare/v4.2.1...v5.0.0) (2023-01-04)
 
 
