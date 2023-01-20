@@ -36,10 +36,16 @@ export interface DefaultMapView {
   projection?: string;
   resolutions?: number[];
 }
+export interface DefaultLegalConfig {
+  contact?: string;
+  imprint?: string;
+  privacy?: string;
+}
 
 export interface DefaultApplicationClientConfig {
   mapView: DefaultMapView;
   description?: string;
+  legal?: DefaultLegalConfig;
   theme?: DefaultApplicationTheme;
 }
 
