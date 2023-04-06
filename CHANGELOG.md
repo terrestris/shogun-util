@@ -1,3 +1,10 @@
+# [5.2.0](https://github.com/terrestris/shogun-util/compare/v5.1.0...v5.2.0) (2023-04-06)
+
+
+### Features
+
+* register possibly configured additional crs definitions on client ([279fe56](https://github.com/terrestris/shogun-util/commit/279fe56f705b3fae1258c8bc13223371da034c01))
+
 # [5.1.0](https://github.com/terrestris/shogun-util/compare/v5.0.0...v5.1.0) (2023-01-20)
 
 
