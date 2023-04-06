@@ -1,3 +1,4 @@
+import { CrsDefinition } from '@terrestris/ol-util/dist/ProjectionUtil/ProjectionUtil';
 import BaseEntity, { BaseEntityArgs } from './BaseEntity';
 import {
   DefaultLayerClientConfig,
@@ -35,6 +36,7 @@ export interface DefaultMapView {
   extent?: [number, number, number, number];
   projection?: string;
   resolutions?: number[];
+  crsDefinitions?: CrsDefinition[];
 }
 export interface DefaultLegalConfig {
   contact?: string;

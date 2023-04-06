@@ -39,6 +39,8 @@ import SHOGunAPIClient from '../service/SHOGunAPIClient';
 
 import { getBearerTokenHeader } from '../security/getBearerTokenHeader';
 
+import _uniqueBy from 'lodash/uniqBy';
+
 import {
   allLayersByIds
 } from '../graphqlqueries/Layers';
@@ -60,7 +62,14 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
   async parseMapView(application: T, additionalOpts?: OlViewOptions): Promise<OlView> {
 
-    ProjectionUtil.initProj4Definitions(defaultProj4CrsDefinitions, false);
+    const customProj4Definitions = application.clientConfig?.mapView?.crsDefinitions || [];
+
+    const proj4Definitions = [
+      ...customProj4Definitions,
+      ...defaultProj4CrsDefinitions
+    ];
+
+    ProjectionUtil.initProj4Definitions(_uniqueBy(proj4Definitions, 'crsCode'), false);
 
     const mapView = application.clientConfig?.mapView;
 
