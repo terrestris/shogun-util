@@ -49,6 +49,7 @@ export interface DefaultApplicationClientConfig {
   description?: string;
   legal?: DefaultLegalConfig;
   theme?: DefaultApplicationTheme;
+  defaultLanguage?: string;
 }
 
 export interface ApplicationArgs extends BaseEntityArgs {
