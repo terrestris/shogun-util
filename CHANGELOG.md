@@ -1,3 +1,10 @@
+# [5.3.0](https://github.com/terrestris/shogun-util/compare/v5.2.0...v5.3.0) (2023-04-28)
+
+
+### Features
+
+* add defaultLangauge type to clientconfig ([6a8117e](https://github.com/terrestris/shogun-util/commit/6a8117e7cc2bca3fc4baae9a14656fa335c60f63))
+
 # [5.2.0](https://github.com/terrestris/shogun-util/compare/v5.1.0...v5.2.0) (2023-04-06)
 
 
