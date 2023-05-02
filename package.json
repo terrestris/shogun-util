@@ -60,7 +60,7 @@
     "jest-cli": "^29.4.2",
     "jest-environment-jsdom": "^29.5.0",
     "openapi-types": "^12.1.0",
-    "semantic-release": "^21.0.1",
+    "semantic-release": "^21.0.2",
     "typedoc": "^0.24.6",
     "typescript": "^5.0.4"
   },
