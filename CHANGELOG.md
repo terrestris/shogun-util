@@ -1,3 +1,10 @@
+## [5.3.1](https://github.com/terrestris/shogun-util/compare/v5.3.0...v5.3.1) (2023-05-03)
+
+
+### Bug Fixes
+
+* only use tile load function if necessary ([e0a998d](https://github.com/terrestris/shogun-util/commit/e0a998d43f124221cdc5c4c974fd814a98f2da82))
+
 # [5.3.0](https://github.com/terrestris/shogun-util/compare/v5.2.0...v5.3.0) (2023-04-28)
 
 
