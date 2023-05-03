@@ -243,16 +243,19 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       opacity
     } = layer.clientConfig || {};
 
-    const source = new OlImageWMS({
+    const sourceConfig: any = {
       url,
       attributions: attribution,
       params: {
         LAYERS: layerNames,
         ...requestParams
       },
-      crossOrigin,
-      imageLoadFunction: (imageTile, src) => this.bearerTokenLoadFunction(imageTile, src, useBearerToken)
-    });
+      crossOrigin
+    };
+    if (useBearerToken) {
+      sourceConfig.imageLoadFunction = (imageTile: any, src: any) => this.bearerTokenLoadFunction(imageTile, src, true);
+    }
+    const source = new OlImageWMS(sourceConfig);
 
     const imageLayer = new OlImageLayer({
       source,
@@ -296,7 +299,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       });
     }
 
-    const source = new OlTileWMS({
+    const sourceConfig: any = {
       url,
       tileGrid,
       attributions: attribution,
@@ -305,9 +308,13 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         LAYERS: layerNames,
         ...requestParams
       },
-      crossOrigin,
-      tileLoadFunction: (imageTile, src) => this.bearerTokenLoadFunction(imageTile, src, useBearerToken)
-    });
+      crossOrigin
+    };
+    if (useBearerToken) {
+      sourceConfig.tileLoadFunction = (imageTile: any, src: any) => this.bearerTokenLoadFunction(imageTile, src, true);
+    }
+
+    const source = new OlTileWMS(sourceConfig);
 
     const tileLayer = new OlTileLayer({
       source,
