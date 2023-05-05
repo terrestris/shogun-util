@@ -158,7 +158,9 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       if (node.children?.length > 0) {
         this.getLayerIds(node.children, layerIds);
       } else {
-        layerIds.push(node.layerId);
+        if (node.layerId) {
+          layerIds.push(node.layerId);
+        }
       }
     }
 
