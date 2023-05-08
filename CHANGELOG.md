@@ -1,3 +1,10 @@
+## [5.3.2](https://github.com/terrestris/shogun-util/compare/v5.3.1...v5.3.2) (2023-05-08)
+
+
+### Bug Fixes
+
+* only fetch layers with layerId ([1f708b4](https://github.com/terrestris/shogun-util/commit/1f708b40b799f30d8178afd0e1d6a4d14a15411b))
+
 ## [5.3.1](https://github.com/terrestris/shogun-util/compare/v5.3.0...v5.3.1) (2023-05-03)
 
 
