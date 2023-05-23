@@ -177,6 +177,11 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         const layerNode = layers.find(l => l.id === node.layerId);
         if (layerNode) {
           const olLayer = await this.parseLayer(layerNode as S, projection);
+
+          if (!olLayer) {
+            continue;
+          }
+
           olLayer.setVisible(node.checked);
           if (node.title) {
             olLayer.set('name', node.title);
@@ -356,8 +361,11 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
       capabilities = wmtsCapabilitiesParser.read(capabilitiesResponseText);
     } catch (error) {
-      throw new Error(`WMTS layer '${layerNames}' could not be created, error while ` +
-        `reading the WMTS GetCapabilities: ${error}`);
+      Logger.error(
+        `WMTS layer '${layerNames}' could not be created, error while ` +
+          `reading the WMTS GetCapabilities: ${error}`
+      );
+      return;
     }
 
     let optionsConfig: any = {
@@ -568,6 +576,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     olLayer.set('legendUrl', layer.sourceConfig.legendUrl);
     olLayer.set('hoverable', layer.clientConfig?.hoverable);
     olLayer.set('useBearerToken', layer.sourceConfig?.useBearerToken);
+    olLayer.set('editable', layer.clientConfig?.editable);
   }
 
   private async bearerTokenLoadFunctionVector(opts: {

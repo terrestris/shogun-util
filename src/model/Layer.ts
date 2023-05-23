@@ -39,6 +39,7 @@ export interface DefaultLayerClientConfig {
   crossOrigin?: string;
   opacity?: number;
   downloadConfig?: DownloadConfig[];
+  editable?: boolean;
 }
 
 export interface LayerArgs extends BaseEntityArgs {

@@ -41,9 +41,9 @@ export abstract class GenericService<T extends BaseEntity> extends PermissionSer
         throw new Error(`HTTP error status: ${response.status}`);
       }
 
-      const json: T[] = await response.json();
+      const json = await response.json();
 
-      return json;
+      return json.content;
     } catch (error) {
       throw new Error(`Error while requesting all entities: ${error}`);
     }
