@@ -1,6 +1,7 @@
 import { FeatureCollection } from 'geojson';
 import BaseEntity, { BaseEntityArgs } from './BaseEntity';
 import LayerType from './enum/LayerType';
+import EditFormComponentType from './enum/EditFormComponentType';
 
 export interface DefaultRequestParams {
   [key: string]: string | number | boolean;
@@ -22,7 +23,21 @@ export interface DefaultLayerSourceConfig {
 export interface DefaultLayerPropertyConfig {
   propertyName: string;
   displayName?: string;
-  visible?: boolean;
+}
+
+export interface PropertyFormItemReadConfig extends DefaultLayerPropertyConfig {
+  fieldProps?: any;
+}
+
+export interface PropertyFormItemEditConfig extends PropertyFormItemReadConfig {
+  component: EditFormComponentType;
+  readOnly?: boolean;
+  required?: boolean;
+}
+
+export interface PropertyFormTabConfig<T extends PropertyFormItemReadConfig> {
+  title: string;
+  children?: T[];
 }
 
 export interface DownloadConfig {
@@ -36,6 +51,8 @@ export interface DefaultLayerClientConfig {
   hoverable?: boolean;
   searchable?: boolean;
   propertyConfig?: DefaultLayerPropertyConfig[];
+  featureInfoFormConfig?: PropertyFormTabConfig<PropertyFormItemReadConfig>[];
+  editFormConfig?: PropertyFormTabConfig<PropertyFormItemEditConfig>[];
   crossOrigin?: string;
   opacity?: number;
   downloadConfig?: DownloadConfig[];

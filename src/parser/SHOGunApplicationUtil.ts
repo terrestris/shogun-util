@@ -577,6 +577,8 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     olLayer.set('hoverable', layer.clientConfig?.hoverable);
     olLayer.set('useBearerToken', layer.sourceConfig?.useBearerToken);
     olLayer.set('editable', layer.clientConfig?.editable);
+    olLayer.set('editFormConfig', layer.clientConfig?.editFormConfig);
+    olLayer.set('featureInfoFormConfig', layer.clientConfig?.featureInfoFormConfig);
   }
 
   private async bearerTokenLoadFunctionVector(opts: {

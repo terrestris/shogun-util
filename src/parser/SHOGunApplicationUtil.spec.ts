@@ -132,8 +132,7 @@ describe('SHOGunApplicationUtil', () => {
         minResolution: 1909,
         propertyConfig: [{
           propertyName: 'ID',
-          displayName: 'id',
-          visible: true
+          displayName: 'id'
         }],
         downloadConfig: [{
           downloadUrl: 'https://example.com/geo/ows?request=GetFeature&outputFormat=application%2Fjson',
