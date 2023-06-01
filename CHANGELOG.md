@@ -1,3 +1,11 @@
+# [5.4.0](https://github.com/terrestris/shogun-util/compare/v5.3.2...v5.4.0) (2023-06-01)
+
+
+### Features
+
+* add models to specify form configurations ([f8c2c92](https://github.com/terrestris/shogun-util/commit/f8c2c9241d1de19cb4cf3c68adb48031032ddb71))
+* adds editable flag to layer ([484457c](https://github.com/terrestris/shogun-util/commit/484457c545f07c2525ce2b02988bb73320490937))
+
 ## [5.3.2](https://github.com/terrestris/shogun-util/compare/v5.3.1...v5.3.2) (2023-05-08)
 
 
