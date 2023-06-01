@@ -89,7 +89,7 @@ describe('SHOGunAPIClient', () => {
       }
     };
 
-    fetchMock = fetchSpy(successResponse([myApplication]));
+    fetchMock = fetchSpy(successResponse({content: [myApplication]}));
 
     const apps = await client.application<MyApplication>().findAll();
 

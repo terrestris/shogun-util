@@ -61,17 +61,22 @@ describe('GenericService', () => {
   });
 
   it('returns all entities (findAll)', async () => {
-    const response = [{
-      id: 1
-    }, {
-      id: 2
-    }];
+    const response = {
+      content: [
+        {
+          id: 1
+        },
+        {
+          id: 2
+        }
+      ]
+    };
 
     fetchMock = fetchSpy(successResponse(response));
 
     const resp = await service.findAll();
 
-    expect(resp).toEqual(response);
+    expect(resp).toEqual(response.content);
   });
 
   it('throws an error if all entities couldn\'t be fetched (findAll)', async () => {
