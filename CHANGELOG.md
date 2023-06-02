@@ -1,3 +1,11 @@
+## [5.4.1](https://github.com/terrestris/shogun-util/compare/v5.4.0...v5.4.1) (2023-06-02)
+
+
+### Bug Fixes
+
+* fixes edit form component types ([6c0f020](https://github.com/terrestris/shogun-util/commit/6c0f02022e22b4b3a794d370d29be8fc8623fb86))
+* sync edit form component types with backend ([aa1912f](https://github.com/terrestris/shogun-util/commit/aa1912f6d29a0653112c58cc38ca5b3682035479))
+
 # [5.4.0](https://github.com/terrestris/shogun-util/compare/v5.3.2...v5.4.0) (2023-06-01)
 
 
