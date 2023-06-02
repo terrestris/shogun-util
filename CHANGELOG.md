@@ -1,3 +1,10 @@
+# [5.5.0](https://github.com/terrestris/shogun-util/compare/v5.4.1...v5.5.0) (2023-06-02)
+
+
+### Features
+
+* add searchConfig to layer ([29093ef](https://github.com/terrestris/shogun-util/commit/29093efa4a5c10e6fccdbb408b00788e5c95c501))
+
 ## [5.4.1](https://github.com/terrestris/shogun-util/compare/v5.4.0...v5.4.1) (2023-06-02)
 
 
