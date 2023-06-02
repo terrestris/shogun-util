@@ -1,4 +1,4 @@
-export type EditFormComponentType = 'CHECKBOX' | 'DATE' | 'DROPDOWN' | 'INPUT' | 'NUMBER' |
-  'SWITCH' | 'TEXTAREA' | 'UPLOAD' | 'DISPLAY' | 'SELECT';
+export type EditFormComponentType = 'CHECKBOX' | 'DATE' | 'DISPLAY' | 'INPUT' | 'NUMBER' |
+'SELECT' | 'SWITCH' | 'TEXTAREA' | 'UPLOAD';
 
 export default EditFormComponentType;
