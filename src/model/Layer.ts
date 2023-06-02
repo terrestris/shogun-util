@@ -45,11 +45,17 @@ export interface DownloadConfig {
   formatName?: string;
 }
 
+export interface SearchConfig {
+  attributes?: string[];
+  displayTemplate?: string;
+}
+
 export interface DefaultLayerClientConfig {
   minResolution?: number;
   maxResolution?: number;
   hoverable?: boolean;
   searchable?: boolean;
+  searchConfig?: SearchConfig;
   propertyConfig?: DefaultLayerPropertyConfig[];
   featureInfoFormConfig?: PropertyFormTabConfig<PropertyFormItemReadConfig>[];
   editFormConfig?: PropertyFormTabConfig<PropertyFormItemEditConfig>[];
