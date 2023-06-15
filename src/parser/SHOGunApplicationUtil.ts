@@ -106,7 +106,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     return view;
   }
 
-  async parseLayerTree(application: T, projection?: OlProjectionLike) {
+  async parseLayerTree(application: T, projection?: OlProjectionLike, keepClientConfig = false) {
     const layerTree = application.layerTree;
 
     if (!layerTree) {
@@ -135,7 +135,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         this.mergeApplicationLayerConfigs(layers, application);
 
         if (layerTree.children) {
-          const nodes = await this.parseNodes(layerTree.children, layers, projection);
+          const nodes = await this.parseNodes(layerTree.children, layers, projection, keepClientConfig);
 
           const tree = new OlLayerGroup({
             layers: nodes.reverse(),
@@ -167,7 +167,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     return layerIds;
   }
 
-  async parseNodes(nodes: DefaultLayerTree[], layers: S[], projection?: OlProjectionLike) {
+  async parseNodes(nodes: DefaultLayerTree[], layers: S[], projection?: OlProjectionLike, keepClientConfig = false) {
     const collection: OlLayerBase[] = [];
 
     for (const node of nodes) {
@@ -185,6 +185,9 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
           olLayer.setVisible(node.checked);
           if (node.title) {
             olLayer.set('name', node.title);
+          }
+          if (keepClientConfig) {
+            olLayer.set('clientConfig', layerNode.clientConfig);
           }
           collection.push(olLayer);
         }
