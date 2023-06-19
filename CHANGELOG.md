@@ -1,3 +1,10 @@
+# [5.6.0](https://github.com/terrestris/shogun-util/compare/v5.5.0...v5.6.0) (2023-06-19)
+
+
+### Features
+
+* optionally keep client config ([57731de](https://github.com/terrestris/shogun-util/commit/57731deab591d486e51aaafc3804f0d034359704))
+
 # [5.5.0](https://github.com/terrestris/shogun-util/compare/v5.4.1...v5.5.0) (2023-06-02)
 
 
