@@ -1,3 +1,10 @@
+## [5.6.1](https://github.com/terrestris/shogun-util/compare/v5.6.0...v5.6.1) (2023-06-21)
+
+
+### Bug Fixes
+
+* wmts parsing ([57c1a92](https://github.com/terrestris/shogun-util/commit/57c1a920fc3870694dfc618f6065993ab99dbc26))
+
 # [5.6.0](https://github.com/terrestris/shogun-util/compare/v5.5.0...v5.6.0) (2023-06-19)
 
 
