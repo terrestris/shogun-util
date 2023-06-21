@@ -524,7 +524,13 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       return timeLayer;
     }
 
-    const timeDimension = dimension.find((d: any) => d.name === 'time');
+    let timeDimension;
+
+    if (Array.isArray(dimension)) {
+      timeDimension = dimension.find((d: any) => d.name === 'time');
+    } else {
+      timeDimension = dimension.name === 'time' ? dimension : null;
+    }
 
     if (!timeDimension) {
       return timeLayer;
