@@ -536,11 +536,34 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       return timeLayer;
     }
 
-    timeLayer.set('dimension', timeDimension);
+    let timeRange;
+    let timeDefault;
+    if (wmsVersion === '1.3.0') {
+      timeRange = timeDimension['#text'];
+      timeDefault = timeDimension.default;
+    } else {
+      const extent = layerCapabilities?.Extent;
+      let timeDimensionExtent;
+      if (Array.isArray(extent)) {
+        timeDimensionExtent = extent?.find((d: any) => d.name === 'time');
+      } else {
+        timeDimensionExtent = extent?.name === 'time' ? extent : null;
+      }
+      if (!timeDimensionExtent) {
+        return timeLayer;
+      }
+      timeRange = timeDimensionExtent['#text'];
+      timeDefault = timeDimensionExtent.default;
+    }
 
-    if (timeDimension.default) {
+    timeLayer.set('dimension', {
+      name: timeDimension.name,
+      values: timeRange
+    });
+
+    if (timeDefault) {
       timeLayer.getSource()?.updateParams({
-        TIME: timeDimension.default
+        TIME: timeDefault
       });
     }
 
