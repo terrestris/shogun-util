@@ -1,3 +1,10 @@
+## [5.6.2](https://github.com/terrestris/shogun-util/compare/v5.6.1...v5.6.2) (2023-06-26)
+
+
+### Bug Fixes
+
+* fix detection of wms time dimension attributes after switch to fast-xml-parser ([b2a4579](https://github.com/terrestris/shogun-util/commit/b2a4579d6cdaf6fd75803f6573b80d194c756532))
+
 ## [5.6.1](https://github.com/terrestris/shogun-util/compare/v5.6.0...v5.6.1) (2023-06-21)
 
 
