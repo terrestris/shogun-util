@@ -1,11 +1,9 @@
-import GraphQLService, { GraphQLQueryObject } from './index';
-
+import User from '../../model/User';
 import fetchSpy, {
   failureResponse,
   successResponse
 } from '../../spec/fetchSpy';
-
-import User from '../../model/User';
+import GraphQLService, { GraphQLQueryObject } from './index';
 
 describe('GraphQLService', () => {
   let fetchMock: jest.SpyInstance;

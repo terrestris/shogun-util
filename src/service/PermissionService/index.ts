@@ -1,18 +1,17 @@
 import Keycloak from 'keycloak-js';
 
-import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
-import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
-
-import UserInstancePermission from '../../model/security/UserInstancePermission';
+import PermissionCollectionType from '../../model/enum/PermissionCollectionType';
+import GroupClassPermission from '../../model/security/GroupClassPermission';
 import GroupInstancePermission from '../../model/security/GroupInstancePermission';
 import UserClassPermission from '../../model/security/UserClassPermission';
-import GroupClassPermission from '../../model/security/GroupClassPermission';
-import PermissionCollectionType from '../../model/enum/PermissionCollectionType';
+import UserInstancePermission from '../../model/security/UserInstancePermission';
+import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
+import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
 
 export interface PermissionServiceOpts {
   basePath: string;
   keycloak?: Keycloak;
-};
+}
 
 export class PermissionService {
 

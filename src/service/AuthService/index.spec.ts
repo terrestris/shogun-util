@@ -2,7 +2,6 @@ import fetchSpy, {
   failureResponse,
   successResponse
 } from '../../spec/fetchSpy';
-
 import AuthService from '.';
 
 describe('AuthService', () => {

@@ -1,6 +1,5 @@
 import ImageFile from '../../model/ImageFile';
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
-
 import GenericFileService, { GenericFileServiceOpts } from '../GenericFileService';
 
 export class ImageFileService<T extends ImageFile> extends GenericFileService<T> {

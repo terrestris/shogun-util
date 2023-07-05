@@ -1,13 +1,12 @@
 import Keycloak from 'keycloak-js';
 
-import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
-
 import { AppInfo } from '../../model/AppInfo';
+import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 
 export interface AppInfoServiceOpts {
   basePath: string;
   keycloak?: Keycloak;
-};
+}
 
 export class AppInfoService {
 

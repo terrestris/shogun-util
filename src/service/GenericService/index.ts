@@ -1,15 +1,14 @@
 import Keycloak from 'keycloak-js';
 
+import BaseEntity from '../../model/BaseEntity';
 import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
-
-import BaseEntity from '../../model/BaseEntity';
 import PermissionService from '../PermissionService';
 
 export interface GenericServiceOpts {
   basePath: string;
   keycloak?: Keycloak;
-};
+}
 
 export abstract class GenericService<T extends BaseEntity> extends PermissionService {
 

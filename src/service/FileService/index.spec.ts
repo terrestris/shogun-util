@@ -1,6 +1,6 @@
-import FileService from '.';
 import File from '../../model/File';
 import GenericFileService from '../GenericFileService';
+import FileService from '.';
 
 describe('FileService', () => {
   let service: FileService<File>;

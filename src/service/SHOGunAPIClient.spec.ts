@@ -2,22 +2,19 @@ import Application, {
   ApplicationArgs,
   DefaultApplicationClientConfig
 } from '../model/Application';
-
+import fetchSpy, { successResponse } from '../spec/fetchSpy';
+import AppInfoService from './AppInfoService';
 import ApplicationService from './ApplicationService';
 import AuthService from './AuthService';
-import GraphQLService from './GraphQLService';
-import AppInfoService from './AppInfoService';
-import LayerService from './LayerService';
-import UserService from './UserService';
-import GroupService from './GroupService';
-
-import fetchSpy, { successResponse } from '../spec/fetchSpy';
-
-import SHOGunAPIClient from './SHOGunAPIClient';
 import CacheService from './CacheService';
 import FileService from './FileService';
+import GraphQLService from './GraphQLService';
+import GroupService from './GroupService';
 import ImageFileService from './ImageFileService';
+import LayerService from './LayerService';
 import OpenAPIService from './OpenAPIService';
+import SHOGunAPIClient from './SHOGunAPIClient';
+import UserService from './UserService';
 
 export interface MyDefaultApplicationClientConfig extends DefaultApplicationClientConfig {
   newField: number;

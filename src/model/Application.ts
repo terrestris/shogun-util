@@ -1,4 +1,5 @@
 import { CrsDefinition } from '@terrestris/ol-util/dist/ProjectionUtil/ProjectionUtil';
+
 import BaseEntity, { BaseEntityArgs } from './BaseEntity';
 import {
   DefaultLayerClientConfig,

@@ -6,7 +6,6 @@ import Group, { ProviderGroupDetails } from '../model/Group';
 import ImageFile from '../model/ImageFile';
 import Layer from '../model/Layer';
 import User, { ProviderUserDetails } from '../model/User';
-
 import AppInfoService from './AppInfoService';
 import ApplicationService from './ApplicationService';
 import AuthService from './AuthService';

@@ -1,6 +1,6 @@
-import UserService from '.';
 import User, { KeycloakUserRepresentation } from '../../model/User';
 import GenericService from '../GenericService';
+import UserService from '.';
 
 describe('UserService', () => {
   let service: UserService<User>;

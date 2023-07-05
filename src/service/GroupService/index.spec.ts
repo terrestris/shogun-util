@@ -1,6 +1,6 @@
-import GroupService from '.';
 import Group, { KeycloakGroupRepresentation } from '../../model/Group';
 import GenericService from '../GenericService';
+import GroupService from '.';
 
 describe('GroupService', () => {
   let service: GroupService<Group<KeycloakGroupRepresentation>, KeycloakGroupRepresentation>;

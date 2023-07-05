@@ -1,14 +1,13 @@
 import Keycloak from 'keycloak-js';
 
+import SHOGunFile from '../../model/File';
 import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
-
-import SHOGunFile from '../../model/File';
 
 export interface GenericFileServiceOpts {
   basePath: string;
   keycloak?: Keycloak;
-};
+}
 
 export abstract class GenericFileService<T extends SHOGunFile> {
 

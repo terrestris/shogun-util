@@ -1,7 +1,8 @@
 import { FeatureCollection } from 'geojson';
+
 import BaseEntity, { BaseEntityArgs } from './BaseEntity';
-import LayerType from './enum/LayerType';
 import EditFormComponentType from './enum/EditFormComponentType';
+import LayerType from './enum/LayerType';
 
 export interface DefaultRequestParams {
   [key: string]: string | number | boolean;

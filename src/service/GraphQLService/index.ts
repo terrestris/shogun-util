@@ -8,19 +8,19 @@ export interface GraphQLQueryObject {
   variables?: {
     [key: string]: any;
   };
-};
+}
 
 export interface GraphQLResponse<T> {
   data: {
     [key: string]: T[];
   };
   errors?: any;
-};
+}
 
 export interface GraphQLServiceOpts {
   basePath: string;
   keycloak?: Keycloak;
-};
+}
 
 export class GraphQLService {
 
