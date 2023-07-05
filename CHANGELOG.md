@@ -1,3 +1,10 @@
+# [5.7.0](https://github.com/terrestris/shogun-util/compare/v5.6.2...v5.7.0) (2023-07-05)
+
+
+### Features
+
+* introduce graphQL query to find application by id ([575000c](https://github.com/terrestris/shogun-util/commit/575000c56539a8642ad0643a025318f3fada7511))
+
 ## [5.6.2](https://github.com/terrestris/shogun-util/compare/v5.6.1...v5.6.2) (2023-06-26)
 
 
