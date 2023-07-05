@@ -114,7 +114,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       try {
         const {
           allLayersByIds: layers
-        } = await this.client.graphql().sendQuery<S>({
+        } = await this.client.graphql().sendQuery<S[]>({
           query: allLayersByIds,
           variables: {
             ids: layerIds
