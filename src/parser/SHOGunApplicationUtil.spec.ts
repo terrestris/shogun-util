@@ -1,19 +1,18 @@
-import OlSourceImageWMS from 'ol/source/ImageWMS';
-import OlSourceTileWMS from 'ol/source/TileWMS';
+import OlFormatGeoJSON from 'ol/format/GeoJSON';
 import OlLayerImage from 'ol/layer/Image';
 import OlLayerTile from 'ol/layer/Tile';
 import OlLayerVector from 'ol/layer/Vector';
-import OlSourceVector from 'ol/source/Vector';
-import OlFormatGeoJSON from 'ol/format/GeoJSON';
-import OlTileGrid from 'ol/tilegrid/TileGrid';
 import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
+import OlSourceImageWMS from 'ol/source/ImageWMS';
+import OlSourceTileWMS from 'ol/source/TileWMS';
+import OlSourceVector from 'ol/source/Vector';
+import OlTileGrid from 'ol/tilegrid/TileGrid';
 import { getUid } from 'ol/util';
 
 import Application, { DefaultLayerTree } from '../model/Application';
 import Layer from '../model/Layer';
-
-import SHOGunApplicationUtil from './SHOGunApplicationUtil';
 import SHOGunAPIClient from '../service/SHOGunAPIClient';
+import SHOGunApplicationUtil from './SHOGunApplicationUtil';
 
 describe('SHOGunApplicationUtil', () => {
   let fetchMock: jest.SpyInstance;

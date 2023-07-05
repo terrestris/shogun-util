@@ -1,18 +1,17 @@
 import Keycloak from 'keycloak-js';
-
-import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
-
 import {
   OpenAPIV2,
   OpenAPIV3
 } from 'openapi-types';
+
+import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 
 export type OpenApiVersion = 'v2' | 'v3';
 
 export interface OpenAPIServiceOpts {
   basePath: string;
   keycloak?: Keycloak;
-};
+}
 
 export class OpenAPIService {
 

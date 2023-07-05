@@ -1,7 +1,7 @@
-import ImageFileService from '.';
 import ImageFile from '../../model/ImageFile';
-import GenericFileService from '../GenericFileService';
 import fetchSpy, { failureResponse, successResponse } from '../../spec/fetchSpy';
+import GenericFileService from '../GenericFileService';
+import ImageFileService from '.';
 
 describe('ImageFileService', () => {
   let fetchMock: jest.SpyInstance;

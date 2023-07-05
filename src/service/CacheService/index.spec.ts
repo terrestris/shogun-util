@@ -2,7 +2,6 @@ import fetchSpy, {
   failureResponse,
   successResponse
 } from '../../spec/fetchSpy';
-
 import CacheService from '.';
 
 describe('AppInfoService', () => {

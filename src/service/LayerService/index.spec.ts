@@ -1,6 +1,6 @@
-import LayerService from '.';
 import Layer from '../../model/Layer';
 import GenericService from '../GenericService';
+import LayerService from '.';
 
 describe('LayerService', () => {
   let service: LayerService<Layer>;

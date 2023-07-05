@@ -1,6 +1,5 @@
 import Keycloak from 'keycloak-js';
 
-import PermissionService from '.';
 import GroupClassPermission from '../../model/security/GroupClassPermission';
 import GroupInstancePermission from '../../model/security/GroupInstancePermission';
 import UserClassPermission from '../../model/security/UserClassPermission';
@@ -9,6 +8,7 @@ import fetchSpy, {
   failureResponse,
   successResponse
 } from '../../spec/fetchSpy';
+import PermissionService from '.';
 
 describe('PermissionService', () => {
   let fetchMock: jest.SpyInstance;

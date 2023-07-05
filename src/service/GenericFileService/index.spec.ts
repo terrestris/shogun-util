@@ -1,7 +1,6 @@
 import BaseEntity, { BaseEntityArgs } from '../../model/BaseEntity';
-
-import GenericFileService, { GenericFileServiceOpts } from '.';
 import fetchSpy, { failureResponse, successResponse } from '../../spec/fetchSpy';
+import GenericFileService, { GenericFileServiceOpts } from '.';
 
 interface DummyEntityArgs extends BaseEntityArgs {
   dummyField?: string;
@@ -20,7 +19,7 @@ class DummyEntity extends BaseEntity {
 
     this.dummyField = dummyField;
   }
-};
+}
 
 class DummyService extends GenericFileService<DummyEntity> {
   constructor(opts: GenericFileServiceOpts = {

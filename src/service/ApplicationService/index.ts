@@ -1,6 +1,5 @@
-import GenericService, { GenericServiceOpts } from '../GenericService';
-
 import Application from '../../model/Application';
+import GenericService, { GenericServiceOpts } from '../GenericService';
 
 export class ApplicationService<T extends Application> extends GenericService<T> {
 

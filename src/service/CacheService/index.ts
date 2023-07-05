@@ -6,7 +6,7 @@ import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
 export interface CacheServiceOpts {
   basePath: string;
   keycloak?: Keycloak;
-};
+}
 
 export class CacheService {
 

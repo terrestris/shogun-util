@@ -2,7 +2,6 @@ import fetchSpy, {
   failureResponse,
   successResponse
 } from '../../spec/fetchSpy';
-
 import OpenAPIService from '.';
 
 describe('OpenAPIService', () => {

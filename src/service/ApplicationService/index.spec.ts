@@ -1,7 +1,6 @@
 import Application from '../../model/Application';
-
-import ApplicationService from '.';
 import GenericService from '../GenericService';
+import ApplicationService from '.';
 
 describe('ApplicationService', () => {
   let service: ApplicationService<Application>;

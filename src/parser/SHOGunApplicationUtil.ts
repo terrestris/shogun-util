@@ -1,3 +1,9 @@
+import Logger from '@terrestris/base-util/dist/Logger';
+import { UrlUtil } from '@terrestris/base-util/dist/UrlUtil/UrlUtil';
+import CapabilitiesUtil from '@terrestris/ol-util/dist/CapabilitiesUtil/CapabilitiesUtil';
+import { MapUtil } from '@terrestris/ol-util/dist/MapUtil/MapUtil';
+import ProjectionUtil, { defaultProj4CrsDefinitions } from '@terrestris/ol-util/dist/ProjectionUtil/ProjectionUtil';
+import _uniqueBy from 'lodash/uniqBy';
 import { Extent as OlExtent } from 'ol/extent';
 import OlFeature from 'ol/Feature';
 import OlFormatGeoJSON from 'ol/format/GeoJSON';
@@ -25,25 +31,13 @@ import OlTileGrid from 'ol/tilegrid/TileGrid';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlView, { ViewOptions as OlViewOptions } from 'ol/View';
 
-import Logger from '@terrestris/base-util/dist/Logger';
-import { UrlUtil } from '@terrestris/base-util/dist/UrlUtil/UrlUtil';
-
-import CapabilitiesUtil from '@terrestris/ol-util/dist/CapabilitiesUtil/CapabilitiesUtil';
-import { MapUtil } from '@terrestris/ol-util/dist/MapUtil/MapUtil';
-import ProjectionUtil, { defaultProj4CrsDefinitions } from '@terrestris/ol-util/dist/ProjectionUtil/ProjectionUtil';
-
-import Application, { DefaultLayerTree } from '../model/Application';
-import Layer from '../model/Layer';
-
-import SHOGunAPIClient from '../service/SHOGunAPIClient';
-
-import { getBearerTokenHeader } from '../security/getBearerTokenHeader';
-
-import _uniqueBy from 'lodash/uniqBy';
-
 import {
   allLayersByIds
 } from '../graphqlqueries/Layers';
+import Application, { DefaultLayerTree } from '../model/Application';
+import Layer from '../model/Layer';
+import { getBearerTokenHeader } from '../security/getBearerTokenHeader';
+import SHOGunAPIClient from '../service/SHOGunAPIClient';
 
 export interface SHOGunApplicationUtilOpts {
   client?: SHOGunAPIClient;
