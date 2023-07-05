@@ -1,24 +1,15 @@
-import Keycloak from 'keycloak-js';
-
 import { AppInfo } from '../../model/AppInfo';
 import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
+import { GenericService, GenericServiceOpts } from '../GenericService';
 
-export interface AppInfoServiceOpts {
-  basePath: string;
-  keycloak?: Keycloak;
-}
+export type AppInfoServiceOpts = GenericServiceOpts;
 
-export class AppInfoService {
-
-  private basePath: string;
-
-  private keycloak?: Keycloak;
+export class AppInfoService extends GenericService {
 
   constructor(opts: AppInfoServiceOpts = {
     basePath: '/info'
   }) {
-    this.basePath = opts.basePath;
-    this.keycloak = opts.keycloak;
+    super(opts);
   }
 
   async getAppInfo(fetchOpts?: RequestInit): Promise<AppInfo> {
@@ -35,9 +26,7 @@ export class AppInfoService {
         throw new Error(`HTTP error status: ${response.status}`);
       }
 
-      const json = await response.json();
-
-      return json;
+      return await response.json();
     } catch (error) {
       throw new Error(`Error while requesting the application info: ${error}`);
     }

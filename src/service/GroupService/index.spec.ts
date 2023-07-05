@@ -1,5 +1,5 @@
 import Group, { KeycloakGroupRepresentation } from '../../model/Group';
-import GenericService from '../GenericService';
+import GenericEntityService from '../GenericEntityService';
 import GroupService from '.';
 
 describe('GroupService', () => {
@@ -14,11 +14,11 @@ describe('GroupService', () => {
   });
 
   it('extends the GenericService', () => {
-    expect(service instanceof GenericService).toBeTruthy();
+    expect(service instanceof GenericEntityService).toBeTruthy();
   });
 
   it('has set the correct default path', () => {
-    expect(service.basePath).toEqual('/groups');
+    expect(service.getBasePath()).toEqual('/groups');
   });
 
 });

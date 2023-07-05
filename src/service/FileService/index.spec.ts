@@ -18,7 +18,7 @@ describe('FileService', () => {
   });
 
   it('has set the correct default path', () => {
-    expect(service.basePath).toEqual('/files');
+    expect(service.getBasePath()).toEqual('/files');
   });
 
 });

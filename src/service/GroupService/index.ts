@@ -1,10 +1,10 @@
 import Group, { KeycloakGroupRepresentation,ProviderGroupDetails } from '../../model/Group';
-import GenericService, { GenericServiceOpts } from '../GenericService';
+import GenericEntityService, { GenericEntityServiceOpts } from '../GenericEntityService';
 
 export class GroupService<T extends Group<S>,
-  S extends ProviderGroupDetails = KeycloakGroupRepresentation> extends GenericService<T> {
+  S extends ProviderGroupDetails = KeycloakGroupRepresentation> extends GenericEntityService<T> {
 
-  constructor(opts: GenericServiceOpts = {
+  constructor(opts: GenericEntityServiceOpts = {
     basePath: '/groups'
   }) {
     super(opts);

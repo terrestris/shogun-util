@@ -24,9 +24,7 @@ export class ImageFileService<T extends ImageFile> extends GenericFileService<T>
         throw new Error(`HTTP error status: ${response.status}`);
       }
 
-      const blob: Blob = await response.blob();
-
-      return blob;
+      return await response.blob();
     } catch (error) {
       throw new Error(`Error while requesting a single entity: ${error}`);
     }

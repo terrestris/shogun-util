@@ -33,7 +33,6 @@ export interface SHOGunAPIClientOpts {
 export class SHOGunAPIClient {
 
   private basePath: string;
-
   private keycloak?: Keycloak;
 
   private cacheService?: CacheService;

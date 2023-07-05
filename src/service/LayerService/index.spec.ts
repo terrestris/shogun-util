@@ -1,5 +1,5 @@
 import Layer from '../../model/Layer';
-import GenericService from '../GenericService';
+import GenericEntityService from '../GenericEntityService';
 import LayerService from '.';
 
 describe('LayerService', () => {
@@ -14,11 +14,11 @@ describe('LayerService', () => {
   });
 
   it('extends the GenericService', () => {
-    expect(service instanceof GenericService).toBeTruthy();
+    expect(service instanceof GenericEntityService).toBeTruthy();
   });
 
   it('has set the correct default path', () => {
-    expect(service.basePath).toEqual('/layers');
+    expect(service.getBasePath()).toEqual('/layers');
   });
 
 });
