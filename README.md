@@ -67,3 +67,12 @@ const map = new Map({
   layers
 });
 ```
+
+## Development
+
+`npm run watch:buildto` can be used to inject an updated version of `shogun-util` into another project.
+The script will also watch for further changes.
+
+```sh
+npm run watch:buildto ../shogun-gis-client/node_modules/@terrestris/shogun-util/
+```
