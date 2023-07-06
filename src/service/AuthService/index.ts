@@ -1,24 +1,15 @@
-import Keycloak from 'keycloak-js';
-
 import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
+import { GenericService, GenericServiceOpts } from '../GenericService';
 
-export interface AuthServiceOpts {
-  basePath: string;
-  keycloak?: Keycloak;
-}
+export type AuthServiceOpts = GenericServiceOpts;
 
-export class AuthService {
-
-  private basePath: string;
-
-  private keycloak?: Keycloak;
+export class AuthService extends GenericService {
 
   constructor(opts: AuthServiceOpts = {
     basePath: '/sso'
   }) {
-    this.basePath = opts.basePath;
-    this.keycloak = opts.keycloak;
+    super(opts);
   }
 
   async logout(requestOpts?: RequestInit): Promise<void> {

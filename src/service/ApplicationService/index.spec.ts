@@ -1,5 +1,5 @@
 import Application from '../../model/Application';
-import GenericService from '../GenericService';
+import GenericEntityService from '../GenericEntityService';
 import ApplicationService from '.';
 
 describe('ApplicationService', () => {
@@ -14,11 +14,11 @@ describe('ApplicationService', () => {
   });
 
   it('extends the GenericService', () => {
-    expect(service instanceof GenericService).toBeTruthy();
+    expect(service instanceof GenericEntityService).toBeTruthy();
   });
 
   it('has set the correct default path', () => {
-    expect(service.basePath).toEqual('/applications');
+    expect(service.getBasePath()).toEqual('/applications');
   });
 
 });

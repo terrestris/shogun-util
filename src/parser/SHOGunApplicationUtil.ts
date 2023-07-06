@@ -17,10 +17,7 @@ import OlImageLayer from 'ol/layer/Image';
 import OlTileLayer from 'ol/layer/Tile';
 import OlLayerVector from 'ol/layer/Vector';
 import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
-import {
-  fromLonLat,
-  ProjectionLike as OlProjectionLike
-} from 'ol/proj';
+import { fromLonLat, ProjectionLike as OlProjectionLike } from 'ol/proj';
 import { Units } from 'ol/proj/Units';
 import OlImageWMS from 'ol/source/ImageWMS';
 import OlTileWMS from 'ol/source/TileWMS';
@@ -45,9 +42,9 @@ export interface SHOGunApplicationUtilOpts {
 
 class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
-  private client: SHOGunAPIClient | undefined;
+  private readonly client: SHOGunAPIClient | undefined;
 
-  private objectUrls: any = {};
+  private readonly objectUrls: any = {};
 
   constructor(opts?: SHOGunApplicationUtilOpts) {
     // TODO Default client?
@@ -88,7 +85,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       ];
     }
 
-    const view = new OlView({
+    return new OlView({
       projection,
       center,
       zoom,
@@ -96,8 +93,6 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       resolutions,
       ...additionalOpts
     });
-
-    return view;
   }
 
   async parseLayerTree(application: T, projection?: OlProjectionLike, keepClientConfig = false) {
@@ -119,7 +114,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       try {
         const {
           allLayersByIds: layers
-        } = await this.client.graphql().sendQuery<S>({
+        } = await this.client.graphql().sendQuery<S[]>({
           query: allLayersByIds,
           variables: {
             ids: layerIds
@@ -131,11 +126,10 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         if (layerTree.children) {
           const nodes = await this.parseNodes(layerTree.children, layers, projection, keepClientConfig);
 
-          const tree = new OlLayerGroup({
+          return new OlLayerGroup({
             layers: nodes.reverse(),
             visible: layerTree.checked
           });
-          return tree;
         }
       } catch (e) {
         Logger.warn('Could not parse the layer tree: ' + e);

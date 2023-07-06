@@ -1,29 +1,18 @@
-import Keycloak from 'keycloak-js';
-import {
-  OpenAPIV2,
-  OpenAPIV3
-} from 'openapi-types';
+import { OpenAPIV2, OpenAPIV3 } from 'openapi-types';
 
 import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
+import { GenericService, GenericServiceOpts } from '../GenericService';
 
 export type OpenApiVersion = 'v2' | 'v3';
 
-export interface OpenAPIServiceOpts {
-  basePath: string;
-  keycloak?: Keycloak;
-}
+export type OpenAPIServiceOpts = GenericServiceOpts;
 
-export class OpenAPIService {
-
-  private basePath: string;
-
-  private keycloak?: Keycloak;
+export class OpenAPIService extends GenericService {
 
   constructor(opts: OpenAPIServiceOpts = {
     basePath: '/'
   }) {
-    this.basePath = opts.basePath;
-    this.keycloak = opts.keycloak;
+    super(opts);
   }
 
   async getApiDocs(version: OpenApiVersion = 'v2', fetchOpts?: RequestInit):

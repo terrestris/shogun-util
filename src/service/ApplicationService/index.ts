@@ -1,9 +1,9 @@
 import Application from '../../model/Application';
-import GenericService, { GenericServiceOpts } from '../GenericService';
+import GenericEntityService, { GenericEntityServiceOpts } from '../GenericEntityService';
 
-export class ApplicationService<T extends Application> extends GenericService<T> {
+export class ApplicationService<T extends Application> extends GenericEntityService<T> {
 
-  constructor(opts: GenericServiceOpts = {
+  constructor(opts: GenericEntityServiceOpts = {
     basePath: '/applications'
   }) {
     super(opts);

@@ -1,23 +1,14 @@
-import Keycloak from 'keycloak-js';
-
 import SHOGunFile from '../../model/File';
 import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
+import { GenericService, GenericServiceOpts } from '../GenericService';
 
-export interface GenericFileServiceOpts {
-  basePath: string;
-  keycloak?: Keycloak;
-}
+export type GenericFileServiceOpts = GenericServiceOpts;
 
-export abstract class GenericFileService<T extends SHOGunFile> {
+export abstract class GenericFileService<T extends SHOGunFile> extends GenericService {
 
-  basePath: string;
-
-  keycloak?: Keycloak;
-
-  constructor(opts: GenericFileServiceOpts) {
-    this.basePath = opts.basePath;
-    this.keycloak = opts.keycloak;
+  protected constructor(opts: GenericFileServiceOpts) {
+    super(opts);
   }
 
   async findAll(fetchOpts?: RequestInit): Promise<T[]> {
@@ -34,9 +25,7 @@ export abstract class GenericFileService<T extends SHOGunFile> {
         throw new Error(`HTTP error status: ${response.status}`);
       }
 
-      const json: T[] = await response.json();
-
-      return json ;
+      return await response.json() ;
     } catch (error) {
       throw new Error(`Error while requesting all entities: ${error}`);
     }
@@ -56,9 +45,7 @@ export abstract class GenericFileService<T extends SHOGunFile> {
         throw new Error(`HTTP error status: ${response.status}`);
       }
 
-      const blob: Blob = await response.blob();
-
-      return blob;
+      return await response.blob();
     } catch (error) {
       throw new Error(`Error while requesting a single entity: ${error}`);
     }
@@ -84,9 +71,7 @@ export abstract class GenericFileService<T extends SHOGunFile> {
         throw new Error(`HTTP error status: ${response.status}`);
       }
 
-      const json: T = await response.json();
-
-      return json;
+      return await response.json();
     } catch (error) {
       throw new Error(`Error while creating an entity: ${error}`);
     }
@@ -108,6 +93,10 @@ export abstract class GenericFileService<T extends SHOGunFile> {
     } catch (error) {
       throw new Error(`Error while deleting an entity: ${error}`);
     }
+  }
+
+  getBasePath() {
+    return this.basePath;
   }
 
 }

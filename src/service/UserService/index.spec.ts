@@ -1,5 +1,5 @@
-import User, { KeycloakUserRepresentation } from '../../model/User';
-import GenericService from '../GenericService';
+import User from '../../model/User';
+import GenericEntityService from '../GenericEntityService';
 import UserService from '.';
 
 describe('UserService', () => {
@@ -14,11 +14,11 @@ describe('UserService', () => {
   });
 
   it('extends the GenericService', () => {
-    expect(service instanceof GenericService).toBeTruthy();
+    expect(service instanceof GenericEntityService).toBeTruthy();
   });
 
   it('has set the correct default path', () => {
-    expect(service.basePath).toEqual('/users');
+    expect(service.getBasePath()).toEqual('/users');
   });
 
 });

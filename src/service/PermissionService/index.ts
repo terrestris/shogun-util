@@ -1,5 +1,3 @@
-import Keycloak from 'keycloak-js';
-
 import PermissionCollectionType from '../../model/enum/PermissionCollectionType';
 import GroupClassPermission from '../../model/security/GroupClassPermission';
 import GroupInstancePermission from '../../model/security/GroupInstancePermission';
@@ -7,21 +5,14 @@ import UserClassPermission from '../../model/security/UserClassPermission';
 import UserInstancePermission from '../../model/security/UserInstancePermission';
 import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
+import { GenericService, GenericServiceOpts } from '../GenericService';
 
-export interface PermissionServiceOpts {
-  basePath: string;
-  keycloak?: Keycloak;
-}
+export type PermissionServiceOpts = GenericServiceOpts;
 
-export class PermissionService {
-
-  basePath: string;
-
-  keycloak?: Keycloak;
+export class PermissionService extends GenericService {
 
   constructor(opts: PermissionServiceOpts) {
-    this.basePath = opts.basePath;
-    this.keycloak = opts.keycloak;
+    super(opts);
   }
 
   async getUserInstancePermissions(id: string | number, fetchOpts?: RequestInit): Promise<UserInstancePermission[]> {
@@ -38,9 +29,7 @@ export class PermissionService {
         throw new Error(`HTTP error status: ${response.status}`);
       }
 
-      const json: UserInstancePermission[] = await response.json();
-
-      return json;
+      return await response.json();
     } catch (error) {
       throw new Error(`Error while requesting the user instance permissions: ${error}`);
     }
@@ -60,9 +49,7 @@ export class PermissionService {
         throw new Error(`HTTP error status: ${response.status}`);
       }
 
-      const json: GroupInstancePermission[] = await response.json();
-
-      return json;
+      return await response.json();
     } catch (error) {
       throw new Error(`Error while requesting the group instance permissions: ${error}`);
     }
@@ -82,9 +69,7 @@ export class PermissionService {
         throw new Error(`HTTP error status: ${response.status}`);
       }
 
-      const json: UserClassPermission[] = await response.json();
-
-      return json;
+      return await response.json();
     } catch (error) {
       throw new Error(`Error while requesting the user class permissions: ${error}`);
     }
@@ -104,9 +89,7 @@ export class PermissionService {
         throw new Error(`HTTP error status: ${response.status}`);
       }
 
-      const json: GroupClassPermission[] = await response.json();
-
-      return json;
+      return await response.json();
     } catch (error) {
       throw new Error(`Error while requesting the group class permissions: ${error}`);
     }
@@ -127,9 +110,7 @@ export class PermissionService {
         throw new Error(`HTTP error status: ${response.status}`);
       }
 
-      const json: UserInstancePermission = await response.json();
-
-      return json;
+      return await response.json();
     } catch (error) {
       throw new Error(`Error while requesting the user instance permission: ${error}`);
     }
@@ -150,9 +131,7 @@ export class PermissionService {
         throw new Error(`HTTP error status: ${response.status}`);
       }
 
-      const json: UserInstancePermission = await response.json();
-
-      return json;
+      return await response.json();
     } catch (error) {
       throw new Error(`Error while requesting the group instance permission: ${error}`);
     }
@@ -173,9 +152,7 @@ export class PermissionService {
         throw new Error(`HTTP error status: ${response.status}`);
       }
 
-      const json: UserInstancePermission = await response.json();
-
-      return json;
+      return await response.json();
     } catch (error) {
       throw new Error(`Error while requesting the user class permission: ${error}`);
     }
@@ -196,9 +173,7 @@ export class PermissionService {
         throw new Error(`HTTP error status: ${response.status}`);
       }
 
-      const json: UserInstancePermission = await response.json();
-
-      return json;
+      return await response.json();
     } catch (error) {
       throw new Error(`Error while requesting the group class permission: ${error}`);
     }

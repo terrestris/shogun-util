@@ -1,24 +1,15 @@
-import Keycloak from 'keycloak-js';
-
 import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
+import { GenericService, GenericServiceOpts } from '../GenericService';
 
-export interface CacheServiceOpts {
-  basePath: string;
-  keycloak?: Keycloak;
-}
+export type CacheServiceOpts = GenericServiceOpts;
 
-export class CacheService {
-
-  private basePath: string;
-
-  private keycloak?: Keycloak;
+export class CacheService extends GenericService {
 
   constructor(opts: CacheServiceOpts = {
     basePath: '/cache'
   }) {
-    this.basePath = opts.basePath;
-    this.keycloak = opts.keycloak;
+    super(opts);
   }
 
   async evictCache(fetchOpts?: RequestInit): Promise<void> {

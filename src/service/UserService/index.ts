@@ -1,10 +1,10 @@
 import User, { KeycloakUserRepresentation, ProviderUserDetails } from '../../model/User';
-import GenericService, { GenericServiceOpts } from '../GenericService';
+import GenericEntityService, { GenericEntityServiceOpts } from '../GenericEntityService';
 
 export class UserService<T extends User<S>,
-  S extends ProviderUserDetails = KeycloakUserRepresentation> extends GenericService<T> {
+  S extends ProviderUserDetails = KeycloakUserRepresentation> extends GenericEntityService<T> {
 
-  constructor(opts: GenericServiceOpts = {
+  constructor(opts: GenericEntityServiceOpts = {
     basePath: '/users'
   }) {
     super(opts);

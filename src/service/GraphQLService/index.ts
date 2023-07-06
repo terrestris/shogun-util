@@ -1,7 +1,6 @@
-import Keycloak from 'keycloak-js';
-
 import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
+import { GenericService, GenericServiceOpts } from '../GenericService';
 
 export interface GraphQLQueryObject {
   query: string;
@@ -12,30 +11,22 @@ export interface GraphQLQueryObject {
 
 export interface GraphQLResponse<T> {
   data: {
-    [key: string]: T[];
+    [key: string]: T;
   };
   errors?: any;
 }
 
-export interface GraphQLServiceOpts {
-  basePath: string;
-  keycloak?: Keycloak;
-}
+export type GraphQLServiceOpts = GenericServiceOpts;
 
-export class GraphQLService {
-
-  private basePath: string;
-
-  private keycloak?: Keycloak;
+export class GraphQLService extends GenericService {
 
   constructor(opts: GraphQLServiceOpts = {
     basePath: '/graphql'
   }) {
-    this.basePath = opts.basePath;
-    this.keycloak = opts.keycloak;
+    super(opts);
   }
 
-  async sendQuery<T>(query: GraphQLQueryObject, fetchOpts?: RequestInit): Promise<{[key: string]: T[]}> {
+  async sendQuery<T>(query: GraphQLQueryObject, fetchOpts?: RequestInit): Promise<{[key: string]: T}> {
     try {
       const response = await fetch(this.basePath, {
         method: 'POST',
