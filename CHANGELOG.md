@@ -1,3 +1,23 @@
+# [6.0.0](https://github.com/terrestris/shogun-util/compare/v5.7.0...v6.0.0) (2023-07-06)
+
+
+### Bug Fixes
+
+* move to array in gerneric type ([dc830da](https://github.com/terrestris/shogun-util/commit/dc830da744b68543ae22bd421ff9705752d01cf2))
+
+
+### Features
+
+* introduce GenericService as abstract base service ([7821c87](https://github.com/terrestris/shogun-util/commit/7821c878e5dd1b0f7d959afbb8755c52b45e7283))
+
+
+### BREAKING CHANGES
+
+* generics in graphql service require single instances
+now
+* refactor services such that they inherit from
+GenericService
+
 # [5.7.0](https://github.com/terrestris/shogun-util/compare/v5.6.2...v5.7.0) (2023-07-05)
 
 
