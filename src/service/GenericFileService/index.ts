@@ -2,7 +2,7 @@ import SHOGunFile from '../../model/File';
 import { Page } from '../../model/Page';
 import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
-import { GenericService, GenericServiceOpts } from '../GenericService';
+import { GenericService, GenericServiceOpts, PageOpts } from '../GenericService';
 
 export type GenericFileServiceOpts = GenericServiceOpts;
 
@@ -12,9 +12,9 @@ export abstract class GenericFileService<T extends SHOGunFile> extends GenericSe
     super(opts);
   }
 
-  async findAll(fetchOpts?: RequestInit): Promise<Page<T>> {
+  async findAll(pageOpts?: PageOpts, fetchOpts?: RequestInit): Promise<Page<T>> {
     try {
-      const response = await fetch(this.basePath, {
+      const response = await fetch(this.getPageUrl(pageOpts), {
         method: 'GET',
         headers: {
           ...getBearerTokenHeader(this.keycloak)
