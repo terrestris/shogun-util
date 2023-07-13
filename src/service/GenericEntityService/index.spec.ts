@@ -75,7 +75,7 @@ describe('GenericService', () => {
 
     const resp = await service.findAll();
 
-    expect(resp).toEqual(response.content);
+    expect(resp).toEqual(response);
   });
 
   it('throws an error if all entities couldn\'t be fetched (findAll)', async () => {

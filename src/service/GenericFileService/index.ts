@@ -1,4 +1,5 @@
 import SHOGunFile from '../../model/File';
+import { Page } from '../../model/Page';
 import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
 import { GenericService, GenericServiceOpts } from '../GenericService';
@@ -11,7 +12,7 @@ export abstract class GenericFileService<T extends SHOGunFile> extends GenericSe
     super(opts);
   }
 
-  async findAll(fetchOpts?: RequestInit): Promise<T[]> {
+  async findAll(fetchOpts?: RequestInit): Promise<Page<T>> {
     try {
       const response = await fetch(this.basePath, {
         method: 'GET',
@@ -25,7 +26,7 @@ export abstract class GenericFileService<T extends SHOGunFile> extends GenericSe
         throw new Error(`HTTP error status: ${response.status}`);
       }
 
-      return await response.json() ;
+      return await response.json() as Page<T>;
     } catch (error) {
       throw new Error(`Error while requesting all entities: ${error}`);
     }
