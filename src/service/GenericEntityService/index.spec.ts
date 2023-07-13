@@ -59,6 +59,93 @@ describe('GenericService', () => {
     });
   });
 
+  it('sends all required parameters to return all paged entities (findAll)', async () => {
+    fetchMock = fetchSpy(successResponse([]));
+
+    await service.findAll({
+      page: 0
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith('/dummy?page=0', {
+      headers: {},
+      method: 'GET'
+    });
+
+    fetchMock.mockClear();
+
+    await service.findAll({
+      page: 0,
+      size: 10
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith('/dummy?page=0&size=10', {
+      headers: {},
+      method: 'GET'
+    });
+
+    fetchMock.mockClear();
+
+    await service.findAll({
+      page: 0,
+      size: 10,
+      sort: {
+        properties: ['a']
+      }
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith('/dummy?page=0&size=10&sort=a', {
+      headers: {},
+      method: 'GET'
+    });
+
+    fetchMock.mockClear();
+
+    await service.findAll({
+      page: 0,
+      size: 10,
+      sort: {
+        properties: ['a', 'b']
+      }
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith('/dummy?page=0&size=10&sort=a%2Cb', {
+      headers: {},
+      method: 'GET'
+    });
+
+    fetchMock.mockClear();
+
+    await service.findAll({
+      page: 0,
+      size: 10,
+      sort: {
+        properties: ['a', 'b'],
+        order: 'asc'
+      }
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith('/dummy?page=0&size=10&sort=a%2Cb%2Casc', {
+      headers: {},
+      method: 'GET'
+    });
+
+    fetchMock.mockClear();
+
+    await service.findAll({
+      page: 0,
+      size: 10,
+      sort: {
+        properties: ['a', 'b'],
+        order: 'desc'
+      }
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith('/dummy?page=0&size=10&sort=a%2Cb%2Cdesc', {
+      headers: {},
+      method: 'GET'
+    });
+  });
+
   it('returns all entities (findAll)', async () => {
     const response = {
       content: [
@@ -75,7 +162,7 @@ describe('GenericService', () => {
 
     const resp = await service.findAll();
 
-    expect(resp).toEqual(response.content);
+    expect(resp).toEqual(response);
   });
 
   it('throws an error if all entities couldn\'t be fetched (findAll)', async () => {

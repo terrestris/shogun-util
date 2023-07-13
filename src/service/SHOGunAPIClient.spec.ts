@@ -90,6 +90,6 @@ describe('SHOGunAPIClient', () => {
 
     const apps = await client.application<MyApplication>().findAll();
 
-    expect(apps[0].clientConfig?.newField).toEqual(1);
+    expect(apps.content[0].clientConfig?.newField).toEqual(1);
   });
 });

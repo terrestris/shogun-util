@@ -1,7 +1,8 @@
 import BaseEntity from '../../model/BaseEntity';
+import { Page } from '../../model/Page';
 import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
-import { GenericServiceOpts } from '../GenericService';
+import { GenericServiceOpts, PageOpts } from '../GenericService';
 import PermissionService from '../PermissionService';
 
 export type GenericEntityServiceOpts = GenericServiceOpts;
@@ -12,9 +13,9 @@ export abstract class GenericEntityService<T extends BaseEntity> extends Permiss
     super(opts);
   }
 
-  async findAll(fetchOpts?: RequestInit): Promise<T[]> {
+  async findAll(pageOpts?: PageOpts, fetchOpts?: RequestInit): Promise<Page<T>> {
     try {
-      const response = await fetch(this.basePath, {
+      const response = await fetch(this.getPageUrl(pageOpts), {
         method: 'GET',
         headers: {
           ...getBearerTokenHeader(this.keycloak)
@@ -26,9 +27,7 @@ export abstract class GenericEntityService<T extends BaseEntity> extends Permiss
         throw new Error(`HTTP error status: ${response.status}`);
       }
 
-      const json = await response.json();
-
-      return json.content;
+      return await response.json() as Page<T>;
     } catch (error) {
       throw new Error(`Error while requesting all entities: ${error}`);
     }
