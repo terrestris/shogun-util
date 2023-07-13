@@ -56,6 +56,7 @@ export interface DefaultApplicationClientConfig {
 export interface ApplicationArgs extends BaseEntityArgs {
   name?: string;
   stateOnly?: boolean;
+  publicAccess?: boolean;
   clientConfig?: DefaultApplicationClientConfig;
   layerTree?: DefaultLayerTree;
   layerConfig?: DefaultApplicationLayerConfig[];
@@ -65,6 +66,7 @@ export interface ApplicationArgs extends BaseEntityArgs {
 export default class Application extends BaseEntity {
   name?: string;
   stateOnly?: boolean;
+  publicAccess?: boolean;
   clientConfig?: DefaultApplicationClientConfig;
   layerTree?: DefaultLayerTree;
   layerConfig?: DefaultApplicationLayerConfig[];
@@ -76,6 +78,7 @@ export default class Application extends BaseEntity {
     modified,
     name,
     stateOnly,
+    publicAccess,
     clientConfig,
     layerTree,
     layerConfig,
@@ -85,6 +88,7 @@ export default class Application extends BaseEntity {
 
     this.name = name;
     this.stateOnly = stateOnly;
+    this.publicAccess = publicAccess;
     this.clientConfig = clientConfig;
     this.layerTree = layerTree;
     this.layerConfig = layerConfig;
