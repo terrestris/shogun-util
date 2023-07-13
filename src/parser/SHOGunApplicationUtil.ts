@@ -160,7 +160,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
     for (const node of nodes) {
       if (node.children?.length > 0) {
-        collection.push(await this.parseFolder(node, layers, projection));
+        collection.push(await this.parseFolder(node, layers, projection, keepClientConfig));
       } else {
         const layerNode = layers.find(l => l.id === node.layerId);
         if (layerNode) {
@@ -185,8 +185,8 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     return collection;
   }
 
-  async parseFolder(el: DefaultLayerTree, layers: S[], projection?: OlProjectionLike) {
-    const layersInFolder = await this.parseNodes(el.children, layers, projection);
+  async parseFolder(el: DefaultLayerTree, layers: S[], projection?: OlProjectionLike, keepClientConfig = false) {
+    const layersInFolder = await this.parseNodes(el.children, layers, projection, keepClientConfig);
 
     const folder = new OlLayerGroup({
       layers: layersInFolder.reverse(),
