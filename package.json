@@ -52,7 +52,7 @@
     "@semantic-release/github": "^9.0.3",
     "@semantic-release/npm": "^10.0.4",
     "@semantic-release/release-notes-generator": "^11.0.4",
-    "@terrestris/eslint-config-typescript": "^3.1.0",
+    "@terrestris/eslint-config-typescript": "^4.0.0",
     "@types/geojson": "^7946.0.10",
     "@types/jest": "^29.5.3",
     "@types/lodash": "^4.14.195",
