@@ -1,3 +1,10 @@
+## [6.0.1](https://github.com/terrestris/shogun-util/compare/v6.0.0...v6.0.1) (2023-07-13)
+
+
+### Bug Fixes
+
+* pass keep client config param recursively ([b9950e4](https://github.com/terrestris/shogun-util/commit/b9950e44442a33085242f550442709fab597a0fa))
+
 # [6.0.0](https://github.com/terrestris/shogun-util/compare/v5.7.0...v6.0.0) (2023-07-06)
 
 
