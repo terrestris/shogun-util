@@ -1,3 +1,11 @@
+# [6.1.0](https://github.com/terrestris/shogun-util/compare/v6.0.1...v6.1.0) (2023-07-13)
+
+
+### Features
+
+* add option to pass page options ([dc2dad3](https://github.com/terrestris/shogun-util/commit/dc2dad3dc0249009bcb4437b5675f9be90a23ce3))
+* inlcude Page type to findAll responses ([de68643](https://github.com/terrestris/shogun-util/commit/de686437ac34f9686c912ae7fe2db7364f559105))
+
 ## [6.0.1](https://github.com/terrestris/shogun-util/compare/v6.0.0...v6.0.1) (2023-07-13)
 
 
