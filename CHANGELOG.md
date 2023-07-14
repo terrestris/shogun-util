@@ -1,3 +1,10 @@
+## [7.0.1](https://github.com/terrestris/shogun-util/compare/v7.0.0...v7.0.1) (2023-07-14)
+
+
+### Bug Fixes
+
+* add non-null assertion operator ([9fe1a2b](https://github.com/terrestris/shogun-util/commit/9fe1a2b65327ed21df272506368f4d4c6ee3d8b3))
+
 # [7.0.0](https://github.com/terrestris/shogun-util/compare/v6.1.0...v7.0.0) (2023-07-14)
 
 
