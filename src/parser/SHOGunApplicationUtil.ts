@@ -594,7 +594,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     olLayer.set('propertyConfig', layer.clientConfig?.propertyConfig);
     olLayer.set('downloadConfig', layer.clientConfig?.downloadConfig);
     olLayer.set('searchConfig', layer.clientConfig?.searchConfig);
-    olLayer.set('legendUrl', layer.sourceConfig.legendUrl);
+    olLayer.set('legendUrl', layer.sourceConfig?.legendUrl);
     olLayer.set('hoverable', layer.clientConfig?.hoverable);
     olLayer.set('useBearerToken', layer.sourceConfig?.useBearerToken);
     olLayer.set('editable', layer.clientConfig?.editable);
