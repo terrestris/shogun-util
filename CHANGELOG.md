@@ -1,3 +1,15 @@
+# [7.0.0](https://github.com/terrestris/shogun-util/compare/v6.1.0...v7.0.0) (2023-07-14)
+
+
+### Bug Fixes
+
+* set correct layer type name for WMSTIME ([a5a4974](https://github.com/terrestris/shogun-util/commit/a5a4974159e5474999363088c938fe384a07a7de))
+
+
+### BREAKING CHANGES
+
+* This renames the public enum from WMSTime to WMSTIME
+
 # [6.1.0](https://github.com/terrestris/shogun-util/compare/v6.0.1...v6.1.0) (2023-07-13)
 
 
