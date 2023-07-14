@@ -215,12 +215,12 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       return this.parseWFSLayer(layer, projection);
     }
 
-    if (layer.type === 'WMSTime') {
+    if (layer.type === 'WMSTIME') {
       return await this.parseWMSTimeLayer(layer);
     }
 
     // TODO Add support for VECTORTILE and XYZ
-    throw new Error('Currently only WMTS, WMS, TILEWMS, WFS and WMSTime layers are supported.');
+    throw new Error('Currently only WMTS, WMS, TILEWMS, WFS and WMSTIME layers are supported.');
   }
 
   parseImageLayer(layer: S) {
