@@ -6,6 +6,7 @@ import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
 import OlSourceImageWMS from 'ol/source/ImageWMS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlSourceVector from 'ol/source/Vector';
+import OlSourceXYZ from 'ol/source/XYZ';
 import OlTileGrid from 'ol/tilegrid/TileGrid';
 import { getUid } from 'ol/util';
 
@@ -273,6 +274,49 @@ describe('SHOGunApplicationUtil', () => {
         url: () => {
           return '';
         }
+      }),
+      minResolution: myLayer.clientConfig?.minResolution,
+      maxResolution: myLayer.clientConfig?.maxResolution
+    });
+
+    expected.set('shogunId', myLayer.id);
+    expected.set('name', myLayer.name);
+    expected.set('type', myLayer.type);
+    expected.set('searchable', myLayer.clientConfig?.searchable);
+    expected.set('propertyConfig', myLayer.clientConfig?.propertyConfig);
+    expected.set('legendUrl', myLayer.sourceConfig.legendUrl);
+    expected.set('hoverable', myLayer.clientConfig?.hoverable);
+
+    // @ts-ignore
+    // eslint-disable-next-line camelcase
+    expected.ol_uid = getUid(layer);
+    // @ts-ignore
+    // eslint-disable-next-line camelcase
+    expected.getSource().ol_uid = getUid(layer.getSource());
+
+    expect(JSON.stringify(layer)).toEqual(JSON.stringify(expected));
+  });
+
+  it('is capable to parse a XYZ layer (parseXYZLayer)', async () => {
+    const myLayer: Layer = {
+      id: 1909,
+      created: new Date(),
+      modified: new Date(),
+      name: 'Layer A',
+      type: 'XYZ',
+      clientConfig: {},
+      sourceConfig: {
+        url: 'https://ows.terrestris.de/osm/service/{z}/{x}/{y}.png',
+        layerNames: ''
+      }
+    };
+
+    const layer = await util.parseLayer(myLayer);
+
+    const expected = new OlLayerTile({
+      source: new OlSourceXYZ({
+        attributions: myLayer.sourceConfig.attribution,
+        url: myLayer.sourceConfig.url
       }),
       minResolution: myLayer.clientConfig?.minResolution,
       maxResolution: myLayer.clientConfig?.maxResolution
