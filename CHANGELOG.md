@@ -1,3 +1,10 @@
+# [7.1.0](https://github.com/terrestris/shogun-util/compare/v7.0.1...v7.1.0) (2023-07-19)
+
+
+### Features
+
+* add support for parsing XYZ layers ([bf647bc](https://github.com/terrestris/shogun-util/commit/bf647bcba1a3a76a614ef1c91e2a08c404bd1bd3))
+
 ## [7.0.1](https://github.com/terrestris/shogun-util/compare/v7.0.0...v7.0.1) (2023-07-14)
 
 
