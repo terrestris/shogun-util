@@ -19,10 +19,17 @@ import OlLayerVector from 'ol/layer/Vector';
 import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
 import { fromLonLat, ProjectionLike as OlProjectionLike } from 'ol/proj';
 import { Units } from 'ol/proj/Units';
-import OlImageWMS from 'ol/source/ImageWMS';
-import OlTileWMS from 'ol/source/TileWMS';
+import OlImageWMS, {
+  Options as OlImageWMSOptions
+} from 'ol/source/ImageWMS';
+import OlTileWMS, {
+  Options as OlTileWMSOptions
+} from 'ol/source/TileWMS';
 import OlSourceVector from 'ol/source/Vector';
 import OlSourceWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
+import OlSourceXYZ, {
+  Options as OlSourceXYZOptions
+} from 'ol/source/XYZ';
 import OlTile from 'ol/Tile';
 import OlTileGrid from 'ol/tilegrid/TileGrid';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
@@ -44,7 +51,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
   private readonly client: SHOGunAPIClient | undefined;
 
-  private readonly objectUrls: any = {};
+  private readonly objectUrls: Record<string, string> = {};
 
   constructor(opts?: SHOGunApplicationUtilOpts) {
     // TODO Default client?
@@ -219,8 +226,12 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       return await this.parseWMSTimeLayer(layer);
     }
 
-    // TODO Add support for VECTORTILE and XYZ
-    throw new Error('Currently only WMTS, WMS, TILEWMS, WFS and WMSTIME layers are supported.');
+    if (layer.type === 'XYZ') {
+      return this.parseXYZLayer(layer);
+    }
+
+    // TODO Add support for VECTORTILE
+    throw new Error('Currently only WMTS, WMS, TILEWMS, WFS, WMSTIME and XYZ layers are supported.');
   }
 
   parseImageLayer(layer: S) {
@@ -241,7 +252,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       opacity
     } = layer.clientConfig || {};
 
-    const sourceConfig: any = {
+    const sourceConfig: OlImageWMSOptions = {
       url,
       attributions: attribution,
       params: {
@@ -250,8 +261,10 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       },
       crossOrigin
     };
+
     if (useBearerToken) {
-      sourceConfig.imageLoadFunction = (imageTile: any, src: any) => this.bearerTokenLoadFunction(imageTile, src, true);
+      sourceConfig.imageLoadFunction = (imageTile: OlImage, src: string) =>
+        this.bearerTokenLoadFunction(imageTile, src, true);
     }
     const source = new OlImageWMS(sourceConfig);
 
@@ -297,7 +310,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       });
     }
 
-    const sourceConfig: any = {
+    const sourceConfig: OlTileWMSOptions = {
       url,
       tileGrid,
       attributions: attribution,
@@ -308,8 +321,10 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       },
       crossOrigin
     };
+
     if (useBearerToken) {
-      sourceConfig.tileLoadFunction = (imageTile: any, src: any) => this.bearerTokenLoadFunction(imageTile, src, true);
+      sourceConfig.tileLoadFunction = (imageTile: OlTile, src: string) =>
+        this.bearerTokenLoadFunction(imageTile, src, true);
     }
 
     const source = new OlTileWMS(sourceConfig);
@@ -556,6 +571,47 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     }
 
     return timeLayer;
+  }
+
+  parseXYZLayer(layer: S) {
+    const {
+      attribution,
+      url,
+      useBearerToken,
+      tileSize = 256,
+    } = layer.sourceConfig || {};
+
+    const {
+      minResolution,
+      maxResolution,
+      crossOrigin,
+      opacity
+    } = layer.clientConfig || {};
+
+    const sourceConfig: OlSourceXYZOptions = {
+      url,
+      attributions: attribution,
+      crossOrigin,
+      tileSize
+    };
+
+    if (useBearerToken) {
+      sourceConfig.tileLoadFunction = (imageTile: OlTile, src: string) =>
+        this.bearerTokenLoadFunction(imageTile, src, true);
+    }
+
+    const source = new OlSourceXYZ(sourceConfig);
+
+    const xyzLayer = new OlTileLayer({
+      source,
+      minResolution,
+      maxResolution,
+      opacity
+    });
+
+    this.setLayerProperties(xyzLayer, layer);
+
+    return xyzLayer;
   }
 
   getMapScales(resolutions: number[], projUnit: Units = 'm'): number[] {
