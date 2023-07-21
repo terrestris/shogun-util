@@ -4,6 +4,21 @@ import CapabilitiesUtil from '@terrestris/ol-util/dist/CapabilitiesUtil/Capabili
 import { MapUtil } from '@terrestris/ol-util/dist/MapUtil/MapUtil';
 import ProjectionUtil, { defaultProj4CrsDefinitions } from '@terrestris/ol-util/dist/ProjectionUtil/ProjectionUtil';
 import _uniqueBy from 'lodash/uniqBy';
+import type {
+  BackgroundLayer as MapboxBackgroundLayer,
+  CircleLayer as MapboxCircleLayer,
+  CustomLayerInterface as MapboxCustomLayerInterface,
+  FillExtrusionLayer as MapboxFillExtrusionLayer,
+  FillLayer as MapboxFillLayer,
+  HeatmapLayer as MapboxHeatmapLayer,
+  HillshadeLayer as MapboxHillshadeLayer,
+  Layer as MapboxLayer,
+  LineLayer as MapboxLineLayer,
+  RasterLayer as MapboxRasterLayer,
+  SkyLayer as MapboxSkyLayer,
+  Style as MapboxStyle,
+  SymbolLayer as MapboxSymbolLayer
+} from 'mapbox-gl';
 import { Extent as OlExtent } from 'ol/extent';
 import OlFeature from 'ol/Feature';
 import OlFormatGeoJSON from 'ol/format/GeoJSON';
@@ -14,6 +29,7 @@ import OlImageTile from 'ol/ImageTile';
 import OlLayerBase from 'ol/layer/Base';
 import OlLayerGroup from 'ol/layer/Group';
 import OlImageLayer from 'ol/layer/Image';
+import OlLayer from 'ol/layer/Layer';
 import OlTileLayer from 'ol/layer/Tile';
 import OlLayerVector from 'ol/layer/Vector';
 import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
@@ -34,6 +50,7 @@ import OlTile from 'ol/Tile';
 import OlTileGrid from 'ol/tilegrid/TileGrid';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlView, { ViewOptions as OlViewOptions } from 'ol/View';
+import { apply as applyMapboxStyle } from 'ol-mapbox-style';
 
 import {
   allLayersByIds
@@ -254,8 +271,12 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       return this.parseXYZLayer(layer);
     }
 
-    // TODO Add support for VECTORTILE
-    throw new Error('Currently only WMTS, WMS, TILEWMS, WFS, WMSTIME and XYZ layers are supported.');
+    if (layer.type === 'VECTORTILE' || layer.type === 'MAPBOXSTYLE') {
+      return await this.parseMapboxStyleLayer(layer);
+    }
+
+    Logger.error(`Unsupported layer type ${layer.type} given. Currently only WMS, TILEWMS, WMTS, ` +
+      'WFS, WMSTIME, XYZ and VECTORTILE/MAPBOXSTYLE are supported.');
   }
 
   parseImageLayer(layer: S) {
@@ -638,12 +659,123 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     return xyzLayer;
   }
 
+  async parseMapboxStyleLayer(layer: S) {
+    const {
+      url,
+      useBearerToken,
+      resolutions
+    } = layer.sourceConfig || {};
+
+    const {
+      minResolution,
+      maxResolution,
+      opacity,
+    } = layer.clientConfig || {};
+
+    const mapBoxLayerGroup = new OlLayerGroup({
+      minResolution,
+      maxResolution,
+      opacity
+    });
+
+    await applyMapboxStyle(
+      mapBoxLayerGroup,
+      url,
+      {
+        resolutions: resolutions,
+        transformRequest: (resourceUrl, resourceType) => {
+          const request = new Request(resourceUrl, {
+            headers: useBearerToken ? {
+              ...getBearerTokenHeader(this.client?.getKeycloak())
+            } : {}
+          });
+
+          return request;
+        }
+      }
+    );
+
+    this.setLayerTitles(mapBoxLayerGroup);
+
+    this.setLayerProperties(mapBoxLayerGroup, layer);
+
+    return mapBoxLayerGroup;
+  }
+
   getMapScales(resolutions: number[], projUnit: Units = 'm'): number[] {
     return resolutions
       .map((res: number) =>
         MapUtil.roundScale(MapUtil.getScaleForResolution(res, projUnit) as number
         ))
       .reverse();
+  }
+
+  private setLayerTitles(mapBoxLayerGroup: OlLayerGroup) {
+    const getLayerTitle = (mapboxLayer: MapboxLayer) => {
+      return mapboxLayer['source-layer'] || mapboxLayer.source || mapboxLayer.id;
+    };
+
+    this.forEachLayer(mapBoxLayerGroup, childLayer => {
+      const mapBoxStyle: MapboxStyle = mapBoxLayerGroup.get('mapbox-style');
+      const mapBoxLayers: string[] = childLayer.get('mapbox-layers');
+
+      const p = mapBoxLayers
+        ?.map(l => mapBoxStyle.layers.find(lay => lay.id === l))
+        ?.map(l => {
+          if (!l) {
+            return;
+          }
+
+          if (l.type === 'background') {
+            return getLayerTitle(l as MapboxBackgroundLayer);
+          }
+          if (l.type === 'circle') {
+            return getLayerTitle(l as MapboxCircleLayer);
+          }
+          if (l.type === 'fill-extrusion') {
+            return getLayerTitle(l as MapboxFillExtrusionLayer);
+          }
+          if (l.type === 'fill') {
+            return getLayerTitle(l as MapboxFillLayer);
+          }
+          if (l.type === 'heatmap') {
+            return getLayerTitle(l as MapboxHeatmapLayer);
+          }
+          if (l.type === 'hillshade') {
+            return getLayerTitle(l as MapboxHillshadeLayer);
+          }
+          if (l.type === 'line') {
+            return getLayerTitle(l as MapboxLineLayer);
+          }
+          if (l.type === 'raster') {
+            return getLayerTitle(l as MapboxRasterLayer);
+          }
+          if (l.type === 'symbol') {
+            return getLayerTitle(l as MapboxSymbolLayer);
+          }
+          if (l.type === 'sky') {
+            return getLayerTitle(l as MapboxSkyLayer);
+          }
+          if (l.type === 'custom') {
+            Logger.warn('Getting the name of a custom layer is not supported right now');
+          }
+        })
+        .filter(l => l);
+
+      childLayer.set('name', [...new Set(p)].join('\n'));
+    });
+  }
+
+  private forEachLayer(groupLayer: OlLayerGroup, callback: (layer: OlLayer) => void) {
+    groupLayer.getLayers().forEach(childLayer => {
+      if (childLayer instanceof OlLayerGroup) {
+        this.forEachLayer(childLayer, callback);
+      }
+
+      if (childLayer instanceof OlLayer) {
+        callback(childLayer);
+      }
+    });
   }
 
   private mergeApplicationLayerConfigs(layers: S[], application: T): void {
