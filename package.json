@@ -38,7 +38,8 @@
     "geojson": "^0.5.0",
     "keycloak-js": "^22.0.3",
     "lodash": "^4.17.21",
-    "ol": "^7.5.2"
+    "ol": "^7.5.2",
+    "ol-mapbox-style": "^10.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.22.17",
@@ -56,6 +57,7 @@
     "@types/geojson": "^7946.0.10",
     "@types/jest": "^29.5.4",
     "@types/lodash": "^4.14.198",
+    "@types/mapbox-gl": "^2.7.12",
     "eslint": "^8.49.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "husky": "^8.0.3",
