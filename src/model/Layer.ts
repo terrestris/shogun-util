@@ -36,6 +36,13 @@ export interface PropertyFormItemEditConfig extends PropertyFormItemReadConfig {
   required?: boolean;
 }
 
+export interface PropertyFormItemEditDefaultConfig extends PropertyFormItemEditConfig {}
+
+export interface PropertyFormItemEditReferenceTableConfig extends PropertyFormItemEditConfig {
+  editFormConfig: PropertyFormItemEditConfig[];
+  tablePropertyName?: string;
+}
+
 export interface PropertyFormTabConfig<T extends PropertyFormItemReadConfig> {
   title: string;
   children?: T[];
@@ -59,7 +66,8 @@ export interface DefaultLayerClientConfig {
   searchConfig?: SearchConfig;
   propertyConfig?: DefaultLayerPropertyConfig[];
   featureInfoFormConfig?: PropertyFormTabConfig<PropertyFormItemReadConfig>[];
-  editFormConfig?: PropertyFormTabConfig<PropertyFormItemEditConfig>[];
+  editFormConfig?: PropertyFormTabConfig<PropertyFormItemEditDefaultConfig |
+    PropertyFormItemEditReferenceTableConfig>[];
   crossOrigin?: string;
   opacity?: number;
   downloadConfig?: DownloadConfig[];
