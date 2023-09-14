@@ -673,6 +673,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
     this.setLayerTitles(mapBoxLayerGroup);
 
+    this.setLayerProps(mapBoxLayerGroup, layer);
     this.setLayerProperties(mapBoxLayerGroup, layer);
 
     return mapBoxLayerGroup;
@@ -684,6 +685,24 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         MapUtil.roundScale(MapUtil.getScaleForResolution(res, projUnit) as number
         ))
       .reverse();
+  }
+
+  private setLayerProps(mapBoxLayerGroup: OlLayerGroup, layer: Layer) {
+    this.forEachLayer(mapBoxLayerGroup, childLayer => {
+      // childLayer.set('shogunId', layer.id);
+      // childLayer.set('name', layer.name);
+      // childLayer.set('type', layer.type);
+      // childLayer.set('searchable', layer.clientConfig?.searchable);
+      childLayer.set('propertyConfig', layer.clientConfig?.propertyConfig);
+      // childLayer.set('downloadConfig', layer.clientConfig?.downloadConfig);
+      // childLayer.set('searchConfig', layer.clientConfig?.searchConfig);
+      // childLayer.set('legendUrl', layer.sourceConfig?.legendUrl);
+      childLayer.set('hoverable', layer.clientConfig?.hoverable);
+      childLayer.set('useBearerToken', layer.sourceConfig?.useBearerToken);
+      // childLayer.set('editable', layer.clientConfig?.editable);
+      // childLayer.set('editFormConfig', layer.clientConfig?.editFormConfig);
+      childLayer.set('featureInfoFormConfig', layer.clientConfig?.featureInfoFormConfig);
+    });
   }
 
   private setLayerTitles(mapBoxLayerGroup: OlLayerGroup) {
