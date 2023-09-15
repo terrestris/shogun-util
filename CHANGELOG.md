@@ -1,3 +1,10 @@
+# [7.2.0](https://github.com/terrestris/shogun-util/compare/v7.1.0...v7.2.0) (2023-09-15)
+
+
+### Features
+
+* include REFERENCE_TABLE type ([fb19e25](https://github.com/terrestris/shogun-util/commit/fb19e25615d9d7d8b6bd1437b881db6a6ef05318))
+
 # [7.1.0](https://github.com/terrestris/shogun-util/compare/v7.0.1...v7.1.0) (2023-07-19)
 
 
