@@ -13,6 +13,40 @@ export abstract class GenericEntityService<T extends BaseEntity> extends Permiss
     super(opts);
   }
 
+  async findAllNoPaging(fetchOpts?: RequestInit): Promise<T[]> {
+    const pageOpts: PageOpts = {
+      page: 0,
+      size: 10
+    };
+    let list: T[] = [];
+    try {
+      while (true) {
+        const response = await fetch(this.getPageUrl(pageOpts), {
+          method: 'GET',
+          headers: {
+            ...getBearerTokenHeader(this.keycloak)
+          },
+          ...fetchOpts
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error status: ${response.status}`);
+        }
+
+        const result = await response.json() as Page<T>;
+        list = list.concat(result.content);
+        if (pageOpts.page as number < result.totalPages) {
+          (pageOpts.page as number) += 1;
+        } else {
+          break;
+        }
+      }
+      return list;
+    } catch (error) {
+      throw new Error(`Error while requesting all entities: ${error}`);
+    }
+  }
+
   async findAll(pageOpts?: PageOpts, fetchOpts?: RequestInit): Promise<Page<T>> {
     try {
       const response = await fetch(this.getPageUrl(pageOpts), {
