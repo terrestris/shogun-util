@@ -1,3 +1,10 @@
+# [7.3.0](https://github.com/terrestris/shogun-util/compare/v7.2.0...v7.3.0) (2023-09-29)
+
+
+### Features
+
+* add find all no paging function ([9fc3f47](https://github.com/terrestris/shogun-util/commit/9fc3f4794a1e072ec9c659798fecc248cd7304a8))
+
 # [7.2.0](https://github.com/terrestris/shogun-util/compare/v7.1.0...v7.2.0) (2023-09-15)
 
 
