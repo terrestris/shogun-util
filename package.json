@@ -41,7 +41,7 @@
     "ol": "^7.5.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.0",
+    "@babel/core": "^7.23.2",
     "@babel/preset-env": "^7.22.20",
     "@babel/preset-typescript": "^7.23.0",
     "@commitlint/cli": "^17.7.2",
