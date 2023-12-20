@@ -1,3 +1,10 @@
+## [7.3.1](https://github.com/terrestris/shogun-util/compare/v7.3.0...v7.3.1) (2023-12-20)
+
+
+### Bug Fixes
+
+* determine layer groups visibility by contained layers as well ([3114eea](https://github.com/terrestris/shogun-util/commit/3114eea3f5ee1406fc62a714adf7ff553e969a02))
+
 # [7.3.0](https://github.com/terrestris/shogun-util/compare/v7.2.0...v7.3.0) (2023-09-29)
 
 
