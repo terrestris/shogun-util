@@ -195,9 +195,11 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
   async parseFolder(el: DefaultLayerTree, layers: S[], projection?: OlProjectionLike, keepClientConfig = false) {
     const layersInFolder = await this.parseNodes(el.children, layers, projection, keepClientConfig);
 
+    const visible = el.checked || layersInFolder.some(layer => layer.getVisible());
+
     const folder = new OlLayerGroup({
       layers: layersInFolder.reverse(),
-      visible: el.checked
+      visible
     });
 
     folder.set('name', el.title);
