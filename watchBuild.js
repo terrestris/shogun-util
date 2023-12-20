@@ -21,6 +21,7 @@ if (process.argv.length < 3) {
 const sourcePath = path.join(curDir, 'src');
 const distPath = path.join(curDir, 'dist');
 const targetDistPath = path.join(curDir, process.argv[2], 'dist');
+const targetSrcPath = path.join(curDir, process.argv[2], 'src');
 
 if (!fs.existsSync(targetDistPath) ) {
   throw new Error('target does not exist');
@@ -34,8 +35,9 @@ async function buildAndCopy() {
     console.log(stdout);
     console.log(stderr);
 
-    console.log('copy dist');
+    console.log(`copy dist & src from ${curDir} to ${path.join(curDir, process.argv[2])}`);
     await fs.copy(distPath, targetDistPath);
+    await fs.copy(sourcePath, targetSrcPath);
 
     console.log('done');
   } catch (error) {

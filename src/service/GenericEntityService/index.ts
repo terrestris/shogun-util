@@ -35,7 +35,7 @@ export abstract class GenericEntityService<T extends BaseEntity> extends Permiss
 
         const result = await response.json() as Page<T>;
         list = list.concat(result.content);
-        if (pageOpts.page as number < result.totalPages) {
+        if ((pageOpts.page as number) < result.totalPages) {
           (pageOpts.page as number) += 1;
         } else {
           break;
@@ -81,9 +81,7 @@ export abstract class GenericEntityService<T extends BaseEntity> extends Permiss
         throw new Error(`HTTP error status: ${response.status}`);
       }
 
-      const json: T = await response.json();
-
-      return json;
+      return await response.json();
     } catch (error) {
       throw new Error(`Error while requesting a single entity: ${error}`);
     }
