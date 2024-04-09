@@ -35,6 +35,12 @@ jobs:
     - name: Build docs 📔
       run: npm run build:docs
 
+    - name: Release 🚀
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      run: npx semantic-release
+
     - name: Get the version 📎
       run: |
         echo "VERSION=$(node -pe "require('./package.json').version")" >> $GITHUB_ENV
@@ -54,9 +60,3 @@ jobs:
         branch: gh-pages
         folder: docs
         target-folder: latest
-
-    - name: Release 🚀
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      run: npx semantic-release
