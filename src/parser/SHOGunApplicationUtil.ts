@@ -408,7 +408,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     const origins = new Array(length);
     const tileSizes = new Array(length);
     for (let zoomLevel = minZoom; zoomLevel < resolutions?.length; ++zoomLevel) {
-      matrixSizes[zoomLevel] = tileGrid.getFullTileRange(zoomLevel).getSize();
+      matrixSizes[zoomLevel] = tileGrid.getFullTileRange(zoomLevel)?.getSize();
       origins[zoomLevel] = tileGrid.getOrigin(zoomLevel);
       tileSizes[zoomLevel] = tileGrid.getTileSize(zoomLevel);
     }
