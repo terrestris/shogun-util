@@ -103,31 +103,15 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
   }
 
   async parseLayerTree(application: T, projection?: OlProjectionLike, keepClientConfig = false) {
+    const layers = await this.fetchLayers(application);
+    return this.parseLayerTreeNodes(application, layers, projection, keepClientConfig);
+  }
+
+  async parseLayerTreeNodes(application: T, layers: S[], projection?: OlProjectionLike, keepClientConfig = false) {
     const layerTree = application.layerTree;
 
-    if (!layerTree) {
-      return;
-    }
-
-    if (!this.client) {
-      Logger.warn('Cannot parse the layers in layertree because no ' +
-        'SHOGunClient has been provided.');
-      return;
-    }
-
-    let layerIds: number[] = this.getLayerIds(layerTree.children);
-
-    if (layerIds.length > 0) {
+    if (layerTree && layers.length > 0) {
       try {
-        const {
-          allLayersByIds: layers
-        } = await this.client.graphql().sendQuery<S[]>({
-          query: allLayersByIds,
-          variables: {
-            ids: layerIds
-          }
-        });
-
         this.mergeApplicationLayerConfigs(layers, application);
 
         if (layerTree.children) {
@@ -144,6 +128,33 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       }
     }
     return new OlLayerGroup();
+  }
+
+  private async fetchLayers(application: T): Promise<S[]> {
+    const layerTree = application.layerTree;
+
+    if (!layerTree) {
+      return [];
+    }
+
+    let layerIds: number[] = this.getLayerIds(layerTree.children);
+
+    if (!this.client) {
+      Logger.warn('Cannot fetxh the layers in layertree because no ' +
+        'SHOGunClient has been provided.');
+      return [];
+    }
+
+    const {
+      allLayersByIds: layers
+    } = await this.client.graphql().sendQuery<S[]>({
+      query: allLayersByIds,
+      variables: {
+        ids: layerIds
+      }
+    });
+
+    return layers;
   }
 
   getLayerIds(nodes: DefaultLayerTree[], ids?: number[]) {
