@@ -1,3 +1,10 @@
+## [8.0.1](https://github.com/terrestris/shogun-util/compare/v8.0.0...v8.0.1) (2024-04-17)
+
+
+### Bug Fixes
+
+* do not initialize resolutions with empty array ([c5171b8](https://github.com/terrestris/shogun-util/commit/c5171b837e80cd8df7b8d722d3b3bdd71e1fdce4))
+
 # [8.0.0](https://github.com/terrestris/shogun-util/compare/v7.3.1...v8.0.0) (2024-04-09)
 
 
