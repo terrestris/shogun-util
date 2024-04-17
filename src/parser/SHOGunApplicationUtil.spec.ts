@@ -16,20 +16,12 @@ import SHOGunAPIClient from '../service/SHOGunAPIClient';
 import SHOGunApplicationUtil from './SHOGunApplicationUtil';
 
 describe('SHOGunApplicationUtil', () => {
-  let fetchMock: jest.SpyInstance;
   let util: SHOGunApplicationUtil<Application, Layer>;
 
   beforeEach(() => {
     util = new SHOGunApplicationUtil<Application, Layer>({
       client: new SHOGunAPIClient()
     });
-  });
-
-  afterEach(() => {
-    if (fetchMock) {
-      fetchMock.mockReset();
-      fetchMock.mockRestore();
-    }
   });
 
   it('is defined', () => {
