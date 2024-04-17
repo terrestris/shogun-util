@@ -104,13 +104,15 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
   async parseLayerTree(application: T, projection?: OlProjectionLike, keepClientConfig = false) {
     const layers = await this.fetchLayers(application);
-    return this.parseLayerTreeNodes(application, layers, projection, keepClientConfig);
+    if (layers) {
+      return this.parseLayerTreeNodes(application, layers, projection, keepClientConfig);
+    }
   }
 
   async parseLayerTreeNodes(application: T, layers: S[], projection?: OlProjectionLike, keepClientConfig = false) {
     const layerTree = application.layerTree;
 
-    if (layerTree && layers.length > 0) {
+    if (layerTree) {
       try {
         this.mergeApplicationLayerConfigs(layers, application);
 
@@ -130,11 +132,11 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     return new OlLayerGroup();
   }
 
-  private async fetchLayers(application: T): Promise<S[]> {
+  private async fetchLayers(application: T): Promise<S[]|undefined> {
     const layerTree = application.layerTree;
 
     if (!layerTree) {
-      return [];
+      return;
     }
 
     let layerIds: number[] = this.getLayerIds(layerTree.children);
@@ -142,19 +144,28 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     if (!this.client) {
       Logger.warn('Cannot fetch the layers in layertree because no ' +
         'SHOGunClient has been provided.');
+      return;
+    }
+
+    if (layerIds.length == 0) {
       return [];
     }
 
-    const {
-      allLayersByIds: layers
-    } = await this.client.graphql().sendQuery<S[]>({
-      query: allLayersByIds,
-      variables: {
-        ids: layerIds
-      }
-    });
+    try {
+      const {
+        allLayersByIds: layers
+      } = await this.client.graphql().sendQuery<S[]>({
+        query: allLayersByIds,
+        variables: {
+          ids: layerIds
+        }
+      });
 
-    return layers;
+      return layers;
+    } catch (e) {
+      Logger.warn('Could not parse the layer tree: ' + e);
+      return [];
+    }
   }
 
   getLayerIds(nodes: DefaultLayerTree[], ids?: number[]) {
