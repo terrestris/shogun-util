@@ -140,7 +140,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     let layerIds: number[] = this.getLayerIds(layerTree.children);
 
     if (!this.client) {
-      Logger.warn('Cannot fetxh the layers in layertree because no ' +
+      Logger.warn('Cannot fetch the layers in layertree because no ' +
         'SHOGunClient has been provided.');
       return [];
     }
