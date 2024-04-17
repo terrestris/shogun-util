@@ -1,3 +1,10 @@
+## [7.3.2](https://github.com/terrestris/shogun-util/compare/v7.3.1...v7.3.2) (2024-04-17)
+
+
+### Bug Fixes
+
+* do not initialize resolutions with empty array ([7d4efba](https://github.com/terrestris/shogun-util/commit/7d4efbafc83ac3ec48b8d07ffe5829576063d0f7))
+
 ## [7.3.1](https://github.com/terrestris/shogun-util/compare/v7.3.0...v7.3.1) (2023-12-20)
 
 
