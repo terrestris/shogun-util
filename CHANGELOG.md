@@ -1,3 +1,13 @@
+## [7.1.1](https://github.com/terrestris/shogun-util/compare/v7.1.0...v7.1.1) (2024-04-17)
+
+
+### Bug Fixes
+
+* catch graphql error and output warning ([087f2e4](https://github.com/terrestris/shogun-util/commit/087f2e4d026eaa7c22135f2d2d94dbcc5bb92bc3))
+* determine layer groups visibility by contained layers as well ([f702334](https://github.com/terrestris/shogun-util/commit/f70233420e443f09a3c8bb8235972b16229f161d))
+* do not initialize resolutions with empty array ([063ea37](https://github.com/terrestris/shogun-util/commit/063ea371b167764ffa0ce68bb063a0c5ebf99af1))
+* typo ([5c9e8f7](https://github.com/terrestris/shogun-util/commit/5c9e8f763372167c44da1f1b009d5424079df93b))
+
 # [7.1.0](https://github.com/terrestris/shogun-util/compare/v7.0.1...v7.1.0) (2023-07-19)
 
 
