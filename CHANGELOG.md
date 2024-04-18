@@ -1,3 +1,15 @@
+# [7.2.0-ol7.1](https://github.com/terrestris/shogun-util/compare/v7.1.1-ol7.1...v7.2.0-ol7.1) (2024-04-18)
+
+
+### Bug Fixes
+
+* trigger release ([9c786d9](https://github.com/terrestris/shogun-util/commit/9c786d95427ea717aa824c29bd82bcb280fb82d8))
+
+
+### Features
+
+* include REFERENCE_TABLE type ([70e3caa](https://github.com/terrestris/shogun-util/commit/70e3caaf4204f3157f4536da1be8850dce9bcfab))
+
 # [7.2.0](https://github.com/terrestris/shogun-util/compare/v7.1.0...v7.2.0) (2023-09-15)
 
 
