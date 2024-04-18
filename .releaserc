@@ -1,6 +1,11 @@
 {
   "branches": [
-    "main"
+    "main",
+    {
+      "name": "ol7",
+      "prerelease": "ol7",
+      "channel": "ol7"
+    }
   ],
   "plugins": [
     "@semantic-release/commit-analyzer",
