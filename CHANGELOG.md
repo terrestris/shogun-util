@@ -1,3 +1,11 @@
+## [7.1.1-ol7.1](https://github.com/terrestris/shogun-util/compare/v7.1.0...v7.1.1-ol7.1) (2024-04-18)
+
+
+### Bug Fixes
+
+* determine layer groups visibility by contained layers as well ([f702334](https://github.com/terrestris/shogun-util/commit/f70233420e443f09a3c8bb8235972b16229f161d))
+* do not initialize resolutions with empty array ([2f57b9b](https://github.com/terrestris/shogun-util/commit/2f57b9b55b49cd2797b8d6e2ee57f21cfe6980b2))
+
 # [7.1.0](https://github.com/terrestris/shogun-util/compare/v7.0.1...v7.1.0) (2023-07-19)
 
 
