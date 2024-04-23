@@ -1,3 +1,10 @@
+# [8.1.0](https://github.com/terrestris/shogun-util/compare/v8.0.1...v8.1.0) (2024-04-23)
+
+
+### Features
+
+* add `faviconPath` to DefaultApplicationTheme ([38c3cfd](https://github.com/terrestris/shogun-util/commit/38c3cfd99c277b5cd38642b8e38641cd48710e4a))
+
 ## [8.0.1](https://github.com/terrestris/shogun-util/compare/v8.0.0...v8.0.1) (2024-04-17)
 
 
