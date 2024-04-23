@@ -147,7 +147,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       return;
     }
 
-    if (layerIds.length == 0) {
+    if (layerIds.length === 0) {
       return [];
     }
 
