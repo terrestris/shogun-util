@@ -1,3 +1,10 @@
+# [7.2.0-ol7.2](https://github.com/terrestris/shogun-util/compare/v7.2.0-ol7.1...v7.2.0-ol7.2) (2024-04-23)
+
+
+### Features
+
+* add `faviconPath` to DefaultApplicationTheme ([30f8f1f](https://github.com/terrestris/shogun-util/commit/30f8f1f61e349ea66f9d93a63b2cd1ae52a8022e))
+
 # [7.2.0-ol7.1](https://github.com/terrestris/shogun-util/compare/v7.1.1-ol7.1...v7.2.0-ol7.1) (2024-04-18)
 
 
