@@ -3,21 +3,12 @@ import { UrlUtil } from '@terrestris/base-util/dist/UrlUtil/UrlUtil';
 import CapabilitiesUtil from '@terrestris/ol-util/dist/CapabilitiesUtil/CapabilitiesUtil';
 import { MapUtil } from '@terrestris/ol-util/dist/MapUtil/MapUtil';
 import ProjectionUtil, { defaultProj4CrsDefinitions } from '@terrestris/ol-util/dist/ProjectionUtil/ProjectionUtil';
+import _get from 'lodash/get';
+import _isNil from 'lodash/isNil';
 import _uniqueBy from 'lodash/uniqBy';
 import type {
-  BackgroundLayer as MapboxBackgroundLayer,
-  CircleLayer as MapboxCircleLayer,
-  CustomLayerInterface as MapboxCustomLayerInterface,
-  FillExtrusionLayer as MapboxFillExtrusionLayer,
-  FillLayer as MapboxFillLayer,
-  HeatmapLayer as MapboxHeatmapLayer,
-  HillshadeLayer as MapboxHillshadeLayer,
   Layer as MapboxLayer,
-  LineLayer as MapboxLineLayer,
-  RasterLayer as MapboxRasterLayer,
-  SkyLayer as MapboxSkyLayer,
-  Style as MapboxStyle,
-  SymbolLayer as MapboxSymbolLayer
+  Style as MapboxStyle
 } from 'mapbox-gl';
 import { Extent as OlExtent } from 'ol/extent';
 import OlFeature from 'ol/Feature';
@@ -33,28 +24,20 @@ import OlLayer from 'ol/layer/Layer';
 import OlTileLayer from 'ol/layer/Tile';
 import OlLayerVector from 'ol/layer/Vector';
 import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
-import { fromLonLat, ProjectionLike as OlProjectionLike } from 'ol/proj';
+import { fromLonLat, Projection as OlProjection, ProjectionLike as OlProjectionLike } from 'ol/proj';
 import { Units } from 'ol/proj/Units';
-import OlImageWMS, {
-  Options as OlImageWMSOptions
-} from 'ol/source/ImageWMS';
-import OlTileWMS, {
-  Options as OlTileWMSOptions
-} from 'ol/source/TileWMS';
+import OlImageWMS, { Options as OlImageWMSOptions } from 'ol/source/ImageWMS';
+import OlTileWMS, { Options as OlTileWMSOptions } from 'ol/source/TileWMS';
 import OlSourceVector from 'ol/source/Vector';
 import OlSourceWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
-import OlSourceXYZ, {
-  Options as OlSourceXYZOptions
-} from 'ol/source/XYZ';
+import OlSourceXYZ, { Options as OlSourceXYZOptions } from 'ol/source/XYZ';
 import OlTile from 'ol/Tile';
 import OlTileGrid from 'ol/tilegrid/TileGrid';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlView, { ViewOptions as OlViewOptions } from 'ol/View';
 import { apply as applyMapboxStyle } from 'ol-mapbox-style';
 
-import {
-  allLayersByIds
-} from '../graphqlqueries/Layers';
+import { allLayersByIds } from '../graphqlqueries/Layers';
 import Application, { DefaultLayerTree } from '../model/Application';
 import Layer from '../model/Layer';
 import { getBearerTokenHeader } from '../security/getBearerTokenHeader';
@@ -135,7 +118,6 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
         if (layerTree.children) {
           const nodes = await this.parseNodes(layerTree.children, layers, projection, keepClientConfig);
-
           return new OlLayerGroup({
             layers: nodes.reverse(),
             visible: layerTree.checked
@@ -164,7 +146,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       return;
     }
 
-    if (layerIds.length == 0) {
+    if (layerIds.length === 0) {
       return [];
     }
 
@@ -271,12 +253,12 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       return this.parseXYZLayer(layer);
     }
 
-    if (layer.type === 'VECTORTILE' || layer.type === 'MAPBOXSTYLE') {
-      return await this.parseMapboxStyleLayer(layer);
+    if (layer.type === 'MAPBOXSTYLE') {
+      return await this.parseMapboxStyleLayer(layer, projection);
     }
 
     Logger.error(`Unsupported layer type ${layer.type} given. Currently only WMS, TILEWMS, WMTS, ` +
-      'WFS, WMSTIME, XYZ and VECTORTILE/MAPBOXSTYLE are supported.');
+      'WFS, WMSTIME, XYZ and MAPBOXSTYLE are supported.');
   }
 
   parseImageLayer(layer: S) {
@@ -659,7 +641,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     return xyzLayer;
   }
 
-  async parseMapboxStyleLayer(layer: S) {
+  async parseMapboxStyleLayer(layer: S, projection?: OlProjectionLike) {
     const {
       url,
       useBearerToken,
@@ -678,22 +660,25 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       opacity
     });
 
-    await applyMapboxStyle(
-      mapBoxLayerGroup,
-      url,
-      {
-        resolutions: resolutions,
-        transformRequest: (resourceUrl, resourceType) => {
-          const request = new Request(resourceUrl, {
-            headers: useBearerToken ? {
-              ...getBearerTokenHeader(this.client?.getKeycloak())
-            } : {}
-          });
-
-          return request;
+    try {
+      await applyMapboxStyle(
+        mapBoxLayerGroup,
+        url,
+        {
+          projection: (projection instanceof OlProjection) ? projection.getCode() : projection,
+          resolutions: resolutions,
+          transformRequest: (resourceUrl) => {
+            return new Request(resourceUrl, {
+              headers: useBearerToken ? {
+                ...getBearerTokenHeader(this.client?.getKeycloak())
+              } : {}
+            });
+          }
         }
-      }
-    );
+      );
+    } catch (e) {
+      Logger.error(`Could apply mapbox style to OlLayerGroup: ${e}`);
+    }
 
     this.setLayerTitles(mapBoxLayerGroup);
 
@@ -711,9 +696,8 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
   }
 
   private setLayerTitles(mapBoxLayerGroup: OlLayerGroup) {
-    const getLayerTitle = (mapboxLayer: MapboxLayer) => {
-      return mapboxLayer['source-layer'] || mapboxLayer.source || mapboxLayer.id;
-    };
+    const getLayerTitle = (mapboxLayer: MapboxLayer) =>
+      _get(mapboxLayer, 'source-layer') ?? mapboxLayer.source ?? mapboxLayer.id;
 
     this.forEachLayer(mapBoxLayerGroup, childLayer => {
       const mapBoxStyle: MapboxStyle = mapBoxLayerGroup.get('mapbox-style');
@@ -722,43 +706,16 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       const p = mapBoxLayers
         ?.map(l => mapBoxStyle.layers.find(lay => lay.id === l))
         ?.map(l => {
-          if (!l) {
+          if (_isNil(l)) {
             return;
           }
 
-          if (l.type === 'background') {
-            return getLayerTitle(l as MapboxBackgroundLayer);
-          }
-          if (l.type === 'circle') {
-            return getLayerTitle(l as MapboxCircleLayer);
-          }
-          if (l.type === 'fill-extrusion') {
-            return getLayerTitle(l as MapboxFillExtrusionLayer);
-          }
-          if (l.type === 'fill') {
-            return getLayerTitle(l as MapboxFillLayer);
-          }
-          if (l.type === 'heatmap') {
-            return getLayerTitle(l as MapboxHeatmapLayer);
-          }
-          if (l.type === 'hillshade') {
-            return getLayerTitle(l as MapboxHillshadeLayer);
-          }
-          if (l.type === 'line') {
-            return getLayerTitle(l as MapboxLineLayer);
-          }
-          if (l.type === 'raster') {
-            return getLayerTitle(l as MapboxRasterLayer);
-          }
-          if (l.type === 'symbol') {
-            return getLayerTitle(l as MapboxSymbolLayer);
-          }
-          if (l.type === 'sky') {
-            return getLayerTitle(l as MapboxSkyLayer);
-          }
           if (l.type === 'custom') {
             Logger.warn('Getting the name of a custom layer is not supported right now');
+            return;
           }
+
+          return getLayerTitle(l);
         })
         .filter(l => l);
 
