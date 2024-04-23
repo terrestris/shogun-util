@@ -15,6 +15,7 @@ export interface DefaultApplicationTheme {
   secondaryColor?: string;
   complementaryColor?: string;
   logoPath?: string;
+  faviconPath?: string;
 }
 
 export interface DefaultApplicationToolConfig {
