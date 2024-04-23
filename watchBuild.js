@@ -27,10 +27,10 @@ if (!fs.existsSync(targetDistPath) ) {
 }
 
 async function buildAndCopy() {
-  console.log('run build');
+  console.log('run build:dist');
 
   try {
-    const { stdout, stderr} = await exec('npm run build');
+    const { stdout, stderr } = await exec('npm run build:dist');
     console.log(stdout);
     console.log(stderr);
 
