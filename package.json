@@ -41,8 +41,8 @@
     "geojson": "^0.5.0",
     "keycloak-js": "^22.0.3",
     "lodash": "^4.17.21",
-    "ol": "^7.5.2",
-    "ol-mapbox-style": "12.3.1"
+    "ol": "7.5.2",
+    "ol-mapbox-style": "10.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.22.17",
