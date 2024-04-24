@@ -3,13 +3,7 @@ import { UrlUtil } from '@terrestris/base-util/dist/UrlUtil/UrlUtil';
 import CapabilitiesUtil from '@terrestris/ol-util/dist/CapabilitiesUtil/CapabilitiesUtil';
 import { MapUtil } from '@terrestris/ol-util/dist/MapUtil/MapUtil';
 import ProjectionUtil, { defaultProj4CrsDefinitions } from '@terrestris/ol-util/dist/ProjectionUtil/ProjectionUtil';
-import _get from 'lodash/get';
-import _isNil from 'lodash/isNil';
 import _uniqueBy from 'lodash/uniqBy';
-import type {
-  Layer as MapboxLayer,
-  Style as MapboxStyle
-} from 'mapbox-gl';
 import { Extent as OlExtent } from 'ol/extent';
 import OlFeature from 'ol/Feature';
 import OlFormatGeoJSON from 'ol/format/GeoJSON';
@@ -20,7 +14,6 @@ import OlImageTile from 'ol/ImageTile';
 import OlLayerBase from 'ol/layer/Base';
 import OlLayerGroup from 'ol/layer/Group';
 import OlImageLayer from 'ol/layer/Image';
-import OlLayer from 'ol/layer/Layer';
 import OlTileLayer from 'ol/layer/Tile';
 import OlLayerVector from 'ol/layer/Vector';
 import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
@@ -680,8 +673,6 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       Logger.error(`Could apply mapbox style to OlLayerGroup: ${e}`);
     }
 
-    this.setLayerTitles(mapBoxLayerGroup);
-
     this.setLayerProperties(mapBoxLayerGroup, layer);
 
     return mapBoxLayerGroup;
@@ -693,46 +684,6 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
         MapUtil.roundScale(MapUtil.getScaleForResolution(res, projUnit) as number
         ))
       .reverse();
-  }
-
-  private setLayerTitles(mapBoxLayerGroup: OlLayerGroup) {
-    const getLayerTitle = (mapboxLayer: MapboxLayer) =>
-      _get(mapboxLayer, 'source-layer') ?? mapboxLayer.source ?? mapboxLayer.id;
-
-    this.forEachLayer(mapBoxLayerGroup, childLayer => {
-      const mapBoxStyle: MapboxStyle = mapBoxLayerGroup.get('mapbox-style');
-      const mapBoxLayers: string[] = childLayer.get('mapbox-layers');
-
-      const p = mapBoxLayers
-        ?.map(l => mapBoxStyle.layers.find(lay => lay.id === l))
-        ?.map(l => {
-          if (_isNil(l)) {
-            return;
-          }
-
-          if (l.type === 'custom') {
-            Logger.warn('Getting the name of a custom layer is not supported right now');
-            return;
-          }
-
-          return getLayerTitle(l);
-        })
-        .filter(l => l);
-
-      childLayer.set('name', [...new Set(p)].join('\n'));
-    });
-  }
-
-  private forEachLayer(groupLayer: OlLayerGroup, callback: (layer: OlLayer) => void) {
-    groupLayer.getLayers().forEach(childLayer => {
-      if (childLayer instanceof OlLayerGroup) {
-        this.forEachLayer(childLayer, callback);
-      }
-
-      if (childLayer instanceof OlLayer) {
-        callback(childLayer);
-      }
-    });
   }
 
   private mergeApplicationLayerConfigs(layers: S[], application: T): void {
