@@ -1,3 +1,17 @@
+# [7.2.0-ol7.3](https://github.com/terrestris/shogun-util/compare/v7.2.0-ol7.2...v7.2.0-ol7.3) (2024-04-25)
+
+
+### Bug Fixes
+
+* do not add layer names to child layers ([ef58f30](https://github.com/terrestris/shogun-util/commit/ef58f30707b2310f5940bd6927debe75432bbdc3))
+* error handling in applyMapboxStyle ([6ba029e](https://github.com/terrestris/shogun-util/commit/6ba029e0dc9948470821eaf281f2f98d121504aa))
+* homogenize ol and ol-mapbox-style versions ([0a8d196](https://github.com/terrestris/shogun-util/commit/0a8d19686a3c953fa4d80fd90ec924ad8554fb8d))
+
+
+### Features
+
+* basic support for vectortile/mapboxstyle layers ([40ee445](https://github.com/terrestris/shogun-util/commit/40ee44507d52eb78a8fc44080151de63d14b588a))
+
 # [7.2.0-ol7.2](https://github.com/terrestris/shogun-util/compare/v7.2.0-ol7.1...v7.2.0-ol7.2) (2024-04-23)
 
 
