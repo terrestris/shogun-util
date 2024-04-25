@@ -15,7 +15,7 @@ class DummyEntity extends BaseEntity {
     modified,
     dummyField
   }: DummyEntityArgs) {
-    super({id, created, modified});
+    super({ id, created, modified });
 
     this.dummyField = dummyField;
   }
@@ -203,7 +203,7 @@ describe('GenericService', () => {
   it('sends all required parameter to create an entity (add)', async () => {
     fetchMock = fetchSpy(successResponse([]));
 
-    await service.add({dummyField: 'dummyValue'});
+    await service.add({ dummyField: 'dummyValue' });
 
     expect(fetchMock).toHaveBeenCalledWith('/dummy', {
       body: '{\"dummyField\":\"dummyValue\"}',
@@ -229,7 +229,7 @@ describe('GenericService', () => {
   it('throws an error if an entity couldn\'t be created (add)', async () => {
     fetchMock = fetchSpy(failureResponse());
 
-    await expect(service.add({dummyField: 'dummyValue'})).rejects.toThrow();
+    await expect(service.add({ dummyField: 'dummyValue' })).rejects.toThrow();
   });
 
   it('sends all required parameters to delete an entity (delete)', async () => {
@@ -258,7 +258,7 @@ describe('GenericService', () => {
   it('sends all required parameters to update an entity (update)', async () => {
     fetchMock = fetchSpy(successResponse([]));
 
-    await service.update({id: 1, dummyField: 'dummyValue'});
+    await service.update({ id: 1, dummyField: 'dummyValue' });
 
     expect(fetchMock).toHaveBeenCalledWith('/dummy/1', {
       body: '{\"id\":1,\"dummyField\":\"dummyValue\"}',
@@ -284,13 +284,13 @@ describe('GenericService', () => {
   it('throws an error if an entity couldn\'t be updated (update)', async () => {
     fetchMock = fetchSpy(failureResponse());
 
-    await expect(service.update({dummyField: 'dummyValue'})).rejects.toThrow();
+    await expect(service.update({ dummyField: 'dummyValue' })).rejects.toThrow();
   });
 
   it('sends all required parameters to partially update an entity (updatePartial)', async () => {
     fetchMock = fetchSpy(successResponse([]));
 
-    await service.updatePartial({id: 1, dummyField: 'dummyValue'});
+    await service.updatePartial({ id: 1, dummyField: 'dummyValue' });
 
     expect(fetchMock).toHaveBeenCalledWith('/dummy/1', {
       body: '{\"id\":1,\"dummyField\":\"dummyValue\"}',
@@ -316,6 +316,57 @@ describe('GenericService', () => {
   it('throws an error if an entity couldn\'t be updated (updatePartial)', async () => {
     fetchMock = fetchSpy(failureResponse());
 
-    await expect(service.updatePartial({dummyField: 'dummyValue'})).rejects.toThrow();
+    await expect(service.updatePartial({ dummyField: 'dummyValue' })).rejects.toThrow();
+  });
+
+  describe('PublicInstancePermission', () => {
+
+    it('can get the public instance permission status', async () => {
+      const response = {
+        public: true
+      };
+
+      fetchMock = fetchSpy(successResponse(response));
+      const resp = await service.isPublic(1);
+      expect(resp).toEqual(true);
+    });
+
+    it('throws an error if it can\'t check if an instance is public', async () => {
+      fetchMock = fetchSpy(failureResponse());
+
+      await expect(service.isPublic(1)).rejects.toThrow();
+    });
+
+    it('can set an instance to be publicly accessible', async () => {
+      fetchMock = fetchSpy(successResponse());
+      try {
+        expect(await service.setPublic(1)).toBeUndefined();
+      } catch (error) {
+        expect(error).toBeUndefined();
+      }
+    });
+
+    it('throws if it can\'t set an instance to be publicly accessible', async () => {
+      fetchMock = fetchSpy(failureResponse());
+
+      await expect(service.setPublic(1)).rejects.toThrow();
+    });
+
+    it('can set an instance to be not publicly accessible', async () => {
+      fetchMock = fetchSpy(successResponse());
+      try {
+        expect(await service.revokePublic(1)).toBeUndefined();
+      } catch (error) {
+        expect(error).toBeUndefined();
+      }
+    });
+
+    it('throws if it can\'t set an instance to be not publicly accessible', async () => {
+      fetchMock = fetchSpy(failureResponse());
+
+      await expect(service.setPublic(1)).rejects.toThrow();
+    });
+
+
   });
 });
