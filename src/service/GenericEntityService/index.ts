@@ -176,6 +176,58 @@ export abstract class GenericEntityService<T extends BaseEntity> extends Permiss
     }
   }
 
+  async getIsPublic(id: string | number, fetchOpts?: RequestInit): Promise<boolean> {
+    try {
+      const response = await fetch(`${this.basePath}/${id}/permissions/public`, {
+        method: 'GET',
+        headers: {
+          ...getBearerTokenHeader(this.keycloak)
+        },
+        ...fetchOpts
+      });
+      const result = await response.json();
+      return result.public;
+    } catch (error) {
+      throw new Error(`Error while checking if an entity is public: ${error}`);
+    }
+  }
+
+  async setPublic(id: string | number, fetchOpts?: RequestInit): Promise<void> {
+    try {
+      const response = await fetch(`${this.basePath}/${id}/permissions/public`, {
+        method: 'POST',
+        headers: {
+          ...getBearerTokenHeader(this.keycloak)
+        },
+        ...fetchOpts
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error status: ${response.status}`);
+      }
+    } catch (error) {
+      throw new Error(`Error while setting an entity as public: ${error}`);
+    }
+  }
+
+  async revokePublic(id: string | number, fetchOpts?: RequestInit): Promise<void> {
+    try {
+      const response = await fetch(`${this.basePath}/${id}/permissions/public`, {
+        method: 'DELETE',
+        headers: {
+          ...getBearerTokenHeader(this.keycloak)
+        },
+        ...fetchOpts
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error status: ${response.status}`);
+      }
+    } catch (error) {
+      throw new Error(`Error while setting an entity as not public: ${error}`);
+    }
+  }
+
   getBasePath(): string {
     return this.basePath;
   }
