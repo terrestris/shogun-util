@@ -144,7 +144,7 @@ export abstract class GenericEntityService<T extends BaseEntity> extends Permiss
     }
   }
 
-  async getIsPublic(id: string | number, fetchOpts?: RequestInit): Promise<boolean> {
+  async isPublic(id: string | number, fetchOpts?: RequestInit): Promise<boolean> {
     try {
       const response = await fetch(`${this.basePath}/${id}/permissions/public`, {
         method: 'GET',
