@@ -17,27 +17,20 @@ import OlImageLayer from 'ol/layer/Image';
 import OlTileLayer from 'ol/layer/Tile';
 import OlLayerVector from 'ol/layer/Vector';
 import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
-import { fromLonLat, ProjectionLike as OlProjectionLike } from 'ol/proj';
+import { fromLonLat, Projection as OlProjection, ProjectionLike as OlProjectionLike } from 'ol/proj';
 import { Units } from 'ol/proj/Units';
-import OlImageWMS, {
-  Options as OlImageWMSOptions
-} from 'ol/source/ImageWMS';
-import OlTileWMS, {
-  Options as OlTileWMSOptions
-} from 'ol/source/TileWMS';
+import OlImageWMS, { Options as OlImageWMSOptions } from 'ol/source/ImageWMS';
+import OlTileWMS, { Options as OlTileWMSOptions } from 'ol/source/TileWMS';
 import OlSourceVector from 'ol/source/Vector';
 import OlSourceWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
-import OlSourceXYZ, {
-  Options as OlSourceXYZOptions
-} from 'ol/source/XYZ';
+import OlSourceXYZ, { Options as OlSourceXYZOptions } from 'ol/source/XYZ';
 import OlTile from 'ol/Tile';
 import OlTileGrid from 'ol/tilegrid/TileGrid';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlView, { ViewOptions as OlViewOptions } from 'ol/View';
+import { apply as applyMapboxStyle } from 'ol-mapbox-style';
 
-import {
-  allLayersByIds
-} from '../graphqlqueries/Layers';
+import { allLayersByIds } from '../graphqlqueries/Layers';
 import Application, { DefaultLayerTree } from '../model/Application';
 import Layer from '../model/Layer';
 import { getBearerTokenHeader } from '../security/getBearerTokenHeader';
@@ -118,7 +111,6 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
 
         if (layerTree.children) {
           const nodes = await this.parseNodes(layerTree.children, layers, projection, keepClientConfig);
-
           return new OlLayerGroup({
             layers: nodes.reverse(),
             visible: layerTree.checked
@@ -147,7 +139,7 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       return;
     }
 
-    if (layerIds.length == 0) {
+    if (layerIds.length === 0) {
       return [];
     }
 
@@ -254,8 +246,12 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
       return this.parseXYZLayer(layer);
     }
 
-    // TODO Add support for VECTORTILE
-    throw new Error('Currently only WMTS, WMS, TILEWMS, WFS, WMSTIME and XYZ layers are supported.');
+    if (layer.type === 'MAPBOXSTYLE') {
+      return await this.parseMapboxStyleLayer(layer, projection);
+    }
+
+    Logger.error(`Unsupported layer type ${layer.type} given. Currently only WMS, TILEWMS, WMTS, ` +
+      'WFS, WMSTIME, XYZ and MAPBOXSTYLE are supported.');
   }
 
   parseImageLayer(layer: S) {
@@ -636,6 +632,50 @@ class SHOGunApplicationUtil<T extends Application, S extends Layer> {
     this.setLayerProperties(xyzLayer, layer);
 
     return xyzLayer;
+  }
+
+  async parseMapboxStyleLayer(layer: S, projection?: OlProjectionLike) {
+    const {
+      url,
+      useBearerToken,
+      resolutions
+    } = layer.sourceConfig || {};
+
+    const {
+      minResolution,
+      maxResolution,
+      opacity,
+    } = layer.clientConfig || {};
+
+    const mapBoxLayerGroup = new OlLayerGroup({
+      minResolution,
+      maxResolution,
+      opacity
+    });
+
+    try {
+      await applyMapboxStyle(
+        mapBoxLayerGroup,
+        url,
+        {
+          projection: (projection instanceof OlProjection) ? projection.getCode() : projection,
+          resolutions: resolutions,
+          transformRequest: (resourceUrl) => {
+            return new Request(resourceUrl, {
+              headers: useBearerToken ? {
+                ...getBearerTokenHeader(this.client?.getKeycloak())
+              } : {}
+            });
+          }
+        }
+      );
+    } catch (e) {
+      Logger.error(`Could apply mapbox style to OlLayerGroup: ${e}`);
+    }
+
+    this.setLayerProperties(mapBoxLayerGroup, layer);
+
+    return mapBoxLayerGroup;
   }
 
   getMapScales(resolutions: number[], projUnit: Units = 'm'): number[] {
