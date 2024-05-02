@@ -1,3 +1,10 @@
+# [7.2.0-ol7.4](https://github.com/terrestris/shogun-util/compare/v7.2.0-ol7.3...v7.2.0-ol7.4) (2024-05-02)
+
+
+### Features
+
+* add method for publicEntity ([ad8bae6](https://github.com/terrestris/shogun-util/commit/ad8bae67ccb4e3acb3abc29458225bb499edabae))
+
 # [7.2.0-ol7.3](https://github.com/terrestris/shogun-util/compare/v7.2.0-ol7.2...v7.2.0-ol7.3) (2024-04-25)
 
 
