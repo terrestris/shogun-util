@@ -1,3 +1,10 @@
+# [8.2.0](https://github.com/terrestris/shogun-util/compare/v8.1.0...v8.2.0) (2024-05-02)
+
+
+### Features
+
+* add method for publicEntity ([c21fa5c](https://github.com/terrestris/shogun-util/commit/c21fa5c3dd35faa787accf48a57a5ff17fb6e46b))
+
 # [8.1.0](https://github.com/terrestris/shogun-util/compare/v8.0.1...v8.1.0) (2024-04-23)
 
 
