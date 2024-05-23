@@ -1,3 +1,10 @@
+# [8.3.0](https://github.com/terrestris/shogun-util/compare/v8.2.0...v8.3.0) (2024-05-23)
+
+
+### Features
+
+* add generic parameters to application to make it easier to extend ([82b0928](https://github.com/terrestris/shogun-util/commit/82b09283de8efa1fd352e5e7f6a6074b146344dd))
+
 # [8.2.0](https://github.com/terrestris/shogun-util/compare/v8.1.0...v8.2.0) (2024-05-02)
 
 
