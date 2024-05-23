@@ -23,10 +23,13 @@ export interface DefaultApplicationToolConfig {
   config: any;
 }
 
-export interface DefaultApplicationLayerConfig {
+export interface DefaultApplicationLayerConfig<
+  ClientConfig extends DefaultLayerClientConfig = DefaultLayerClientConfig,
+  SourceConfig extends DefaultLayerSourceConfig = DefaultLayerSourceConfig
+> {
   layerId: number;
-  clientConfig?: DefaultLayerClientConfig;
-  sourceConfig?: DefaultLayerSourceConfig;
+  clientConfig?: ClientConfig;
+  sourceConfig?: SourceConfig;
 }
 
 export interface DefaultLayerTree {
@@ -50,30 +53,44 @@ export interface DefaultLegalConfig {
   privacy?: string;
 }
 
-export interface DefaultApplicationClientConfig {
-  mapView: DefaultMapView;
+export interface DefaultApplicationClientConfig<
+  MapView extends DefaultMapView = DefaultMapView,
+  LegalConfig extends DefaultLegalConfig = DefaultLegalConfig,
+  ApplicationTheme extends DefaultApplicationTheme = DefaultApplicationTheme
+> {
+  mapView: MapView;
   description?: string;
-  legal?: DefaultLegalConfig;
-  theme?: DefaultApplicationTheme;
+  legal?: LegalConfig;
+  theme?: ApplicationTheme;
   defaultLanguage?: string;
 }
 
-export interface ApplicationArgs extends BaseEntityArgs {
+export interface ApplicationArgs<
+  ClientConfig extends DefaultApplicationClientConfig = DefaultApplicationClientConfig,
+  LayerTree extends DefaultLayerTree = DefaultLayerTree,
+  LayerConfig extends DefaultApplicationLayerConfig = DefaultApplicationLayerConfig,
+  ToolConfig extends DefaultApplicationToolConfig = DefaultApplicationToolConfig
+> extends BaseEntityArgs {
   name?: string;
   stateOnly?: boolean;
-  clientConfig?: DefaultApplicationClientConfig;
-  layerTree?: DefaultLayerTree;
-  layerConfig?: DefaultApplicationLayerConfig[];
-  toolConfig?: DefaultApplicationToolConfig[];
+  clientConfig?: ClientConfig;
+  layerTree?: LayerTree;
+  layerConfig?: LayerConfig[];
+  toolConfig?: ToolConfig[];
 }
 
-export default class Application extends BaseEntity {
+export default class Application<
+  ClientConfig extends DefaultApplicationClientConfig = DefaultApplicationClientConfig,
+  LayerTree extends DefaultLayerTree = DefaultLayerTree,
+  LayerConfig extends DefaultApplicationLayerConfig = DefaultApplicationLayerConfig,
+  ToolConfig extends DefaultApplicationToolConfig = DefaultApplicationToolConfig
+> extends BaseEntity {
   name?: string;
   stateOnly?: boolean;
-  clientConfig?: DefaultApplicationClientConfig;
-  layerTree?: DefaultLayerTree;
-  layerConfig?: DefaultApplicationLayerConfig[];
-  toolConfig?: DefaultApplicationToolConfig[];
+  clientConfig?: ClientConfig;
+  layerTree?: LayerTree;
+  layerConfig?: LayerConfig[];
+  toolConfig?: ToolConfig[];
 
   constructor({
     id,
@@ -85,7 +102,7 @@ export default class Application extends BaseEntity {
     layerTree,
     layerConfig,
     toolConfig
-  }: ApplicationArgs) {
+  }: ApplicationArgs<ClientConfig, LayerTree, LayerConfig, ToolConfig>) {
     super({id, created, modified});
 
     this.name = name;
