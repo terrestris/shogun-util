@@ -1,3 +1,10 @@
+## [8.3.1](https://github.com/terrestris/shogun-util/compare/v8.3.0...v8.3.1) (2024-05-27)
+
+
+### Bug Fixes
+
+* strict equality check ([98e6f30](https://github.com/terrestris/shogun-util/commit/98e6f30e6e3e2090d52c613fb8d0d817f94ba029))
+
 # [8.3.0](https://github.com/terrestris/shogun-util/compare/v8.2.0...v8.3.0) (2024-05-23)
 
 
