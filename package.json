@@ -28,7 +28,7 @@
     "lint": "eslint -c .eslintrc.js --ext .ts src/",
     "lint:fix": "eslint -c .eslintrc.js --ext .ts src/ --fix",
     "prepare": "husky install",
-    "test": "jest --coverage",
+    "test": "jest --coverage --maxWorkers=50%",
     "typecheck": "tsc --noEmit --project tsconfig.json",
     "watch:buildto": "node watchBuild.js"
   },
