@@ -10,7 +10,8 @@ module.exports = {
     '^.+\\.ts$': '<rootDir>/node_modules/babel-jest'
   },
   transformIgnorePatterns: [
-    '<rootDir>/node_modules/(?!(ol|@babel|jest-runtime|@terrestris|color-*))'
+    '<rootDir>/node_modules/(?!(ol|@babel|jest-runtime|@terrestris|color-*|query-string|' +
+    'decode-uri-component|split-on-first|filter-obj))'
   ],
   testRegex: '/src/.*\\.spec.(ts|js)$',
   collectCoverageFrom: [
