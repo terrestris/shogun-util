@@ -5,6 +5,7 @@ import File from '../model/File';
 import Group, { ProviderGroupDetails } from '../model/Group';
 import ImageFile from '../model/ImageFile';
 import Layer from '../model/Layer';
+import Role, { ProviderRoleDetails } from '../model/Role';
 import User, { ProviderUserDetails } from '../model/User';
 import AppInfoService from './AppInfoService';
 import ApplicationService from './ApplicationService';
@@ -16,6 +17,7 @@ import GroupService from './GroupService';
 import ImageFileService from './ImageFileService';
 import LayerService from './LayerService';
 import OpenAPIService from './OpenAPIService';
+import RoleService from './RoleService';
 import UserService from './UserService';
 
 export interface SHOGunAPIClientOpts {
@@ -41,6 +43,7 @@ export class SHOGunAPIClient {
   private layerService?: LayerService<any>;
   private groupService?: GroupService<any>;
   private userService?: UserService<any>;
+  private roleService?: RoleService<any>;
   private fileService?: FileService<any>;
   private imageFileService?: ImageFileService<any>;
   private authService?: AuthService;
@@ -118,6 +121,17 @@ export class SHOGunAPIClient {
     }
 
     return this.userService;
+  }
+
+  role<T extends Role<S>, S extends ProviderRoleDetails>(): RoleService<T, S> {
+    if (!this.roleService) {
+      this.roleService = new RoleService<T, S>({
+        basePath: `${this.basePath}roles`,
+        keycloak: this.keycloak
+      });
+    }
+
+    return this.roleService;
   }
 
   file<T extends File>(): FileService<T> {

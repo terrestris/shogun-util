@@ -13,8 +13,8 @@ export interface KeycloakGroupRepresentation extends ProviderGroupDetails {
   clientRoles?: {
     [key: string]: string[];
   };
-  subGroups: KeycloakGroupRepresentation[];
-  access: {
+  subGroups?: KeycloakGroupRepresentation[];
+  access?: {
     [key: string]: boolean;
   };
 }
