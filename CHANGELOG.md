@@ -1,3 +1,10 @@
+## [8.3.2](https://github.com/terrestris/shogun-util/compare/v8.3.1...v8.3.2) (2024-06-12)
+
+
+### Bug Fixes
+
+* ignore checked attribute for groups ([851fd3f](https://github.com/terrestris/shogun-util/commit/851fd3f573c84dc909235eb86648757b2a6e60be))
+
 ## [8.3.1](https://github.com/terrestris/shogun-util/compare/v8.3.0...v8.3.1) (2024-05-27)
 
 
