@@ -1,10 +1,6 @@
 import CsrfUtil from '@terrestris/base-util/dist/CsrfUtil/CsrfUtil';
 
-export interface CsrfTokenHeader {
-  'X-XSRF-TOKEN': string;
-}
-
-export const getCsrfTokenHeader = (): CsrfTokenHeader | undefined => {
+export const getCsrfTokenHeader = (): Record<string, string> => {
   let csrfToken = CsrfUtil.getCsrfValueFromCookie();
 
   if (!csrfToken) {
@@ -12,7 +8,7 @@ export const getCsrfTokenHeader = (): CsrfTokenHeader | undefined => {
   }
 
   if (!csrfToken) {
-    return;
+    return {};
   }
 
   return {
