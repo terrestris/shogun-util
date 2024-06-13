@@ -1,3 +1,10 @@
+## [8.3.3](https://github.com/terrestris/shogun-util/compare/v8.3.2...v8.3.3) (2024-06-13)
+
+
+### Bug Fixes
+
+* change return types of header functions ([48d45e5](https://github.com/terrestris/shogun-util/commit/48d45e57fb0fdd2ae5a4d702c78b2f14b9484723))
+
 ## [8.3.2](https://github.com/terrestris/shogun-util/compare/v8.3.1...v8.3.2) (2024-06-12)
 
 
