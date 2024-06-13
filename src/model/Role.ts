@@ -2,14 +2,23 @@ import BaseEntity, { BaseEntityArgs } from './BaseEntity';
 
 export interface ProviderRoleDetails {}
 
+export interface KeycloakRoleComposites {
+  realm?: string[];
+  client?: {
+    [key: string]: string[];
+  };
+  application?: {
+    [key: string]: string[];
+  };
+}
+
 export interface KeycloakRoleRepresentation extends ProviderRoleDetails {
   id?: string;
   name?: string;
   description?: string;
   scopeParamRequired?: boolean;
   composite?: boolean;
-  // TODO Recheck this type
-  composites?: string;
+  composites?: KeycloakRoleComposites;
   clientRole?: boolean;
   containerId?: string;
   attributes?: {
