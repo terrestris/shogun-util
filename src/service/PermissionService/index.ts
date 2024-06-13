@@ -1,6 +1,8 @@
 import PermissionCollectionType from '../../model/enum/PermissionCollectionType';
 import GroupClassPermission from '../../model/security/GroupClassPermission';
 import GroupInstancePermission from '../../model/security/GroupInstancePermission';
+import RoleClassPermission from '../../model/security/RoleClassPermission';
+import RoleInstancePermission from '../../model/security/RoleInstancePermission';
 import UserClassPermission from '../../model/security/UserClassPermission';
 import UserInstancePermission from '../../model/security/UserInstancePermission';
 import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
@@ -55,6 +57,26 @@ export class PermissionService extends GenericService {
     }
   }
 
+  async getRoleInstancePermissions(id: string | number, fetchOpts?: RequestInit): Promise<RoleInstancePermission[]> {
+    try {
+      const response = await fetch(`${this.basePath}/${id}/permissions/instance/role`, {
+        method: 'GET',
+        headers: {
+          ...getBearerTokenHeader(this.keycloak)
+        },
+        ...fetchOpts
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      throw new Error(`Error while requesting the role instance permissions: ${error}`);
+    }
+  }
+
   async getUserClassPermissions(id: string | number, fetchOpts?: RequestInit): Promise<UserClassPermission[]> {
     try {
       const response = await fetch(`${this.basePath}/${id}/permissions/class/user`, {
@@ -92,6 +114,26 @@ export class PermissionService extends GenericService {
       return await response.json();
     } catch (error) {
       throw new Error(`Error while requesting the group class permissions: ${error}`);
+    }
+  }
+
+  async getRoleClassPermissions(id: string | number, fetchOpts?: RequestInit): Promise<RoleClassPermission[]> {
+    try {
+      const response = await fetch(`${this.basePath}/${id}/permissions/class/role`, {
+        method: 'GET',
+        headers: {
+          ...getBearerTokenHeader(this.keycloak)
+        },
+        ...fetchOpts
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      throw new Error(`Error while requesting the role class permissions: ${error}`);
     }
   }
 
@@ -137,8 +179,29 @@ export class PermissionService extends GenericService {
     }
   }
 
+  async getRoleInstancePermission(id: string | number, roleId: string | number, fetchOpts?: RequestInit):
+    Promise<RoleInstancePermission> {
+    try {
+      const response = await fetch(`${this.basePath}/${id}/permissions/instance/role/${roleId}`, {
+        method: 'GET',
+        headers: {
+          ...getBearerTokenHeader(this.keycloak)
+        },
+        ...fetchOpts
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      throw new Error(`Error while requesting the role instance permission: ${error}`);
+    }
+  }
+
   async getUserClassPermission(id: string | number, userId: string | number, fetchOpts?: RequestInit):
-    Promise<UserInstancePermission> {
+    Promise<UserClassPermission> {
     try {
       const response = await fetch(`${this.basePath}/${id}/permissions/class/user/${userId}`, {
         method: 'GET',
@@ -159,7 +222,7 @@ export class PermissionService extends GenericService {
   }
 
   async getGroupClassPermission(id: string | number, groupId: string | number, fetchOpts?: RequestInit):
-    Promise<UserInstancePermission> {
+    Promise<UserClassPermission> {
     try {
       const response = await fetch(`${this.basePath}/${id}/permissions/class/group/${groupId}`, {
         method: 'GET',
@@ -176,6 +239,27 @@ export class PermissionService extends GenericService {
       return await response.json();
     } catch (error) {
       throw new Error(`Error while requesting the group class permission: ${error}`);
+    }
+  }
+
+  async getRoleClassPermission(id: string | number, roleId: string | number, fetchOpts?: RequestInit):
+    Promise<RoleClassPermission> {
+    try {
+      const response = await fetch(`${this.basePath}/${id}/permissions/class/role/${roleId}`, {
+        method: 'GET',
+        headers: {
+          ...getBearerTokenHeader(this.keycloak)
+        },
+        ...fetchOpts
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      throw new Error(`Error while requesting the role class permission: ${error}`);
     }
   }
 
@@ -227,6 +311,30 @@ export class PermissionService extends GenericService {
     }
   }
 
+  async setRoleInstancePermission(id: string | number, roleId: string | number,
+    permissionType: PermissionCollectionType, fetchOpts?: RequestInit): Promise<void> {
+    try {
+      const response = await fetch(`${this.basePath}/${id}/permissions/instance/role/${roleId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getCsrfTokenHeader(),
+          ...getBearerTokenHeader(this.keycloak)
+        },
+        body: JSON.stringify({
+          permission: permissionType
+        }),
+        ...fetchOpts
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error status: ${response.status}`);
+      }
+    } catch (error) {
+      throw new Error(`Error while adding the role instance permission: ${error}`);
+    }
+  }
+
   async setUserClassPermission(id: string | number, userId: string | number,
     permissionType: PermissionCollectionType, fetchOpts?: RequestInit): Promise<void> {
     try {
@@ -275,6 +383,30 @@ export class PermissionService extends GenericService {
     }
   }
 
+  async setRoleClassPermission(id: string | number, roleId: string | number,
+    permissionType: PermissionCollectionType, fetchOpts?: RequestInit): Promise<void> {
+    try {
+      const response = await fetch(`${this.basePath}/${id}/permissions/class/role/${roleId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getCsrfTokenHeader(),
+          ...getBearerTokenHeader(this.keycloak)
+        },
+        body: JSON.stringify({
+          permission: permissionType
+        }),
+        ...fetchOpts
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error status: ${response.status}`);
+      }
+    } catch (error) {
+      throw new Error(`Error while adding the role class permission: ${error}`);
+    }
+  }
+
   async deleteUserInstancePermission(id: string | number, userId: string | number,
     fetchOpts?: RequestInit): Promise<void> {
     try {
@@ -312,6 +444,26 @@ export class PermissionService extends GenericService {
       }
     } catch (error) {
       throw new Error(`Error while removing the group instance permission: ${error}`);
+    }
+  }
+
+  async deleteRoleInstancePermission(id: string | number, roleId: string | number,
+    fetchOpts?: RequestInit): Promise<void> {
+    try {
+      const response = await fetch(`${this.basePath}/${id}/permissions/instance/role/${roleId}`, {
+        method: 'DELETE',
+        headers: {
+          ...getCsrfTokenHeader(),
+          ...getBearerTokenHeader(this.keycloak)
+        },
+        ...fetchOpts
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error status: ${response.status}`);
+      }
+    } catch (error) {
+      throw new Error(`Error while removing the role instance permission: ${error}`);
     }
   }
 
@@ -355,6 +507,26 @@ export class PermissionService extends GenericService {
     }
   }
 
+  async deleteRoleClassPermission(id: string | number, roleId: string | number,
+    fetchOpts?: RequestInit): Promise<void> {
+    try {
+      const response = await fetch(`${this.basePath}/${id}/permissions/class/role/${roleId}`, {
+        method: 'DELETE',
+        headers: {
+          ...getCsrfTokenHeader(),
+          ...getBearerTokenHeader(this.keycloak)
+        },
+        ...fetchOpts
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error status: ${response.status}`);
+      }
+    } catch (error) {
+      throw new Error(`Error while removing the role class permission: ${error}`);
+    }
+  }
+
   async deleteUserInstancePermissions(id: string | number, fetchOpts?: RequestInit): Promise<void> {
     try {
       const response = await fetch(`${this.basePath}/${id}/permissions/instance/user`, {
@@ -393,6 +565,25 @@ export class PermissionService extends GenericService {
     }
   }
 
+  async deleteRoleInstancePermissions(id: string | number, fetchOpts?: RequestInit): Promise<void> {
+    try {
+      const response = await fetch(`${this.basePath}/${id}/permissions/instance/role`, {
+        method: 'DELETE',
+        headers: {
+          ...getCsrfTokenHeader(),
+          ...getBearerTokenHeader(this.keycloak)
+        },
+        ...fetchOpts
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error status: ${response.status}`);
+      }
+    } catch (error) {
+      throw new Error(`Error while removing all role instance permissions: ${error}`);
+    }
+  }
+
   async deleteUserClassPermissions(id: string | number, fetchOpts?: RequestInit): Promise<void> {
     try {
       const response = await fetch(`${this.basePath}/${id}/permissions/class/user`, {
@@ -428,6 +619,25 @@ export class PermissionService extends GenericService {
       }
     } catch (error) {
       throw new Error(`Error while removing all group class permissions: ${error}`);
+    }
+  }
+
+  async deleteRoleClassPermissions(id: string | number, fetchOpts?: RequestInit): Promise<void> {
+    try {
+      const response = await fetch(`${this.basePath}/${id}/permissions/class/role`, {
+        method: 'DELETE',
+        headers: {
+          ...getCsrfTokenHeader(),
+          ...getBearerTokenHeader(this.keycloak)
+        },
+        ...fetchOpts
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error status: ${response.status}`);
+      }
+    } catch (error) {
+      throw new Error(`Error while removing all role class permissions: ${error}`);
     }
   }
 

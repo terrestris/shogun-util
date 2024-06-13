@@ -13,6 +13,7 @@ import GroupService from './GroupService';
 import ImageFileService from './ImageFileService';
 import LayerService from './LayerService';
 import OpenAPIService from './OpenAPIService';
+import RoleService from './RoleService';
 import SHOGunAPIClient from './SHOGunAPIClient';
 import UserService from './UserService';
 
@@ -64,6 +65,7 @@ describe('SHOGunAPIClient', () => {
     expect(client.info() instanceof AppInfoService).toBeTruthy();
     expect(client.layer() instanceof LayerService).toBeTruthy();
     expect(client.user() instanceof UserService).toBeTruthy();
+    expect(client.role() instanceof RoleService).toBeTruthy();
     expect(client.group() instanceof GroupService).toBeTruthy();
     expect(client.cache() instanceof CacheService).toBeTruthy();
     expect(client.file() instanceof FileService).toBeTruthy();
