@@ -1,3 +1,15 @@
+# [8.4.0](https://github.com/terrestris/shogun-util/compare/v8.3.3...v8.4.0) (2024-06-13)
+
+
+### Bug Fixes
+
+* refine type ([fff6165](https://github.com/terrestris/shogun-util/commit/fff616582c93f92790642c9eada50c04d1264a17))
+
+
+### Features
+
+* init role / roleclasspermission / roleisntancepermission models ([0667bd5](https://github.com/terrestris/shogun-util/commit/0667bd5516d620a3686c60706d5dda7d45bbd2f0))
+
 ## [8.3.3](https://github.com/terrestris/shogun-util/compare/v8.3.2...v8.3.3) (2024-06-13)
 
 
