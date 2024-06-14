@@ -1,3 +1,10 @@
+# [8.5.0](https://github.com/terrestris/shogun-util/compare/v8.4.0...v8.5.0) (2024-06-14)
+
+
+### Features
+
+* add print app ([64800fa](https://github.com/terrestris/shogun-util/commit/64800fa253cfcc39a9f3c16bc29e0cf46074de75))
+
 # [8.4.0](https://github.com/terrestris/shogun-util/compare/v8.3.3...v8.4.0) (2024-06-13)
 
 
