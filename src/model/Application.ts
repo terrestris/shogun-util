@@ -63,6 +63,7 @@ export interface DefaultApplicationClientConfig<
   legal?: LegalConfig;
   theme?: ApplicationTheme;
   defaultLanguage?: string;
+  printApp?: string;
 }
 
 export interface ApplicationArgs<
