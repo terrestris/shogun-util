@@ -54,7 +54,7 @@
     "@terrestris/ol-util": "^19.0.0",
     "@types/geojson": "^7946.0.14",
     "@types/jest": "^29.5.12",
-    "@types/lodash": "^4.17.5",
+    "@types/lodash": "^4.17.6",
     "eslint": "^8.57.0",
     "eslint-plugin-simple-import-sort": "^12.1.0",
     "husky": "^9.0.11",
