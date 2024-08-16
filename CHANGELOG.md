@@ -1,3 +1,11 @@
+## [8.5.1](https://github.com/terrestris/shogun-util/compare/v8.5.0...v8.5.1) (2024-08-16)
+
+
+### Bug Fixes
+
+* husky install is not valid anymore ([6fb0eb8](https://github.com/terrestris/shogun-util/commit/6fb0eb833c816b6ffbf6161dcb5bf6a92697dec6))
+* set correct node version ([6403876](https://github.com/terrestris/shogun-util/commit/64038767f13c6bbc9b54a946a181106491efe833))
+
 # [8.5.0](https://github.com/terrestris/shogun-util/compare/v8.4.0...v8.5.0) (2024-06-14)
 
 
