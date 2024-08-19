@@ -47,7 +47,10 @@ export interface SHOGunApplicationUtilOpts {
   client?: SHOGunAPIClient;
 }
 
-class SHOGunApplicationUtil<T extends Application, S extends Layer> {
+class SHOGunApplicationUtil<
+  T extends Application,
+  S extends Layer
+> {
 
   private readonly client: SHOGunAPIClient | undefined;
 

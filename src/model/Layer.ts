@@ -59,37 +59,43 @@ export interface SearchConfig {
 }
 
 export interface DefaultLayerClientConfig {
-  minResolution?: number;
-  maxResolution?: number;
-  hoverable?: boolean;
-  searchable?: boolean;
-  searchConfig?: SearchConfig;
-  propertyConfig?: DefaultLayerPropertyConfig[];
-  featureInfoFormConfig?: PropertyFormTabConfig<PropertyFormItemReadConfig>[];
+  crossOrigin?: string;
+  downloadConfig?: DownloadConfig[];
   editFormConfig?: PropertyFormTabConfig<PropertyFormItemEditDefaultConfig |
     PropertyFormItemEditReferenceTableConfig>[];
-  crossOrigin?: string;
-  opacity?: number;
-  downloadConfig?: DownloadConfig[];
   editable?: boolean;
+  featureInfoFormConfig?: PropertyFormTabConfig<PropertyFormItemReadConfig>[];
+  hoverable?: boolean;
+  maxResolution?: number;
+  minResolution?: number;
+  opacity?: number;
+  propertyConfig?: DefaultLayerPropertyConfig[];
+  searchConfig?: SearchConfig;
+  searchable?: boolean;
 }
 
-export interface LayerArgs extends BaseEntityArgs {
+export interface LayerArgs<
+  D extends DefaultLayerClientConfig,
+  S extends DefaultLayerSourceConfig
+> extends BaseEntityArgs {
   name: string;
-  clientConfig?: DefaultLayerClientConfig;
-  sourceConfig: DefaultLayerSourceConfig;
+  clientConfig?: D;
+  sourceConfig: S;
   features?: FeatureCollection;
   type: LayerType;
 }
 
-export default class Layer extends BaseEntity {
+export default class Layer<
+  D extends DefaultLayerClientConfig = DefaultLayerClientConfig,
+  S extends DefaultLayerSourceConfig = DefaultLayerSourceConfig,
+> extends BaseEntity {
   name: string;
-  clientConfig?: DefaultLayerClientConfig;
-  sourceConfig: DefaultLayerSourceConfig;
+  clientConfig?: D;
+  sourceConfig: S;
   features?: FeatureCollection;
   type: LayerType;
 
-  constructor({id, created, modified, clientConfig, features, name, sourceConfig, type}: LayerArgs) {
+  constructor({id, created, modified, clientConfig, features, name, sourceConfig, type}: LayerArgs<D, S>) {
     super({id, created, modified});
 
     this.name = name;
