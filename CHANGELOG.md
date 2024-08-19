@@ -1,3 +1,10 @@
+# [8.6.0](https://github.com/terrestris/shogun-util/compare/v8.5.1...v8.6.0) (2024-08-19)
+
+
+### Features
+
+* **layer:** use generics for source and client config ([0970dd2](https://github.com/terrestris/shogun-util/commit/0970dd28764b5093c2eceee285fbac6a52f61536))
+
 ## [8.5.1](https://github.com/terrestris/shogun-util/compare/v8.5.0...v8.5.1) (2024-08-16)
 
 
