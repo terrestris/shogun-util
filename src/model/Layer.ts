@@ -19,6 +19,7 @@ export interface DefaultLayerSourceConfig {
   matrixSet?: string;
   requestParams?: DefaultRequestParams;
   useBearerToken?: boolean;
+  wmtsDimensions?: Record<string, string>;
 }
 
 export interface DefaultLayerPropertyConfig {
