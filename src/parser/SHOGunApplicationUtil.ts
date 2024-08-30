@@ -369,7 +369,8 @@ class SHOGunApplicationUtil<
       attribution,
       url,
       layerNames,
-      matrixSet
+      matrixSet,
+      wmtsDimensions
     } = layer.sourceConfig || {};
 
     const {
@@ -432,6 +433,16 @@ class SHOGunApplicationUtil<
       matrixSizes[zoomLevel] = tileGrid.getFullTileRange(zoomLevel)?.getSize();
       origins[zoomLevel] = tileGrid.getOrigin(zoomLevel);
       tileSizes[zoomLevel] = tileGrid.getTileSize(zoomLevel);
+    }
+
+    if (wmtsDimensions) {
+      for (const [key, value] of Object.entries(wmtsDimensions)) {
+        if (!options?.dimensions?.[key]) {
+          throw new Error(`Layer has wmtsDimension ${key} configured but the capabilities of the layer only offer ` +
+            `dimensions ${Object.keys(options?.dimensions).join(', ')}.`);
+        }
+        options.dimensions[key] = value;
+      }
     }
 
     const source = new OlSourceWMTS({
