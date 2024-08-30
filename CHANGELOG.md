@@ -1,3 +1,10 @@
+# [8.7.0](https://github.com/terrestris/shogun-util/compare/v8.6.0...v8.7.0) (2024-08-30)
+
+
+### Features
+
+* adds time dimension parameter for wmts layers ([e0731dd](https://github.com/terrestris/shogun-util/commit/e0731dddaeca62c63b23a603a0963f902b5e4840))
+
 # [8.6.0](https://github.com/terrestris/shogun-util/compare/v8.5.1...v8.6.0) (2024-08-19)
 
 
