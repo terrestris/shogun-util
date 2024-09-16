@@ -1,3 +1,10 @@
+# [8.8.0](https://github.com/terrestris/shogun-util/compare/v8.7.0...v8.8.0) (2024-09-16)
+
+
+### Features
+
+* adds an additional propertyConfig ([af99421](https://github.com/terrestris/shogun-util/commit/af9942136d2e9e0940b5618c8278912d88d4406d))
+
 # [8.7.0](https://github.com/terrestris/shogun-util/compare/v8.6.0...v8.7.0) (2024-08-30)
 
 
