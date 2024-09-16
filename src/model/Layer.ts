@@ -24,7 +24,6 @@ export interface DefaultLayerSourceConfig {
 
 export interface DefaultLayerPropertyConfig {
   propertyName: string;
-  placeholder?: string;
   displayName?: string;
 }
 

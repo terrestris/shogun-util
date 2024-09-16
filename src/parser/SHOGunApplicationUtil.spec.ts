@@ -124,7 +124,6 @@ describe('SHOGunApplicationUtil', () => {
         minResolution: 1909,
         propertyConfig: [{
           propertyName: 'ID',
-          placeholder: 'link',
           displayName: 'id'
         }],
         downloadConfig: [{
