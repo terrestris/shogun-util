@@ -33,6 +33,7 @@ import OlSourceXYZ, {
 import OlTile from 'ol/Tile';
 import OlTileGrid from 'ol/tilegrid/TileGrid';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
+import OlTileState from 'ol/TileState';
 import OlView, { ViewOptions as OlViewOptions } from 'ol/View';
 
 import {
@@ -53,8 +54,6 @@ class SHOGunApplicationUtil<
 > {
 
   private readonly client: SHOGunAPIClient | undefined;
-
-  private readonly objectUrls: Record<string, string> = {};
 
   constructor(opts?: SHOGunApplicationUtilOpts) {
     // TODO Default client?
@@ -733,9 +732,6 @@ class SHOGunApplicationUtil<
 
   private async bearerTokenLoadFunction(imageTile: OlTile | OlImage, src: string, useBearerToken: boolean = false) {
     try {
-      if (this.objectUrls[src]) {
-        URL.revokeObjectURL(this.objectUrls[src]);
-      }
       const response = await fetch(src, {
         headers: useBearerToken ? {
           ...getBearerTokenHeader(this.client?.getKeycloak())
@@ -745,14 +741,23 @@ class SHOGunApplicationUtil<
       const imageElement = (imageTile as OlImageTile).getImage() as HTMLImageElement;
 
       if (!response.ok) {
-        imageElement.src = src;
-        return;
+        throw new Error(`No successful response: ${response.status}`);
       }
 
-      this.objectUrls[src] = URL.createObjectURL(await response.blob());
-      imageElement.src = this.objectUrls[src];
+      const blob = await response.blob();
+
+      if (!/image\/*/.test(blob.type)) {
+        throw new Error(`Unexpected format ${blob.type} returned`);
+      }
+
+      imageElement.src = URL.createObjectURL(blob);
+
+      imageElement.onload = () => {
+        URL.revokeObjectURL(src);
+      };
     } catch (error) {
-      Logger.error('Error while loading WMS: ', error);
+      Logger.error('Error while loading an image tile: ', error);
+      (imageTile as OlImageTile).setState(OlTileState.ERROR);
     }
   }
 }
