@@ -1,3 +1,10 @@
+## [8.8.1](https://github.com/terrestris/shogun-util/compare/v8.8.0...v8.8.1) (2024-09-18)
+
+
+### Bug Fixes
+
+* remove unneeded property ([7919619](https://github.com/terrestris/shogun-util/commit/7919619ac25c544bfab632bf8be6c7ee1c11852b))
+
 # [8.8.0](https://github.com/terrestris/shogun-util/compare/v8.7.0...v8.8.0) (2024-09-16)
 
 
