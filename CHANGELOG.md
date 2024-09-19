@@ -1,3 +1,10 @@
+## [8.8.2](https://github.com/terrestris/shogun-util/compare/v8.8.1...v8.8.2) (2024-09-19)
+
+
+### Bug Fixes
+
+* correctly set the tile state on error ([019ae24](https://github.com/terrestris/shogun-util/commit/019ae24e0410fc7f5437f63d40c20e512c600699))
+
 ## [8.8.1](https://github.com/terrestris/shogun-util/compare/v8.8.0...v8.8.1) (2024-09-18)
 
 
