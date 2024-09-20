@@ -1,3 +1,15 @@
+# [9.0.0](https://github.com/terrestris/shogun-util/compare/v8.8.2...v9.0.0) (2024-09-20)
+
+
+### chore
+
+* update ol ([4c54d11](https://github.com/terrestris/shogun-util/commit/4c54d11ed6b912625c67ab568abf0ef6d0edb90a))
+
+
+### BREAKING CHANGES
+
+* required peer dependency for ol is >= 10
+
 ## [8.8.2](https://github.com/terrestris/shogun-util/compare/v8.8.1...v8.8.2) (2024-09-19)
 
 
