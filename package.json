@@ -55,7 +55,7 @@
     "@types/geojson": "^7946.0.14",
     "@types/jest": "^29.5.13",
     "@types/lodash": "^4.17.7",
-    "chokidar": "^4.0.0",
+    "chokidar": "^4.0.1",
     "eslint": "^8.57.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "husky": "^9.1.6",
