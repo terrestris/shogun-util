@@ -1,3 +1,10 @@
+## [9.0.1](https://github.com/terrestris/shogun-util/compare/v9.0.0...v9.0.1) (2024-09-23)
+
+
+### Bug Fixes
+
+* update ol-util ([15074fa](https://github.com/terrestris/shogun-util/commit/15074faad98e9b25b475cb09fdf4e6591d220d5f))
+
 # [9.0.0](https://github.com/terrestris/shogun-util/compare/v8.8.2...v9.0.0) (2024-09-20)
 
 
