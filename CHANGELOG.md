@@ -1,3 +1,10 @@
+# [9.1.0](https://github.com/terrestris/shogun-util/compare/v9.0.1...v9.1.0) (2024-10-09)
+
+
+### Features
+
+* introduce allLayers query ([4df6bdd](https://github.com/terrestris/shogun-util/commit/4df6bddd5ad9625b7e15b2af4823d423596ea5df))
+
 ## [9.0.1](https://github.com/terrestris/shogun-util/compare/v9.0.0...v9.0.1) (2024-09-23)
 
 
