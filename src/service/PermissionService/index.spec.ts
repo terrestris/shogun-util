@@ -15,7 +15,11 @@ describe('PermissionService', () => {
   let service: PermissionService;
 
   beforeEach(() => {
-    const keycloak: Keycloak = new Keycloak();
+    const keycloak: Keycloak = new Keycloak({
+      clientId: 'EXAMPLE',
+      realm: 'EXAMPLE',
+      url: 'https://example.com/auth'
+    });
     keycloak.token = 'ThisIsNotAValidBearerToken';
 
     service = new PermissionService({
