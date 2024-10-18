@@ -11,7 +11,7 @@ module.exports = {
   },
   transformIgnorePatterns: [
     '<rootDir>/node_modules/(?!(ol|@babel|jest-runtime|@terrestris|color-*|query-string|' +
-    'decode-uri-component|split-on-first|filter-obj|geostyler-openlayers-parser|geostyler-style))'
+    'decode-uri-component|split-on-first|filter-obj|geostyler-openlayers-parser|geostyler-style|keycloak-js))'
   ],
   testRegex: '/src/.*\\.spec.(ts|js)$',
   collectCoverageFrom: [
