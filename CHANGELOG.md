@@ -1,3 +1,10 @@
+## [9.1.1](https://github.com/terrestris/shogun-util/compare/v9.1.0...v9.1.1) (2024-10-18)
+
+
+### Bug Fixes
+
+* adjust tsconfig and tests to keycloak-js update ([62715fc](https://github.com/terrestris/shogun-util/commit/62715fc26961cd5a6fb767e1fd97e1648973a53f))
+
 # [9.1.0](https://github.com/terrestris/shogun-util/compare/v9.0.1...v9.1.0) (2024-10-09)
 
 
