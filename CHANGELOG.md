@@ -1,3 +1,15 @@
+# [10.0.0](https://github.com/terrestris/shogun-util/compare/v9.1.1...v10.0.0) (2024-10-21)
+
+
+### chore
+
+* upgrade eslint to v9 ([d32065d](https://github.com/terrestris/shogun-util/commit/d32065d347437e5f974f9fa81ad54e9cd369de48))
+
+
+### BREAKING CHANGES
+
+* eslint upgrade to v9
+
 ## [9.1.1](https://github.com/terrestris/shogun-util/compare/v9.1.0...v9.1.1) (2024-10-18)
 
 
