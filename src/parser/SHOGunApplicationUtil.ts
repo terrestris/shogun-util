@@ -1,8 +1,3 @@
-import Logger from '@terrestris/base-util/dist/Logger';
-import { UrlUtil } from '@terrestris/base-util/dist/UrlUtil/UrlUtil';
-import CapabilitiesUtil from '@terrestris/ol-util/dist/CapabilitiesUtil/CapabilitiesUtil';
-import { MapUtil } from '@terrestris/ol-util/dist/MapUtil/MapUtil';
-import ProjectionUtil, { defaultProj4CrsDefinitions } from '@terrestris/ol-util/dist/ProjectionUtil/ProjectionUtil';
 import _uniqueBy from 'lodash/uniqBy';
 import { Extent as OlExtent } from 'ol/extent';
 import OlFeature from 'ol/Feature';
@@ -35,6 +30,12 @@ import OlTileGrid from 'ol/tilegrid/TileGrid';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlTileState from 'ol/TileState';
 import OlView, { ViewOptions as OlViewOptions } from 'ol/View';
+
+import Logger from '@terrestris/base-util/dist/Logger';
+import { UrlUtil } from '@terrestris/base-util/dist/UrlUtil/UrlUtil';
+import CapabilitiesUtil from '@terrestris/ol-util/dist/CapabilitiesUtil/CapabilitiesUtil';
+import { MapUtil } from '@terrestris/ol-util/dist/MapUtil/MapUtil';
+import ProjectionUtil, { defaultProj4CrsDefinitions } from '@terrestris/ol-util/dist/ProjectionUtil/ProjectionUtil';
 
 import {
   allLayersByIds
@@ -140,7 +141,7 @@ class SHOGunApplicationUtil<
       return;
     }
 
-    let layerIds: number[] = this.getLayerIds(layerTree.children);
+    const layerIds: number[] = this.getLayerIds(layerTree.children);
 
     if (!this.client) {
       Logger.warn('Cannot fetch the layers in layertree because no ' +
@@ -170,7 +171,7 @@ class SHOGunApplicationUtil<
   }
 
   getLayerIds(nodes: DefaultLayerTree[], ids?: number[]) {
-    let layerIds: number[] = ids ?? [];
+    const layerIds: number[] = ids ?? [];
 
     for (const node of nodes) {
       if (node.children?.length > 0) {
@@ -700,7 +701,7 @@ class SHOGunApplicationUtil<
     projection: OlProjectionLike;
     success?: (features: OlFeature<OlGeometry>[]) => void;
     failure?: () => void;
-  }, useBearerToken: boolean = false) {
+  }, useBearerToken = false) {
     try {
       const params = UrlUtil.objectToRequestString({
         SERVICE: 'WFS',
@@ -741,7 +742,7 @@ class SHOGunApplicationUtil<
     }
   }
 
-  private async bearerTokenLoadFunction(imageTile: OlTile | OlImage, src: string, useBearerToken: boolean = false) {
+  private async bearerTokenLoadFunction(imageTile: OlTile | OlImage, src: string, useBearerToken = false) {
     try {
       const response = await fetch(src, {
         headers: useBearerToken ? {

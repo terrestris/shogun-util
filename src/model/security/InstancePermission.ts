@@ -1,4 +1,5 @@
 import BaseEntity, { BaseEntityArgs } from '../BaseEntity';
+
 import PermissionCollection from './PermissionCollection';
 
 export interface InstancePermissionArgs extends BaseEntityArgs {

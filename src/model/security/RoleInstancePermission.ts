@@ -1,4 +1,5 @@
 import Role from '../Role';
+
 import InstancePermission, { InstancePermissionArgs } from './InstancePermission';
 
 export interface RoleInstancePermissionArgs extends InstancePermissionArgs {

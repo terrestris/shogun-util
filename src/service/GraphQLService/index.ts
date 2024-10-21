@@ -4,15 +4,11 @@ import { GenericService, GenericServiceOpts } from '../GenericService';
 
 export interface GraphQLQueryObject {
   query: string;
-  variables?: {
-    [key: string]: any;
-  };
+  variables?: Record<string, any>;
 }
 
 export interface GraphQLResponse<T> {
-  data: {
-    [key: string]: T;
-  };
+  data: Record<string, T>;
   errors?: any;
 }
 
@@ -26,7 +22,7 @@ export class GraphQLService extends GenericService {
     super(opts);
   }
 
-  async sendQuery<T>(query: GraphQLQueryObject, fetchOpts?: RequestInit): Promise<{[key: string]: T}> {
+  async sendQuery<T>(query: GraphQLQueryObject, fetchOpts?: RequestInit): Promise<Record<string, T>> {
     try {
       const response = await fetch(this.basePath, {
         method: 'POST',
