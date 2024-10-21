@@ -47,27 +47,19 @@ export interface KeycloakUserRepresentation extends ProviderUserDetails {
   email?: string;
   federationLink?: string;
   serviceAccountClientId?: string;
-  attributes?: {
-    [key: string]: string[];
-  };
+  attributes?: Record<string, string[]>;
   credentials?: KeycloakCredentialRepresentation[];
   disableableCredentialTypes?: string[];
   requiredActions?: string[];
   federatedIdentities?: KeycloakFederatedIdentityRepresentation[];
   realmRoles?: string[];
-  clientRoles?: {
-    [key: string]: string[];
-  };
+  clientRoles?: Record<string, string[]>;
   clientConsents?: KeycloakUserConsentRepresentation[];
   notBefore?: number;
-  applicationRoles?: {
-    [key: string]: string[];
-  };
+  applicationRoles?: Record<string, string[]>;
   socialLinks?: KeycloakSocialLinkRepresentation[];
   groups?: string[];
-  access?: {
-    [key: string]: boolean;
-  };
+  access?: Record<string, boolean>;
 }
 
 export interface UserArgs<T extends ProviderUserDetails = KeycloakUserRepresentation> extends BaseEntityArgs {

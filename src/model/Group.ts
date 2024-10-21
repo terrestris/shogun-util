@@ -6,17 +6,11 @@ export interface KeycloakGroupRepresentation extends ProviderGroupDetails {
   id?: string;
   name?: string;
   path?: string;
-  attributes?: {
-    [key: string]: string[];
-  };
+  attributes?: Record<string, string[]>;
   realmRoles?: string[];
-  clientRoles?: {
-    [key: string]: string[];
-  };
+  clientRoles?: Record<string, string[]>;
   subGroups?: KeycloakGroupRepresentation[];
-  access?: {
-    [key: string]: boolean;
-  };
+  access?: Record<string, boolean>;
 }
 
 export interface GroupArgs<T extends ProviderGroupDetails = KeycloakGroupRepresentation> extends BaseEntityArgs {

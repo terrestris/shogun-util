@@ -7,6 +7,7 @@ import ImageFile from '../model/ImageFile';
 import Layer from '../model/Layer';
 import Role, { ProviderRoleDetails } from '../model/Role';
 import User, { ProviderUserDetails } from '../model/User';
+
 import AppInfoService from './AppInfoService';
 import ApplicationService from './ApplicationService';
 import AuthService from './AuthService';

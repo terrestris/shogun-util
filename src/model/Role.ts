@@ -4,12 +4,8 @@ export interface ProviderRoleDetails {}
 
 export interface KeycloakRoleComposites {
   realm?: string[];
-  client?: {
-    [key: string]: string[];
-  };
-  application?: {
-    [key: string]: string[];
-  };
+  client?: Record<string, string[]>;
+  application?: Record<string, string[]>;
 }
 
 export interface KeycloakRoleRepresentation extends ProviderRoleDetails {
@@ -21,9 +17,7 @@ export interface KeycloakRoleRepresentation extends ProviderRoleDetails {
   composites?: KeycloakRoleComposites;
   clientRole?: boolean;
   containerId?: string;
-  attributes?: {
-    [key: string]: string[];
-  };
+  attributes?: Record<string, string[]>;
 }
 
 export interface RoleArgs<T extends ProviderRoleDetails = KeycloakRoleRepresentation> extends BaseEntityArgs {

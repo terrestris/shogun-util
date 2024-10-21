@@ -1,4 +1,5 @@
 import Group from '../Group';
+
 import InstancePermission, { InstancePermissionArgs } from './InstancePermission';
 
 export interface GroupInstancePermissionArgs extends InstancePermissionArgs {

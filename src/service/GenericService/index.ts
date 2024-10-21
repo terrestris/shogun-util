@@ -1,21 +1,22 @@
-import { UrlUtil } from '@terrestris/base-util';
 import Keycloak from 'keycloak-js';
 
-export type PageSorter = {
+import { UrlUtil } from '@terrestris/base-util';
+
+export interface PageSorter {
   properties: string[];
   order?: 'asc' | 'desc';
-};
+}
 
-export type PageOpts = {
+export interface PageOpts {
   page?: number;
   size?: number;
   sort?: PageSorter;
-};
+}
 
-export type GenericServiceOpts = {
+export interface GenericServiceOpts {
   basePath: string;
   keycloak?: Keycloak;
-};
+}
 
 export abstract class GenericService {
 

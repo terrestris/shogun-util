@@ -1,7 +1,7 @@
 import Keycloak from 'keycloak-js';
 
 export const getBearerTokenHeader = (keycloak?: Keycloak): Record<string, string> => {
-  let accessToken = keycloak?.token;
+  const accessToken = keycloak?.token;
 
   if (!accessToken) {
     return {};

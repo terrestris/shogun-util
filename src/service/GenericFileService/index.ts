@@ -52,7 +52,7 @@ export abstract class GenericFileService<T extends SHOGunFile> extends GenericSe
     }
   }
 
-  async upload(file: File, fileSystem: boolean = false, fetchOpts?: RequestInit): Promise<T> {
+  async upload(file: File, fileSystem = false, fetchOpts?: RequestInit): Promise<T> {
     try {
       const formData  = new FormData();
 

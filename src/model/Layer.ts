@@ -4,9 +4,7 @@ import BaseEntity, { BaseEntityArgs } from './BaseEntity';
 import EditFormComponentType from './enum/EditFormComponentType';
 import LayerType from './enum/LayerType';
 
-export interface DefaultRequestParams {
-  [key: string]: string | number | boolean;
-}
+export type DefaultRequestParams = Record<string, string | number | boolean>;
 
 export interface DefaultLayerSourceConfig {
   url: string;
