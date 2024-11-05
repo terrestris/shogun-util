@@ -1,3 +1,12 @@
+## [10.0.1](https://github.com/terrestris/shogun-util/compare/v10.0.0...v10.0.1) (2024-11-05)
+
+
+### Bug Fixes
+
+* improve graphql error handling ([611f453](https://github.com/terrestris/shogun-util/commit/611f453261ece2d9c676e96a95b804777e7cd394))
+* linting ([b428d00](https://github.com/terrestris/shogun-util/commit/b428d008eae66f0b704bfaf7b89985e1e4394b1a))
+* linting issues ([55ef916](https://github.com/terrestris/shogun-util/commit/55ef91622a1bb705123958c2a71245c998946e48))
+
 # [10.0.0](https://github.com/terrestris/shogun-util/compare/v9.1.1...v10.0.0) (2024-10-21)
 
 
