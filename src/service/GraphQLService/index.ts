@@ -42,7 +42,7 @@ export class GraphQLService extends GenericService {
       const {data, errors } = await response.json() as GraphQLResponse<T>;
 
       if (errors?.length > 0) {
-        throw new Error(`GraphQL error: ${JSON.stringify(errors, null, "\t")}`);
+        throw new Error(`GraphQL error: ${JSON.stringify(errors, null, '\t')}`);
       }
 
       return data;
