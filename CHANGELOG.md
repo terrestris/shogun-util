@@ -1,3 +1,10 @@
+# [10.1.0](https://github.com/terrestris/shogun-util/compare/v10.0.1...v10.1.0) (2024-11-08)
+
+
+### Features
+
+* adds method to parse map interactions ([3c79d85](https://github.com/terrestris/shogun-util/commit/3c79d85a44446af646a9a61b09a4112bf1c27108))
+
 ## [10.0.1](https://github.com/terrestris/shogun-util/compare/v10.0.0...v10.0.1) (2024-11-05)
 
 
