@@ -10,6 +10,18 @@ import {
   DefaultLayerSourceConfig
 } from './Layer';
 
+export type MapInteraction = 'DragRotate' |
+'DragRotateAndZoom' |
+'DblClickDragZoom' |
+'DoubleClickZoom' |
+'DragPan' |
+'PinchRotate' |
+'PinchZoom' |
+'KeyboardPan' |
+'KeyboardZoom' |
+'MouseWheelZoom' |
+'DragZoom';
+
 export interface DefaultApplicationTheme {
   primaryColor?: string;
   secondaryColor?: string;
@@ -59,6 +71,7 @@ export interface DefaultApplicationClientConfig<
   ApplicationTheme extends DefaultApplicationTheme = DefaultApplicationTheme
 > {
   mapView: MapView;
+  mapInteractions?: MapInteraction[];
   description?: string;
   legal?: LegalConfig;
   theme?: ApplicationTheme;

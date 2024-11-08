@@ -8,12 +8,19 @@ import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlSourceVector from 'ol/source/Vector';
 import OlSourceXYZ from 'ol/source/XYZ';
 import OlTileGrid from 'ol/tilegrid/TileGrid';
+import OlCollection from 'ol/Collection';
+import OlInteraction from 'ol/interaction/Interaction';
+import OlDragPan from 'ol/interaction/DragPan';
+import OlDoubleClickZoom from 'ol/interaction/DoubleClickZoom';
 import { getUid } from 'ol/util';
+import { defaults as DefaultInteractions } from 'ol/interaction/defaults'
+import Logger from '@terrestris/base-util/dist/Logger';
 
 import Application, { DefaultLayerTree } from '../model/Application';
 import Layer from '../model/Layer';
 import SHOGunAPIClient from '../service/SHOGunAPIClient';
 import SHOGunApplicationUtil from './SHOGunApplicationUtil';
+import { omit } from 'lodash';
 
 describe('SHOGunApplicationUtil', () => {
   let util: SHOGunApplicationUtil<Application, Layer>;
@@ -330,6 +337,62 @@ describe('SHOGunApplicationUtil', () => {
     expected.getSource().ol_uid = getUid(layer.getSource());
 
     expect(JSON.stringify(layer)).toEqual(JSON.stringify(expected));
+  });
+
+  describe('parseMapInteractions', () => {
+
+    it('returns the default interactions if no interactions are configured', async () => {
+      const defaultInteractions = DefaultInteractions();
+      const interactions = await util.parseMapInteractions({}) as OlCollection<OlInteraction>;
+      const interactionsArray = interactions.getArray();
+      expect(interactions).toBeDefined();
+      expect(interactionsArray).toHaveLength(defaultInteractions.getLength());
+
+      interactionsArray.forEach((interaction, index) => {
+        const got = omit(interaction, 'ol_uid');
+        const tar = omit(defaultInteractions.item(index), 'ol_uid');
+        expect(interaction).toBeInstanceOf(OlInteraction);
+        expect(JSON.stringify(got)).toEqual(JSON.stringify(tar));
+      });
+    });
+
+    it('returns the configured interactions if interactions are configured', async () => {
+      const interactions = await util.parseMapInteractions({
+        clientConfig: {
+          mapView: {},
+          mapInteractions: [
+            'DragPan',
+            'DoubleClickZoom'
+          ]
+        }
+      }) as OlInteraction[];
+
+      expect(interactions).toBeDefined();
+      expect(interactions).toHaveLength(2);
+      expect(interactions[0]).toBeInstanceOf(OlDragPan);
+      expect(interactions[1]).toBeInstanceOf(OlDoubleClickZoom);
+    });
+
+    it('filters invalid interactions and logs a warning', async () => {
+      const consoleError = jest.spyOn(Logger, 'warn').mockImplementation(() => {});
+      const interactions = await util.parseMapInteractions({
+        clientConfig: {
+          mapView: {},
+          mapInteractions: [
+            'DragPan',
+            // @ts-ignore
+            'InvalidInteraction'
+          ]
+        }
+      }) as OlInteraction[];
+
+      expect(interactions).toBeDefined();
+      expect(interactions).toHaveLength(1);
+      expect(interactions[0]).toBeInstanceOf(OlDragPan);
+      expect(consoleError).toHaveBeenCalled();
+    });
+
+
   });
 
 });

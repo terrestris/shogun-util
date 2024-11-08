@@ -1,4 +1,5 @@
 import _uniqueBy from 'lodash/uniqBy';
+import OlCollection from 'ol/Collection';
 import { Extent as OlExtent } from 'ol/extent';
 import OlFeature from 'ol/Feature';
 import OlFormatGeoJSON from 'ol/format/GeoJSON';
@@ -6,11 +7,26 @@ import OlWMTSCapabilities from 'ol/format/WMTSCapabilities';
 import OlGeometry from 'ol/geom/Geometry';
 import OlImage from 'ol/Image';
 import OlImageTile from 'ol/ImageTile';
+import OlDblClickDragZoom from 'ol/interaction/DblClickDragZoom.js';
+import { defaults as DefaultInteractions } from 'ol/interaction/defaults';
+import OlDoubleClickZoom from 'ol/interaction/DoubleClickZoom';
+import OlDragPan from 'ol/interaction/DragPan';
+import OlDragRotate from 'ol/interaction/DragRotate';
+import OlDragRotateAndZoom from 'ol/interaction/DragRotateAndZoom';
+import OlDragZoom from 'ol/interaction/DragZoom';
+import OlInteraction from 'ol/interaction/Interaction';
+import OlKeyboardPan from 'ol/interaction/KeyboardPan';
+import OlKeyboardZoom from 'ol/interaction/KeyboardZoom';
+import OlMouseWheelZoom from 'ol/interaction/MouseWheelZoom';
+import OlPinchRotate from 'ol/interaction/PinchRotate';
+import OlPinchZoom from 'ol/interaction/PinchZoom';
+
 import OlLayerBase from 'ol/layer/Base';
 import OlLayerGroup from 'ol/layer/Group';
 import OlImageLayer from 'ol/layer/Image';
 import OlTileLayer from 'ol/layer/Tile';
 import OlLayerVector from 'ol/layer/Vector';
+
 import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
 import { fromLonLat, ProjectionLike as OlProjectionLike } from 'ol/proj';
 import { Units } from 'ol/proj/Units';
@@ -40,7 +56,7 @@ import { ProjectionUtil, defaultProj4CrsDefinitions } from '@terrestris/ol-util/
 import {
   allLayersByIds
 } from '../graphqlqueries/Layers';
-import Application, { DefaultLayerTree } from '../model/Application';
+import Application, { DefaultLayerTree, MapInteraction } from '../model/Application';
 import Layer from '../model/Layer';
 import { getBearerTokenHeader } from '../security/getBearerTokenHeader';
 import SHOGunAPIClient from '../service/SHOGunAPIClient';
@@ -132,6 +148,38 @@ class SHOGunApplicationUtil<
       }
     }
     return new OlLayerGroup();
+  }
+
+  async parseMapInteractions(application: T): Promise<OlInteraction[] | OlCollection<OlInteraction>> {
+    const interactions = application.clientConfig?.mapInteractions;
+
+    if (!interactions) {
+      return DefaultInteractions();
+    }
+
+    const classMap: Record<MapInteraction, any> = {
+      DragRotate: OlDragRotate,
+      DragRotateAndZoom: OlDragRotateAndZoom,
+      DblClickDragZoom: OlDblClickDragZoom,
+      DoubleClickZoom: OlDoubleClickZoom,
+      DragPan: OlDragPan,
+      PinchRotate: OlPinchRotate,
+      PinchZoom: OlPinchZoom,
+      KeyboardPan: OlKeyboardPan,
+      KeyboardZoom: OlKeyboardZoom,
+      MouseWheelZoom: OlMouseWheelZoom,
+      DragZoom: OlDragZoom
+    };
+
+    const olInteractions: OlInteraction[] = interactions.map((interaction: keyof typeof classMap) => {
+      const InteractionClass = classMap[interaction] as typeof OlInteraction;
+      if (InteractionClass) {
+        return new InteractionClass();
+      }
+      Logger.warn(`Interaction '${interaction}' not supported.`);
+    }).filter((interaction: OlInteraction | undefined) => interaction !== undefined) as OlInteraction[];
+
+    return olInteractions;
   }
 
   private async fetchLayers(application: T): Promise<S[]|undefined> {
