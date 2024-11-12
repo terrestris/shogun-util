@@ -1,3 +1,10 @@
+# [10.2.0](https://github.com/terrestris/shogun-util/compare/v10.1.0...v10.2.0) (2024-11-12)
+
+
+### Features
+
+* add service methods to create users, groups and roles from the provider ([75b0b58](https://github.com/terrestris/shogun-util/commit/75b0b586356403a5394c0288c5117a146a1ccccc))
+
 # [10.1.0](https://github.com/terrestris/shogun-util/compare/v10.0.1...v10.1.0) (2024-11-08)
 
 
