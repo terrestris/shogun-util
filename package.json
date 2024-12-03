@@ -61,7 +61,7 @@
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.13",
     "chokidar": "^4.0.1",
-    "eslint": "^9.15.0",
+    "eslint": "^9.16.0",
     "eslint-plugin-import": "^2.31.0",
     "globals": "^15.13.0",
     "husky": "^9.1.7",
