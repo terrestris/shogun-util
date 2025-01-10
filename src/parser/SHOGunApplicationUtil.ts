@@ -24,38 +24,33 @@ import OlPinchZoom from 'ol/interaction/PinchZoom';
 import OlLayerBase from 'ol/layer/Base';
 import OlLayerGroup from 'ol/layer/Group';
 import OlImageLayer from 'ol/layer/Image';
+import OlLayer from 'ol/layer/Layer';
 import OlTileLayer from 'ol/layer/Tile';
 import OlLayerVector from 'ol/layer/Vector';
 
 import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
-import { fromLonLat, ProjectionLike as OlProjectionLike } from 'ol/proj';
+import { fromLonLat, Projection as OlProjection, ProjectionLike as OlProjectionLike } from 'ol/proj';
 import { Units } from 'ol/proj/Units';
-import OlImageWMS, {
-  Options as OlImageWMSOptions
-} from 'ol/source/ImageWMS';
-import OlTileWMS, {
-  Options as OlTileWMSOptions
-} from 'ol/source/TileWMS';
+import OlImageWMS, { Options as OlImageWMSOptions } from 'ol/source/ImageWMS';
+import OlTileWMS, { Options as OlTileWMSOptions } from 'ol/source/TileWMS';
 import OlSourceVector from 'ol/source/Vector';
 import OlSourceWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
-import OlSourceXYZ, {
-  Options as OlSourceXYZOptions
-} from 'ol/source/XYZ';
+import OlSourceXYZ, { Options as OlSourceXYZOptions } from 'ol/source/XYZ';
 import OlTile from 'ol/Tile';
 import OlTileGrid from 'ol/tilegrid/TileGrid';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlTileState from 'ol/TileState';
 import OlView, { ViewOptions as OlViewOptions } from 'ol/View';
 
+import { apply as applyMapboxStyle } from 'ol-mapbox-style';
+
 import Logger from '@terrestris/base-util/dist/Logger';
 import { UrlUtil } from '@terrestris/base-util/dist/UrlUtil/UrlUtil';
 import CapabilitiesUtil from '@terrestris/ol-util/dist/CapabilitiesUtil/CapabilitiesUtil';
 import { MapUtil } from '@terrestris/ol-util/dist/MapUtil/MapUtil';
-import { ProjectionUtil, defaultProj4CrsDefinitions } from '@terrestris/ol-util/dist/ProjectionUtil/ProjectionUtil';
+import { defaultProj4CrsDefinitions, ProjectionUtil } from '@terrestris/ol-util/dist/ProjectionUtil/ProjectionUtil';
 
-import {
-  allLayersByIds
-} from '../graphqlqueries/Layers';
+import { allLayersByIds } from '../graphqlqueries/Layers';
 import Application, { DefaultLayerTree, MapInteraction } from '../model/Application';
 import Layer from '../model/Layer';
 import { getBearerTokenHeader } from '../security/getBearerTokenHeader';
@@ -143,7 +138,7 @@ class SHOGunApplicationUtil<
           });
         }
       } catch (e) {
-        Logger.warn('Could not parse the layer tree: ' + e);
+        Logger.warn('Could not parse the layer tree: ', e);
         return new OlLayerGroup();
       }
     }
@@ -171,15 +166,13 @@ class SHOGunApplicationUtil<
       DragZoom: OlDragZoom
     };
 
-    const olInteractions: OlInteraction[] = interactions.map((interaction: keyof typeof classMap) => {
+    return interactions.map((interaction: keyof typeof classMap) => {
       const InteractionClass = classMap[interaction] as typeof OlInteraction;
       if (InteractionClass) {
         return new InteractionClass();
       }
       Logger.warn(`Interaction '${interaction}' not supported.`);
     }).filter((interaction: OlInteraction | undefined) => interaction !== undefined) as OlInteraction[];
-
-    return olInteractions;
   }
 
   private async fetchLayers(application: T): Promise<S[]|undefined> {
@@ -213,7 +206,7 @@ class SHOGunApplicationUtil<
 
       return layers;
     } catch (e) {
-      Logger.warn('Could not parse the layer tree: ' + e);
+      Logger.warn('Could not parse the layer tree: ', e);
       return [];
     }
   }
@@ -301,8 +294,13 @@ class SHOGunApplicationUtil<
       return this.parseXYZLayer(layer);
     }
 
-    // TODO Add support for VECTORTILE
-    throw new Error('Currently only WMTS, WMS, TILEWMS, WFS, WMSTIME and XYZ layers are supported.');
+    if (layer.type === 'MAPBOXSTYLE') {
+      return await this.parseMapboxStyleLayer(layer, projection);
+    }
+
+    Logger.error(`Unsupported layer type ${layer.type} given. Currently only WMS, TILEWMS, WMTS, ` +
+             'WFS, WMSTIME, XYZ and MAPBOXSTYLE are supported.');
+
   }
 
   parseImageLayer(layer: S) {
@@ -694,6 +692,62 @@ class SHOGunApplicationUtil<
     this.setLayerProperties(xyzLayer, layer);
 
     return xyzLayer;
+  }
+
+  async parseMapboxStyleLayer(layer: S, projection?: OlProjectionLike) {
+    const {
+      url,
+      useBearerToken,
+      resolutions
+    } = layer.sourceConfig || {};
+
+    const {
+      minResolution,
+      maxResolution,
+      opacity,
+    } = layer.clientConfig || {};
+
+    const mapBoxLayerGroup = new OlLayerGroup({
+      minResolution,
+      maxResolution,
+      opacity
+    });
+
+    try {
+      await applyMapboxStyle(
+        mapBoxLayerGroup,
+        url,
+        {
+          projection: (projection instanceof OlProjection) ? projection.getCode() : projection,
+          resolutions: resolutions,
+          transformRequest: (resourceUrl) => {
+            return new Request(resourceUrl, {
+              headers: useBearerToken ? {
+                ...getBearerTokenHeader(this.client?.getKeycloak())
+              } : {}
+            });
+          }
+        }
+      );
+    } catch (e) {
+      Logger.error(`Could apply mapbox style to OlLayerGroup: ${e}`);
+    }
+
+    this.setLayerProperties(mapBoxLayerGroup, layer);
+
+    return mapBoxLayerGroup;
+  }
+
+  private forEachLayer(groupLayer: OlLayerGroup, callback: (layer: OlLayer) => void) {
+    groupLayer.getLayers().forEach(childLayer => {
+      if (childLayer instanceof OlLayerGroup) {
+        this.forEachLayer(childLayer, callback);
+      }
+
+      if (childLayer instanceof OlLayer) {
+        callback(childLayer);
+      }
+    });
   }
 
   getMapScales(resolutions: number[], projUnit: Units = 'm'): number[] {
