@@ -3,6 +3,7 @@ import fetchSpy, {
   successResponse
 } from '../../spec/fetchSpy';
 import AuthService from '.';
+import CsrfUtil from '@terrestris/base-util/dist/CsrfUtil/CsrfUtil';
 
 describe('AuthService', () => {
   let fetchMock: jest.SpyInstance;
@@ -28,9 +29,12 @@ describe('AuthService', () => {
 
     await service.logout();
 
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/sso/logout', {
       credentials: 'same-origin',
-      headers: {},
+      headers: {
+        'X-XSRF-TOKEN': csrfHeaderValue
+      },
       method: 'POST'
     });
   });

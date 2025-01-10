@@ -9,6 +9,7 @@ import fetchSpy, {
   successResponse
 } from '../../spec/fetchSpy';
 import PermissionService from '.';
+import CsrfUtil from '@terrestris/base-util/dist/CsrfUtil/CsrfUtil';
 
 describe('PermissionService', () => {
   let fetchMock: jest.SpyInstance;
@@ -482,10 +483,12 @@ describe('PermissionService', () => {
     fetchMock = fetchSpy(successResponse([]));
 
     await service.setUserInstancePermission(1909, 10, 'ADMIN');
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
 
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/instance/user/10', {
       headers: {
         Authorization: 'Bearer ThisIsNotAValidBearerToken',
+        'X-XSRF-TOKEN': csrfHeaderValue,
         'Content-Type': 'application/json'
       },
       body: '{\"permission\":\"ADMIN\"}',
@@ -511,11 +514,12 @@ describe('PermissionService', () => {
     fetchMock = fetchSpy(successResponse([]));
 
     await service.setGroupInstancePermission(1909, 10, 'ADMIN');
-
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/instance/group/10', {
       headers: {
         Authorization: 'Bearer ThisIsNotAValidBearerToken',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-XSRF-TOKEN': csrfHeaderValue
       },
       body: '{\"permission\":\"ADMIN\"}',
       method: 'POST'
@@ -540,11 +544,12 @@ describe('PermissionService', () => {
     fetchMock = fetchSpy(successResponse([]));
 
     await service.setUserClassPermission(1909, 10, 'ADMIN');
-
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/class/user/10', {
       headers: {
         Authorization: 'Bearer ThisIsNotAValidBearerToken',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-XSRF-TOKEN': csrfHeaderValue
       },
       body: '{\"permission\":\"ADMIN\"}',
       method: 'POST'
@@ -569,11 +574,12 @@ describe('PermissionService', () => {
     fetchMock = fetchSpy(successResponse([]));
 
     await service.setGroupClassPermission(1909, 10, 'ADMIN');
-
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/class/group/10', {
       headers: {
         Authorization: 'Bearer ThisIsNotAValidBearerToken',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-XSRF-TOKEN': csrfHeaderValue
       },
       body: '{\"permission\":\"ADMIN\"}',
       method: 'POST'
@@ -599,9 +605,11 @@ describe('PermissionService', () => {
 
     await service.deleteUserInstancePermission(1909, 10);
 
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/instance/user/10', {
       headers: {
-        Authorization: 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken',
+        'X-XSRF-TOKEN': csrfHeaderValue
       },
       method: 'DELETE'
     });
@@ -626,9 +634,11 @@ describe('PermissionService', () => {
 
     await service.deleteGroupInstancePermission(1909, 10);
 
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/instance/group/10', {
       headers: {
-        Authorization: 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken',
+        'X-XSRF-TOKEN': csrfHeaderValue
       },
       method: 'DELETE'
     });
@@ -652,10 +662,11 @@ describe('PermissionService', () => {
     fetchMock = fetchSpy(successResponse([]));
 
     await service.deleteUserClassPermission(1909, 10);
-
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/class/user/10', {
       headers: {
-        Authorization: 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken',
+        'X-XSRF-TOKEN': csrfHeaderValue
       },
       method: 'DELETE'
     });
@@ -680,9 +691,11 @@ describe('PermissionService', () => {
 
     await service.deleteGroupClassPermission(1909, 10);
 
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/class/group/10', {
       headers: {
-        Authorization: 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken',
+        'X-XSRF-TOKEN': csrfHeaderValue
       },
       method: 'DELETE'
     });
@@ -706,10 +719,11 @@ describe('PermissionService', () => {
     fetchMock = fetchSpy(successResponse([]));
 
     await service.deleteUserInstancePermissions(1909);
-
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/instance/user', {
       headers: {
-        Authorization: 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken',
+        'X-XSRF-TOKEN': csrfHeaderValue
       },
       method: 'DELETE'
     });
@@ -733,10 +747,11 @@ describe('PermissionService', () => {
     fetchMock = fetchSpy(successResponse([]));
 
     await service.deleteGroupInstancePermissions(1909);
-
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/instance/group', {
       headers: {
-        Authorization: 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken',
+        'X-XSRF-TOKEN': csrfHeaderValue
       },
       method: 'DELETE'
     });
@@ -760,10 +775,11 @@ describe('PermissionService', () => {
     fetchMock = fetchSpy(successResponse([]));
 
     await service.deleteUserClassPermissions(1909);
-
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/class/user', {
       headers: {
-        Authorization: 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken',
+        'X-XSRF-TOKEN': csrfHeaderValue
       },
       method: 'DELETE'
     });
@@ -788,9 +804,11 @@ describe('PermissionService', () => {
 
     await service.deleteGroupClassPermissions(1909);
 
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/1909/permissions/class/group', {
       headers: {
-        Authorization: 'Bearer ThisIsNotAValidBearerToken'
+        Authorization: 'Bearer ThisIsNotAValidBearerToken',
+        'X-XSRF-TOKEN': csrfHeaderValue
       },
       method: 'DELETE'
     });

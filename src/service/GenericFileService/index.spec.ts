@@ -1,6 +1,7 @@
 import BaseEntity, { BaseEntityArgs } from '../../model/BaseEntity';
 import fetchSpy, { failureResponse, successResponse } from '../../spec/fetchSpy';
 import GenericFileService, { GenericFileServiceOpts } from '.';
+import CsrfUtil from '@terrestris/base-util/dist/CsrfUtil/CsrfUtil';
 
 interface DummyEntityArgs extends BaseEntityArgs {
   dummyField?: string;
@@ -114,10 +115,12 @@ describe('GenericFileService', () => {
 
     const body = new FormData();
     body.append('file', file);
-
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/dummy/upload', {
       body: body,
-      headers: {},
+      headers: {
+        'X-XSRF-TOKEN': csrfHeaderValue
+      },
       method: 'POST'
     });
   });
@@ -131,9 +134,12 @@ describe('GenericFileService', () => {
     const body = new FormData();
     body.append('file', file);
 
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/dummy/uploadToFileSystem', {
       body: body,
-      headers: {},
+      headers: {
+        'X-XSRF-TOKEN': csrfHeaderValue
+      },
       method: 'POST'
     });
   });
@@ -161,6 +167,7 @@ describe('GenericFileService', () => {
 
     await service.delete('db5f69fa-e8f6-42a6-a305-d2555d7d4d08');
 
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/dummy/db5f69fa-e8f6-42a6-a305-d2555d7d4d08', {
       headers: {},
       method: 'DELETE'

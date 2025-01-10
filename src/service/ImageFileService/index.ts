@@ -1,5 +1,5 @@
 import ImageFile from '../../model/ImageFile';
-import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
+import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 import GenericFileService, { GenericFileServiceOpts } from '../GenericFileService';
 
 export class ImageFileService<T extends ImageFile> extends GenericFileService<T> {
@@ -15,7 +15,7 @@ export class ImageFileService<T extends ImageFile> extends GenericFileService<T>
       const response = await fetch(`${this.basePath}/${fileUuid}/thumbnail`, {
         method: 'GET',
         headers: {
-          ...getCsrfTokenHeader()
+          ...getBearerTokenHeader(this.keycloak),
         },
         ...fetchOpts
       });
