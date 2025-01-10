@@ -1,3 +1,10 @@
+## [10.2.1](https://github.com/terrestris/shogun-util/compare/v10.2.0...v10.2.1) (2025-01-10)
+
+
+### Bug Fixes
+
+* mock CSRF meta elements in tests ([367e8c4](https://github.com/terrestris/shogun-util/commit/367e8c4f6888aee77f19fca20949fade00ebd6e2))
+
 # [10.2.0](https://github.com/terrestris/shogun-util/compare/v10.1.0...v10.2.0) (2024-11-12)
 
 
