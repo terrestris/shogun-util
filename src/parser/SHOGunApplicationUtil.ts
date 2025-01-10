@@ -738,18 +738,6 @@ class SHOGunApplicationUtil<
     return mapBoxLayerGroup;
   }
 
-  private forEachLayer(groupLayer: OlLayerGroup, callback: (layer: OlLayer) => void) {
-    groupLayer.getLayers().forEach(childLayer => {
-      if (childLayer instanceof OlLayerGroup) {
-        this.forEachLayer(childLayer, callback);
-      }
-
-      if (childLayer instanceof OlLayer) {
-        callback(childLayer);
-      }
-    });
-  }
-
   getMapScales(resolutions: number[], projUnit: Units = 'm'): number[] {
     return resolutions
       .map((res: number) =>
