@@ -53,6 +53,25 @@ describe('ApplicationService', () => {
     }));
   });
 
+  it('should return the application when the fetch is successful', async () => {
+    const mockApplication = { id: 123, name: 'TestApp' } as Application;
+
+    (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: jest.fn().mockResolvedValueOnce(mockApplication),
+    });
+
+    const result = await service.findOneByName('TestApp');
+
+    expect(fetch).toHaveBeenCalledWith('/applications/name/TestApp', expect.objectContaining({
+      method: 'GET',
+      headers: expect.any(Object),
+    }));
+
+    expect(result).toEqual(mockApplication);
+    expect(result.name).toBe('TestApp');
+  });
+
   it('is defined', () => {
     expect(ApplicationService).toBeDefined();
   });
