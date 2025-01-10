@@ -1,3 +1,15 @@
+# [10.3.0](https://github.com/terrestris/shogun-util/compare/v10.2.1...v10.3.0) (2025-01-10)
+
+
+### Bug Fixes
+
+* remove (currently) unneeded function ([4c4e4d6](https://github.com/terrestris/shogun-util/commit/4c4e4d63e33c3593d9aeb82e2c2e6247f8c0b602))
+
+
+### Features
+
+* adds elementary support vor vector tiles ([e78e347](https://github.com/terrestris/shogun-util/commit/e78e3470b559307d72d31c54fc89aacee63290fe))
+
 ## [10.2.1](https://github.com/terrestris/shogun-util/compare/v10.2.0...v10.2.1) (2025-01-10)
 
 
