@@ -1,6 +1,7 @@
 import BaseEntity, { BaseEntityArgs } from '../../model/BaseEntity';
 import fetchSpy, { failureResponse, successResponse } from '../../spec/fetchSpy';
 import GenericService, { GenericEntityServiceOpts } from '.';
+import CsrfUtil from '@terrestris/base-util/dist/CsrfUtil/CsrfUtil';
 
 interface DummyEntityArgs extends BaseEntityArgs {
   dummyField?: string;
@@ -204,11 +205,12 @@ describe('GenericService', () => {
     fetchMock = fetchSpy(successResponse([]));
 
     await service.add({ dummyField: 'dummyValue' });
-
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/dummy', {
       body: '{\"dummyField\":\"dummyValue\"}',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-XSRF-TOKEN': csrfHeaderValue
       },
       method: 'POST'
     });
@@ -236,7 +238,7 @@ describe('GenericService', () => {
     fetchMock = fetchSpy(successResponse([]));
 
     const resp = await service.delete(1);
-
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/dummy/1', {
       headers: {},
       method: 'DELETE'
@@ -259,11 +261,12 @@ describe('GenericService', () => {
     fetchMock = fetchSpy(successResponse([]));
 
     await service.update({ id: 1, dummyField: 'dummyValue' });
-
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/dummy/1', {
       body: '{\"id\":1,\"dummyField\":\"dummyValue\"}',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-XSRF-TOKEN': csrfHeaderValue
       },
       method: 'PUT'
     });
@@ -291,11 +294,12 @@ describe('GenericService', () => {
     fetchMock = fetchSpy(successResponse([]));
 
     await service.updatePartial({ id: 1, dummyField: 'dummyValue' });
-
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/dummy/1', {
       body: '{\"id\":1,\"dummyField\":\"dummyValue\"}',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-XSRF-TOKEN': csrfHeaderValue
       },
       method: 'PATCH'
     });
@@ -366,7 +370,6 @@ describe('GenericService', () => {
 
       await expect(service.setPublic(1)).rejects.toThrow();
     });
-
 
   });
 });

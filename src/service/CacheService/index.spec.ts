@@ -3,6 +3,7 @@ import fetchSpy, {
   successResponse
 } from '../../spec/fetchSpy';
 import CacheService from '.';
+import CsrfUtil from '@terrestris/base-util/dist/CsrfUtil/CsrfUtil';
 
 describe('AppInfoService', () => {
   let fetchMock: jest.SpyInstance;
@@ -27,9 +28,11 @@ describe('AppInfoService', () => {
     fetchMock = fetchSpy(successResponse([]));
 
     await service.evictCache();
-
+    const csrfHeaderValue = CsrfUtil.getCsrfValue();
     expect(fetchMock).toHaveBeenCalledWith('/cache/evict', {
-      headers: {},
+      headers: {
+        'X-XSRF-TOKEN': csrfHeaderValue
+      },
       method: 'POST'
     });
   });
