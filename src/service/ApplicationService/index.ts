@@ -12,7 +12,7 @@ export class ApplicationService<T extends Application> extends GenericEntityServ
 
   async findOneByName(name: string, fetchOpts?: RequestInit): Promise<T> {
     try {
-      const response = await fetch(`${this.basePath}/name/${name}`, {
+      const response = await fetch(`${this.basePath}/findByName/${name}`, {
         method: 'GET',
         headers: {
           ...getBearerTokenHeader(this.keycloak)

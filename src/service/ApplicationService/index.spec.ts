@@ -23,7 +23,7 @@ describe('ApplicationService', () => {
 
     const result = await service.findOneByName('TestApp');
 
-    expect(fetch).toHaveBeenCalledWith('/applications/name/TestApp', expect.objectContaining({
+    expect(fetch).toHaveBeenCalledWith('/applications/findByName/TestApp', expect.objectContaining({
       method: 'GET',
       headers: expect.any(Object),
     }));
@@ -37,7 +37,7 @@ describe('ApplicationService', () => {
     });
 
     await expect(service.findOneByName('NonExistentApp')).rejects.toThrow('HTTP error status: 404');
-    expect(fetch).toHaveBeenCalledWith('/applications/name/NonExistentApp', expect.objectContaining({
+    expect(fetch).toHaveBeenCalledWith('/applications/findByName/NonExistentApp', expect.objectContaining({
       method: 'GET',
       headers: expect.any(Object),
     }));
@@ -47,7 +47,7 @@ describe('ApplicationService', () => {
     (fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
 
     await expect(service.findOneByName('TestApp')).rejects.toThrow('Error while requesting a single entity: Error: Network error');
-    expect(fetch).toHaveBeenCalledWith('/applications/name/TestApp', expect.objectContaining({
+    expect(fetch).toHaveBeenCalledWith('/applications/findByName/TestApp', expect.objectContaining({
       method: 'GET',
       headers: expect.any(Object),
     }));
@@ -63,7 +63,7 @@ describe('ApplicationService', () => {
 
     const result = await service.findOneByName('TestApp');
 
-    expect(fetch).toHaveBeenCalledWith('/applications/name/TestApp', expect.objectContaining({
+    expect(fetch).toHaveBeenCalledWith('/applications/findByName/TestApp', expect.objectContaining({
       method: 'GET',
       headers: expect.any(Object),
     }));
