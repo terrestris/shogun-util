@@ -1,3 +1,17 @@
+# [10.4.0](https://github.com/terrestris/shogun-util/compare/v10.3.0...v10.4.0) (2025-01-16)
+
+
+### Bug Fixes
+
+* adds another test ([eac8c00](https://github.com/terrestris/shogun-util/commit/eac8c0080a53934cff9ea49343f3e755231b0cc8))
+* adds unit tests ([3ddd0fe](https://github.com/terrestris/shogun-util/commit/3ddd0fe4462c8c88ea3061fec3dbfa9b4cc04a68))
+* change api endpoint name ([f5a1186](https://github.com/terrestris/shogun-util/commit/f5a1186b64bb0e09ddec92d528b07a2b7e8f225c))
+
+
+### Features
+
+* extends the util by a find by name function ([6f6d182](https://github.com/terrestris/shogun-util/commit/6f6d1829aeaa285a8bbd6bc50baceecb5e643f4c))
+
 # [10.3.0](https://github.com/terrestris/shogun-util/compare/v10.2.1...v10.3.0) (2025-01-10)
 
 
