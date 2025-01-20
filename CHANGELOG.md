@@ -1,3 +1,10 @@
+## [10.4.1](https://github.com/terrestris/shogun-util/compare/v10.4.0...v10.4.1) (2025-01-20)
+
+
+### Bug Fixes
+
+* lenient layer parsing ([fab6f8b](https://github.com/terrestris/shogun-util/commit/fab6f8b7a29cb7a2c6747c35a5eab9c209b4e306))
+
 # [10.4.0](https://github.com/terrestris/shogun-util/compare/v10.3.0...v10.4.0) (2025-01-16)
 
 
