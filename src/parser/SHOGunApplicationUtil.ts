@@ -24,7 +24,6 @@ import OlPinchZoom from 'ol/interaction/PinchZoom';
 import OlLayerBase from 'ol/layer/Base';
 import OlLayerGroup from 'ol/layer/Group';
 import OlImageLayer from 'ol/layer/Image';
-import OlLayer from 'ol/layer/Layer';
 import OlTileLayer from 'ol/layer/Tile';
 import OlLayerVector from 'ol/layer/Vector';
 
@@ -236,7 +235,12 @@ class SHOGunApplicationUtil<
       } else {
         const layerNode = layers.find(l => l.id === node.layerId);
         if (layerNode) {
-          const olLayer = await this.parseLayer(layerNode as S, projection);
+          let olLayer;
+          try {
+            olLayer = await this.parseLayer(layerNode as S, projection);
+          } catch (error) {
+            Logger.warn('Could not parse layer: ', error);
+          }
 
           if (!olLayer) {
             continue;
