@@ -67,6 +67,24 @@ export abstract class GenericEntityService<T extends BaseEntity> extends Permiss
     }
   }
 
+  async findAllRevisions(id: string | number, fetchOpts?: RequestInit): Promise<T[]> {
+    try {
+      const response = await fetch(`${this.basePath}/${id}/rev`, {
+        method: 'GET',
+        headers: {
+          ...getBearerTokenHeader(this.keycloak)
+        },
+        ...fetchOpts
+      });
+
+      const revisions: T[] = await response.json();
+
+      return revisions;
+    } catch (error) {
+      throw new Error(`Error while requesting revisions: ${error}`);
+    }
+  }
+
   async findOne(id: string | number, fetchOpts?: RequestInit): Promise<T> {
     try {
       const response = await fetch(`${this.basePath}/${id}`, {
@@ -84,6 +102,34 @@ export abstract class GenericEntityService<T extends BaseEntity> extends Permiss
       return await response.json();
     } catch (error) {
       throw new Error(`Error while requesting a single entity: ${error}`);
+    }
+  }
+
+  async findRevision(id: string | number, revision: number, fetchOpts?: RequestInit): Promise<T> {
+    try {
+      const response = await fetch(`${this.basePath}/${id}/rev/${revision}`, {
+        method: 'GET',
+        headers: {
+          ...getBearerTokenHeader(this.keycloak)
+        },
+        ...fetchOpts
+      });
+
+      // const {
+      //   entityAtRevision
+      // } = await this.client.graphql().sendQuery<T>({
+      //   query: entityByRevision,
+      //   variables: {
+      //     id: id,
+      //     revision: revision
+      //   }
+      // });
+
+      const json: T = await response.json();
+
+      return json;
+    } catch (error) {
+      throw new Error(`Error while requesting a single entity revision: ${error}`);
     }
   }
 
