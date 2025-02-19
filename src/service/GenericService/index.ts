@@ -2,6 +2,8 @@ import Keycloak from 'keycloak-js';
 
 import { UrlUtil } from '@terrestris/base-util';
 
+import SHOGunAPIClient from '../SHOGunAPIClient';
+
 export interface PageSorter {
   properties: string[];
   order?: 'asc' | 'desc';
@@ -16,16 +18,19 @@ export interface PageOpts {
 export interface GenericServiceOpts {
   basePath: string;
   keycloak?: Keycloak;
+  client?: SHOGunAPIClient;
 }
 
 export abstract class GenericService {
 
   protected readonly basePath: string;
   protected readonly keycloak?: Keycloak;
+  protected readonly client?: SHOGunAPIClient;
 
   protected constructor(opts: GenericServiceOpts) {
     this.basePath = opts.basePath;
     this.keycloak = opts.keycloak;
+    this.client = opts.client;
   }
 
   protected getPageUrl(pageOpts?: PageOpts) {
