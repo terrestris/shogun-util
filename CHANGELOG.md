@@ -1,3 +1,10 @@
+## [10.4.3](https://github.com/terrestris/shogun-util/compare/v10.4.2...v10.4.3) (2025-02-26)
+
+
+### Bug Fixes
+
+* set extent from parsed tilegrid ([ec84661](https://github.com/terrestris/shogun-util/commit/ec846610dec902910287caadbb6d69fddac7af40))
+
 ## [10.4.2](https://github.com/terrestris/shogun-util/compare/v10.4.1...v10.4.2) (2025-02-26)
 
 
