@@ -391,8 +391,35 @@ describe('SHOGunApplicationUtil', () => {
       expect(interactions[0]).toBeInstanceOf(OlDragPan);
       expect(consoleError).toHaveBeenCalled();
     });
+  });
 
+  describe('parseMvtLayer', () => {
+    it('parses an MVT layer correctly', () => {
+      const myLayer: Layer = {
+        id: 1909,
+        name: 'Layer A',
+        type: 'MVT',
+        sourceConfig: {
+          url: 'https://example.com/mytileserver/mylayer/{z}/{x}/{y}.pbf',
+          layerNames: ''
+        }
+      };
 
+      const layer = util.parseMvtLayer(myLayer);
+      expect(layer).toBeDefined();
+
+      const source = layer.getSource()
+      expect(source).toBeDefined();
+
+      const urls = source?.getUrls();
+      expect(urls).toBeDefined();
+      expect(urls?.length).toBe(1);
+      expect(urls![0]).toEqual(myLayer.sourceConfig.url);
+
+      expect(layer.get('shogunId')).toBe(myLayer.id);
+      expect(layer.get('name')).toBe(myLayer.name);
+      expect(layer.get('type')).toBe(myLayer.type);
+    });
   });
 
 });
