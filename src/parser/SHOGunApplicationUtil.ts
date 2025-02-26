@@ -501,6 +501,7 @@ class SHOGunApplicationUtil<
         tileGrid: new OlTileGridWMTS({
           resolutions: tileGrid.getResolutions(),
           matrixIds: tileGrid.getMatrixIds(),
+          extent: tileGrid.getExtent(),
           sizes: matrixSizes,
           origins,
           tileSizes
