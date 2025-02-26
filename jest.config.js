@@ -10,7 +10,7 @@ module.exports = {
     '^.+\\.ts$': '<rootDir>/node_modules/babel-jest'
   },
   transformIgnorePatterns: [
-    '<rootDir>/node_modules/(?!(ol|@babel|jest-runtime|@terrestris|color-*|query-string|' +
+    '<rootDir>/node_modules/(?!(ol|@babel|jest-runtime|@terrestris|color-*|query-string|quickselect|' +
     'decode-uri-component|split-on-first|filter-obj|geostyler-openlayers-parser|geostyler-style|keycloak-js|pbf))'
   ],
   testRegex: '/src/.*\\.spec.(ts|js)$',
