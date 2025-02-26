@@ -1,3 +1,10 @@
+## [10.4.2](https://github.com/terrestris/shogun-util/compare/v10.4.1...v10.4.2) (2025-02-26)
+
+
+### Bug Fixes
+
+* adds quickselect to transform ignore patterns ([d72541d](https://github.com/terrestris/shogun-util/commit/d72541d59eb041631dd7bf635a5119959cde792e))
+
 ## [10.4.1](https://github.com/terrestris/shogun-util/compare/v10.4.0...v10.4.1) (2025-01-20)
 
 
