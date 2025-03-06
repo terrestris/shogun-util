@@ -1,3 +1,15 @@
+# [10.5.0](https://github.com/terrestris/shogun-util/compare/v10.4.3...v10.5.0) (2025-03-06)
+
+
+### Bug Fixes
+
+* remove generic VECTORTILE since there does't exist any specific parser ([fa27d2c](https://github.com/terrestris/shogun-util/commit/fa27d2c549a7a20fced9ca838b5069fe468ea7c4))
+
+
+### Features
+
+* add support for MVT layers ([00b4df4](https://github.com/terrestris/shogun-util/commit/00b4df4690ab7d508109d2dbaaa4fc8f43ad44a6))
+
 ## [10.4.3](https://github.com/terrestris/shogun-util/compare/v10.4.2...v10.4.3) (2025-02-26)
 
 
