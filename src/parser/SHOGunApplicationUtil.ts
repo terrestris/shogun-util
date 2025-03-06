@@ -1,8 +1,10 @@
+import _isNil from 'lodash/isNil';
 import _uniqueBy from 'lodash/uniqBy';
 import OlCollection from 'ol/Collection';
 import { Extent as OlExtent } from 'ol/extent';
 import OlFeature from 'ol/Feature';
 import OlFormatGeoJSON from 'ol/format/GeoJSON';
+import OlFormatMVT from 'ol/format/MVT';
 import OlWMTSCapabilities from 'ol/format/WMTSCapabilities';
 import OlGeometry from 'ol/geom/Geometry';
 import OlImage from 'ol/Image';
@@ -26,6 +28,7 @@ import OlLayerGroup from 'ol/layer/Group';
 import OlImageLayer from 'ol/layer/Image';
 import OlTileLayer from 'ol/layer/Tile';
 import OlLayerVector from 'ol/layer/Vector';
+import OlVectorTileLayer from 'ol/layer/VectorTile';
 
 import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
 import { fromLonLat, Projection as OlProjection, ProjectionLike as OlProjectionLike } from 'ol/proj';
@@ -33,6 +36,7 @@ import { Units } from 'ol/proj/Units';
 import OlImageWMS, { Options as OlImageWMSOptions } from 'ol/source/ImageWMS';
 import OlTileWMS, { Options as OlTileWMSOptions } from 'ol/source/TileWMS';
 import OlSourceVector from 'ol/source/Vector';
+import OlSourceVectorTile from 'ol/source/VectorTile';
 import OlSourceWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
 import OlSourceXYZ, { Options as OlSourceXYZOptions } from 'ol/source/XYZ';
 import OlTile from 'ol/Tile';
@@ -296,6 +300,10 @@ class SHOGunApplicationUtil<
 
     if (layer.type === 'XYZ') {
       return this.parseXYZLayer(layer);
+    }
+
+    if (layer.type === 'MVT') {
+      return this.parseMvtLayer(layer);
     }
 
     if (layer.type === 'MAPBOXSTYLE') {
@@ -697,6 +705,31 @@ class SHOGunApplicationUtil<
     this.setLayerProperties(xyzLayer, layer);
 
     return xyzLayer;
+  }
+
+  parseMvtLayer(layer: S) {
+    const {
+      url,
+      useBearerToken
+    } = layer.sourceConfig || {};
+
+    const source = new OlSourceVectorTile({
+      format: new OlFormatMVT(),
+      url
+    });
+
+    if (!_isNil(useBearerToken)) {
+      source.setTileLoadFunction((imageTile: OlTile, src: string) =>
+        this.bearerTokenLoadFunction(imageTile, src, true));
+    }
+
+    const mvtLayer = new OlVectorTileLayer({
+      source
+    });
+
+    this.setLayerProperties(mvtLayer, layer);
+
+    return mvtLayer;
   }
 
   async parseMapboxStyleLayer(layer: S, projection?: OlProjectionLike) {
