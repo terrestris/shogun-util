@@ -1,3 +1,10 @@
+## [10.5.1](https://github.com/terrestris/shogun-util/compare/v10.5.0...v10.5.1) (2025-03-17)
+
+
+### Bug Fixes
+
+* move public permission service methods to PermissionService ([776bce9](https://github.com/terrestris/shogun-util/commit/776bce906f201616f1daeb3f2cee9ed81476b25a))
+
 # [10.5.0](https://github.com/terrestris/shogun-util/compare/v10.4.3...v10.5.0) (2025-03-06)
 
 
