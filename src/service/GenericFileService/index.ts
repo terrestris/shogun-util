@@ -2,11 +2,12 @@ import SHOGunFile from '../../model/File';
 import { Page } from '../../model/Page';
 import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
-import { GenericService, GenericServiceOpts, PageOpts } from '../GenericService';
+import { GenericServiceOpts, PageOpts } from '../GenericService';
+import PermissionService from '../PermissionService';
 
 export type GenericFileServiceOpts = GenericServiceOpts;
 
-export abstract class GenericFileService<T extends SHOGunFile> extends GenericService {
+export abstract class GenericFileService<T extends SHOGunFile> extends PermissionService {
 
   protected constructor(opts: GenericFileServiceOpts) {
     super(opts);

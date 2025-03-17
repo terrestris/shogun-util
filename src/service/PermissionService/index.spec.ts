@@ -826,4 +826,50 @@ describe('PermissionService', () => {
 
     await expect(service.deleteGroupClassPermissions(1909)).rejects.toThrow();
   });
+
+  it('can get the public instance permission status', async () => {
+    const response = {
+      public: true
+    };
+
+    fetchMock = fetchSpy(successResponse(response));
+    const resp = await service.isPublic(1);
+    expect(resp).toEqual(true);
+  });
+
+  it('throws an error if it can\'t check if an instance is public', async () => {
+    fetchMock = fetchSpy(failureResponse());
+
+    await expect(service.isPublic(1)).rejects.toThrow();
+  });
+
+  it('can set an instance to be publicly accessible', async () => {
+    fetchMock = fetchSpy(successResponse());
+    try {
+      expect(await service.setPublic(1)).toBeUndefined();
+    } catch (error) {
+      expect(error).toBeUndefined();
+    }
+  });
+
+  it('throws if it can\'t set an instance to be publicly accessible', async () => {
+    fetchMock = fetchSpy(failureResponse());
+
+    await expect(service.setPublic(1)).rejects.toThrow();
+  });
+
+  it('can set an instance to be not publicly accessible', async () => {
+    fetchMock = fetchSpy(successResponse());
+    try {
+      expect(await service.revokePublic(1)).toBeUndefined();
+    } catch (error) {
+      expect(error).toBeUndefined();
+    }
+  });
+
+  it('throws if it can\'t set an instance to be not publicly accessible', async () => {
+    fetchMock = fetchSpy(failureResponse());
+
+    await expect(service.setPublic(1)).rejects.toThrow();
+  });
 });
