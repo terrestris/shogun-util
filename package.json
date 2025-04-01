@@ -56,7 +56,7 @@
     "@semantic-release/release-notes-generator": "^14.0.3",
     "@stylistic/eslint-plugin": "^4.2.0",
     "@terrestris/eslint-config-typescript": "^9.0.0",
-    "@terrestris/ol-util": "^21.1.0",
+    "@terrestris/ol-util": "^21.1.1",
     "@types/geojson": "^7946.0.16",
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.16",
