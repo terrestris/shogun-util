@@ -1,3 +1,10 @@
+## [10.5.2](https://github.com/terrestris/shogun-util/compare/v10.5.1...v10.5.2) (2025-04-10)
+
+
+### Bug Fixes
+
+* pass projection to XYZ and MVT layers if defined ([581f32a](https://github.com/terrestris/shogun-util/commit/581f32af3c8106eebaa57c004bc1013eedd77cbf))
+
 ## [10.5.1](https://github.com/terrestris/shogun-util/compare/v10.5.0...v10.5.1) (2025-03-17)
 
 
