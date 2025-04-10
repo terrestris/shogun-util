@@ -7,15 +7,15 @@ import LayerType from './enum/LayerType';
 export type DefaultRequestParams = Record<string, string | number | boolean>;
 
 export interface DefaultLayerSourceConfig {
-  url: string;
+  attribution?: string;
   layerNames: string;
   legendUrl?: string;
-  tileSize?: number;
-  tileOrigin?: [number, number];
-  resolutions?: number[];
-  attribution?: string;
   matrixSet?: string;
   requestParams?: DefaultRequestParams;
+  resolutions?: number[];
+  tileOrigin?: [number, number];
+  tileSize?: number;
+  url: string;
   useBearerToken?: boolean;
   wmtsDimensions?: Record<string, string>;
 }
