@@ -299,11 +299,11 @@ class SHOGunApplicationUtil<
     }
 
     if (layer.type === 'XYZ') {
-      return this.parseXYZLayer(layer);
+      return this.parseXYZLayer(layer, projection);
     }
 
     if (layer.type === 'MVT') {
-      return this.parseMvtLayer(layer);
+      return this.parseMvtLayer(layer, projection);
     }
 
     if (layer.type === 'MAPBOXSTYLE') {
@@ -666,12 +666,12 @@ class SHOGunApplicationUtil<
     return timeLayer;
   }
 
-  parseXYZLayer(layer: S) {
+  parseXYZLayer(layer: S, projection: OlProjectionLike = 'EPSG:3857') {
     const {
       attribution,
-      url,
-      useBearerToken,
       tileSize = 256,
+      url,
+      useBearerToken
     } = layer.sourceConfig || {};
 
     const {
@@ -682,10 +682,11 @@ class SHOGunApplicationUtil<
     } = layer.clientConfig || {};
 
     const sourceConfig: OlSourceXYZOptions = {
-      url,
       attributions: attribution,
       crossOrigin,
-      tileSize
+      projection,
+      tileSize,
+      url
     };
 
     if (useBearerToken) {
@@ -707,7 +708,7 @@ class SHOGunApplicationUtil<
     return xyzLayer;
   }
 
-  parseMvtLayer(layer: S) {
+  parseMvtLayer(layer: S, projection: OlProjectionLike = 'EPSG:3857') {
     const {
       url,
       useBearerToken
@@ -715,7 +716,8 @@ class SHOGunApplicationUtil<
 
     const source = new OlSourceVectorTile({
       format: new OlFormatMVT(),
-      url
+      url,
+      projection
     });
 
     if (!_isNil(useBearerToken)) {
@@ -728,7 +730,6 @@ class SHOGunApplicationUtil<
     });
 
     this.setLayerProperties(mvtLayer, layer);
-
     return mvtLayer;
   }
 
