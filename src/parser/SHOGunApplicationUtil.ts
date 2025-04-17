@@ -819,6 +819,7 @@ class SHOGunApplicationUtil<
     olLayer.set('editable', layer.clientConfig?.editable);
     olLayer.set('editFormConfig', layer.clientConfig?.editFormConfig);
     olLayer.set('featureInfoFormConfig', layer.clientConfig?.featureInfoFormConfig);
+    olLayer.set('searchFeatureConfig', layer.clientConfig?.searchFeatureConfig);
   }
 
   private async bearerTokenLoadFunctionVector(opts: {
