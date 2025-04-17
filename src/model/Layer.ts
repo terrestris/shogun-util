@@ -64,6 +64,7 @@ export interface DefaultLayerClientConfig {
     PropertyFormItemEditReferenceTableConfig>[];
   editable?: boolean;
   featureInfoFormConfig?: PropertyFormTabConfig<PropertyFormItemReadConfig>[];
+  searchFeatureConfig?: PropertyFormTabConfig<PropertyFormItemReadConfig>;
   hoverable?: boolean;
   maxResolution?: number;
   minResolution?: number;
