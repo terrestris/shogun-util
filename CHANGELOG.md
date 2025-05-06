@@ -1,3 +1,10 @@
+# [10.6.0](https://github.com/terrestris/shogun-util/compare/v10.5.2...v10.6.0) (2025-05-06)
+
+
+### Features
+
+* introduces resultDrawerConfig for search config ([815866a](https://github.com/terrestris/shogun-util/commit/815866a6c4fe9d9ee221aff7c4ece46ebcf7dca3))
+
 ## [10.5.2](https://github.com/terrestris/shogun-util/compare/v10.5.1...v10.5.2) (2025-04-10)
 
 
