@@ -55,6 +55,7 @@ export interface DownloadConfig {
 export interface SearchConfig {
   attributes?: string[];
   displayTemplate?: string;
+  resultDrawerConfig?: PropertyFormTabConfig<PropertyFormItemReadConfig>;
 }
 
 export interface DefaultLayerClientConfig {
