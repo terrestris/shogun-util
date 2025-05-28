@@ -31,7 +31,12 @@ import OlLayerVector from 'ol/layer/Vector';
 import OlVectorTileLayer from 'ol/layer/VectorTile';
 
 import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
-import { fromLonLat, Projection as OlProjection, ProjectionLike as OlProjectionLike } from 'ol/proj';
+import {
+  fromLonLat,
+  Projection as OlProjection,
+  ProjectionLike as OlProjectionLike,
+  get as getProjObject
+} from 'ol/proj';
 import { Units } from 'ol/proj/Units';
 import OlImageWMS, { Options as OlImageWMSOptions } from 'ol/source/ImageWMS';
 import OlTileWMS, { Options as OlTileWMSOptions } from 'ol/source/TileWMS';
@@ -292,6 +297,10 @@ class SHOGunApplicationUtil<
 
     if (layer.type === 'WFS') {
       return this.parseWFSLayer(layer, projection);
+    }
+
+    if (layer.type === 'OGC_FEATURES') {
+      return this.parseOGCFeaturesLayer(layer, projection);
     }
 
     if (layer.type === 'WMSTIME') {
@@ -565,16 +574,59 @@ class SHOGunApplicationUtil<
       attributions: attribution,
       strategy: olStrategyBbox,
       loader: (extent, resolution, proj, success, failure) => {
-        this.bearerTokenLoadFunctionVector({
-          source,
-          url,
-          layerNames,
-          extent,
-          resolution,
-          projection,
-          success,
-          failure
-        }, useBearerToken);
+        const params = UrlUtil.objectToRequestString({
+          SERVICE: 'WFS',
+          VERSION: '2.0.0',
+          REQUEST: 'GetFeature',
+          TYPENAMES: layerNames,
+          OUTPUTFORMAT: 'application/json',
+          SRSNAME: projection,
+          BBOX: `${extent.join(',')},${projection}`
+        });
+
+        this.bearerTokenLoadFunctionVector(url, params, extent, !!useBearerToken, source, success, failure);
+      }
+    });
+
+    const vectorLayer = new OlLayerVector({
+      source,
+      minResolution,
+      maxResolution,
+      opacity
+    });
+
+    this.setLayerProperties(vectorLayer, layer);
+
+    return vectorLayer;
+  }
+
+  parseOGCFeaturesLayer(layer: S, projection: OlProjectionLike = 'EPSG:3857') {
+    const {
+      attribution,
+      url,
+      useBearerToken
+    } = layer.sourceConfig || {};
+
+    const {
+      minResolution,
+      maxResolution,
+      opacity
+    } = layer.clientConfig || {};
+
+    const projNum = getProjObject(projection)?.getCode().split(':')[1];
+
+    const source = new OlSourceVector({
+      format: new OlFormatGeoJSON(),
+      attributions: attribution,
+      strategy: olStrategyBbox,
+      loader: (extent, resolution, proj, success, failure) => {
+        const params = UrlUtil.objectToRequestString({
+          bbox: extent.join(','),
+          'bbox-crs': projNum,
+          crs: projNum
+        });
+
+        this.bearerTokenLoadFunctionVector(url, params, extent, !!useBearerToken, source, success, failure);
       }
     });
 
@@ -821,30 +873,19 @@ class SHOGunApplicationUtil<
     olLayer.set('featureInfoFormConfig', layer.clientConfig?.featureInfoFormConfig);
   }
 
-  private async bearerTokenLoadFunctionVector(opts: {
-    source: OlSourceVector;
-    url: string;
-    layerNames: string;
-    extent: OlExtent;
-    resolution: number;
-    projection: OlProjectionLike;
-    success?: (features: OlFeature<OlGeometry>[]) => void;
-    failure?: () => void;
-  }, useBearerToken = false) {
+  private async bearerTokenLoadFunctionVector(
+    url: string,
+    params: string,
+    extent: OlExtent,
+    useBearerToken: boolean,
+    source: OlSourceVector,
+    success?: (features: OlFeature<OlGeometry>[]) => void,
+    failure?: () => void
+  ) {
     try {
-      const params = UrlUtil.objectToRequestString({
-        SERVICE: 'WFS',
-        VERSION: '2.0.0',
-        REQUEST: 'GetFeature',
-        TYPENAMES: opts.layerNames,
-        OUTPUTFORMAT: 'application/json',
-        SRSNAME: opts.projection,
-        BBOX: `${opts.extent.join(',')},${opts.projection}`
-      });
+      const urlWithParams = `${url}${url.endsWith('?') ? '' : '?'}${params}`;
 
-      const wfsUrl = `${opts.url}${opts.url.endsWith('?') ? '' : '?'}${params}`;
-
-      const response = await fetch(wfsUrl, {
+      const response = await fetch(urlWithParams, {
         headers: useBearerToken ? {
           ...getBearerTokenHeader(this.client?.getKeycloak())
         } : {}
@@ -854,20 +895,16 @@ class SHOGunApplicationUtil<
         throw new Error('No successful response');
       }
 
-      const features = opts.source.getFormat()?.readFeatures(await response.json());
+      const features = source.getFormat()?.readFeatures(await response.json());
       if (features) {
-        opts.source.addFeatures(features as OlFeature<OlGeometry>[]);
+        source.addFeatures(features as OlFeature<OlGeometry>[]);
       }
 
-      if (opts.success) {
-        opts.success(features as OlFeature<OlGeometry>[]);
-      }
+      success?.(features as OlFeature<OlGeometry>[]);
     } catch (error) {
-      opts.source.removeLoadedExtent(opts.extent);
-      if (opts.failure) {
-        opts.failure();
-      }
-      Logger.error('Error loading WFS: ', error);
+      source.removeLoadedExtent(extent);
+      failure?.();
+      Logger.error('Error loading features: ', error);
     }
   }
 
