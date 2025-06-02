@@ -1,3 +1,11 @@
+# [10.7.0](https://github.com/terrestris/shogun-util/compare/v10.6.0...v10.7.0) (2025-06-02)
+
+
+### Features
+
+* add OGC_FEATURES layer type ([5accc66](https://github.com/terrestris/shogun-util/commit/5accc6641fe02302ff3a26c151ed1340e48e70ae))
+* include request params into vector layer requests ([f289022](https://github.com/terrestris/shogun-util/commit/f28902226d9e58bdee831ba3d23f97aa324c78aa))
+
 # [10.6.0](https://github.com/terrestris/shogun-util/compare/v10.5.2...v10.6.0) (2025-05-06)
 
 
