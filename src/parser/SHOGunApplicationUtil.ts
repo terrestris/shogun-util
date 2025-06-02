@@ -560,7 +560,8 @@ class SHOGunApplicationUtil<
       attribution,
       url,
       layerNames,
-      useBearerToken
+      useBearerToken,
+      requestParams = {}
     } = layer.sourceConfig || {};
 
     const {
@@ -579,9 +580,10 @@ class SHOGunApplicationUtil<
           VERSION: '2.0.0',
           REQUEST: 'GetFeature',
           TYPENAMES: layerNames,
-          OUTPUTFORMAT: 'application/json',
+          OUTPUTFORMAT: 'application/json', // TODO: This can be overriden by requestParams, but the source assumes GeoJSON
           SRSNAME: projection,
-          BBOX: `${extent.join(',')},${projection}`
+          BBOX: `${extent.join(',')},${projection}`,
+          ...requestParams
         });
 
         this.bearerTokenLoadFunctionVector(url, params, extent, !!useBearerToken, source, success, failure);
@@ -604,7 +606,8 @@ class SHOGunApplicationUtil<
     const {
       attribution,
       url,
-      useBearerToken
+      useBearerToken,
+      requestParams = {}
     } = layer.sourceConfig || {};
 
     const {
@@ -623,7 +626,8 @@ class SHOGunApplicationUtil<
         const params = UrlUtil.objectToRequestString({
           bbox: extent.join(','),
           'bbox-crs': projNum,
-          crs: projNum
+          crs: projNum,
+          ...requestParams
         });
 
         this.bearerTokenLoadFunctionVector(url, params, extent, !!useBearerToken, source, success, failure);
