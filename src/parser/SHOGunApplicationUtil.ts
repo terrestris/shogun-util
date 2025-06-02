@@ -580,7 +580,8 @@ class SHOGunApplicationUtil<
           VERSION: '2.0.0',
           REQUEST: 'GetFeature',
           TYPENAMES: layerNames,
-          OUTPUTFORMAT: 'application/json', // TODO: This can be overriden by requestParams, but the source assumes GeoJSON
+          // TODO: This can be overriden by requestParams, but the source assumes GeoJSON
+          OUTPUTFORMAT: 'application/json',
           SRSNAME: projection,
           BBOX: `${extent.join(',')},${projection}`,
           ...requestParams
