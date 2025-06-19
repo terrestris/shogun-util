@@ -67,7 +67,7 @@
     "husky": "^9.1.7",
     "jest": "^30.0.0",
     "jest-cli": "^30.0.0",
-    "jest-environment-jsdom": "^30.0.0",
+    "jest-environment-jsdom": "^30.0.1",
     "ol": "^10.6.0",
     "ol-mapbox-style": "^12.4.1",
     "openapi-types": "^12.1.3",
