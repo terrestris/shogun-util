@@ -1,5 +1,6 @@
 import _isNil from 'lodash/isNil';
 import _uniqueBy from 'lodash/uniqBy';
+
 import OlCollection from 'ol/Collection';
 import { Extent as OlExtent } from 'ol/extent';
 import OlFeature from 'ol/Feature';
@@ -7,7 +8,6 @@ import OlFormatGeoJSON from 'ol/format/GeoJSON';
 import OlFormatMVT from 'ol/format/MVT';
 import OlWMTSCapabilities from 'ol/format/WMTSCapabilities';
 import OlGeometry from 'ol/geom/Geometry';
-import OlImage from 'ol/Image';
 import OlImageTile from 'ol/ImageTile';
 import OlDblClickDragZoom from 'ol/interaction/DblClickDragZoom.js';
 import { defaults as DefaultInteractions } from 'ol/interaction/defaults';
@@ -22,14 +22,12 @@ import OlKeyboardZoom from 'ol/interaction/KeyboardZoom';
 import OlMouseWheelZoom from 'ol/interaction/MouseWheelZoom';
 import OlPinchRotate from 'ol/interaction/PinchRotate';
 import OlPinchZoom from 'ol/interaction/PinchZoom';
-
 import OlLayerBase from 'ol/layer/Base';
 import OlLayerGroup from 'ol/layer/Group';
 import OlImageLayer from 'ol/layer/Image';
 import OlTileLayer from 'ol/layer/Tile';
 import OlLayerVector from 'ol/layer/Vector';
 import OlVectorTileLayer from 'ol/layer/VectorTile';
-
 import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
 import {
   fromLonLat,
@@ -38,16 +36,25 @@ import {
   get as getProjObject
 } from 'ol/proj';
 import { Units } from 'ol/proj/Units';
-import OlImageWMS, { Options as OlImageWMSOptions } from 'ol/source/ImageWMS';
+import { CrossOriginAttribute as OlCrossOriginAttribute } from 'ol/source/DataTile';
+import OlSourceImage from 'ol/source/Image';
+import OlSourceImageTile from 'ol/source/ImageTile';
 import OlTileWMS, { Options as OlTileWMSOptions } from 'ol/source/TileWMS';
 import OlSourceVector from 'ol/source/Vector';
 import OlSourceVectorTile from 'ol/source/VectorTile';
+import {
+  createLoader as createWmsLoader,
+  LoaderOptions as WmsLoaderOptions
+} from 'ol/source/wms';
 import OlSourceWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
-import OlSourceXYZ, { Options as OlSourceXYZOptions } from 'ol/source/XYZ';
 import OlTile from 'ol/Tile';
+import { createXYZ } from 'ol/tilegrid';
 import OlTileGrid from 'ol/tilegrid/TileGrid';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlTileState from 'ol/TileState';
+import {
+  renderXYZTemplate
+} from 'ol/uri';
 import OlView, { ViewOptions as OlViewOptions } from 'ol/View';
 
 import { apply as applyMapboxStyle } from 'ol-mapbox-style';
@@ -284,7 +291,7 @@ class SHOGunApplicationUtil<
 
   async parseLayer(layer: S, projection?: OlProjectionLike) {
     if (layer.type === 'WMS') {
-      return this.parseImageLayer(layer);
+      return this.parseImageLayer(layer, projection);
     }
 
     if (layer.type === 'TILEWMS') {
@@ -308,7 +315,7 @@ class SHOGunApplicationUtil<
     }
 
     if (layer.type === 'XYZ') {
-      return this.parseXYZLayer(layer, projection);
+      return this.parseXYZLayer(layer);
     }
 
     if (layer.type === 'MVT') {
@@ -321,10 +328,9 @@ class SHOGunApplicationUtil<
 
     Logger.error(`Unsupported layer type ${layer.type} given. Currently only WMS, TILEWMS, WMTS, ` +
              'WFS, WMSTIME, XYZ and MAPBOXSTYLE are supported.');
-
   }
 
-  parseImageLayer(layer: S) {
+  parseImageLayer(layer: S, projection: OlProjectionLike = 'EPSG:3857') {
     const {
       attribution,
       url,
@@ -342,9 +348,9 @@ class SHOGunApplicationUtil<
       opacity
     } = layer.clientConfig || {};
 
-    const sourceConfig: OlImageWMSOptions = {
+    const loaderOptions: WmsLoaderOptions = {
       url,
-      attributions: attribution,
+      projection: projection,
       params: {
         LAYERS: layerNames,
         ...requestParams
@@ -353,10 +359,17 @@ class SHOGunApplicationUtil<
     };
 
     if (useBearerToken) {
-      sourceConfig.imageLoadFunction = (imageTile: OlImage, src: string) =>
-        this.bearerTokenLoadFunction(imageTile, src, true);
+      loaderOptions.load = (imageElement, src) => {
+        return this.imageLoadFunction(imageElement, src, true);
+      };
     }
-    const source = new OlImageWMS(sourceConfig);
+
+    const loader = createWmsLoader(loaderOptions);
+
+    const source = new OlSourceImage({
+      attributions: attribution,
+      loader: loader
+    });
 
     const imageLayer = new OlImageLayer({
       source,
@@ -393,6 +406,15 @@ class SHOGunApplicationUtil<
 
     let tileGrid;
     if (tileSize && resolutions && tileOrigin) {
+      if (typeof projection === 'string') {
+        const olProjection = getProjObject(projection);
+
+        const customTileGrid = createXYZ({
+          extent: olProjection?.getExtent(),
+          tileSize
+        });
+      }
+
       tileGrid = new OlTileGrid({
         resolutions,
         tileSize: [tileSize, tileSize],
@@ -414,7 +436,7 @@ class SHOGunApplicationUtil<
 
     if (useBearerToken) {
       sourceConfig.tileLoadFunction = (imageTile: OlTile, src: string) =>
-        this.bearerTokenLoadFunction(imageTile, src, true);
+        this.tileImageLoadFunction(imageTile, src, true);
     }
 
     const source = new OlTileWMS(sourceConfig);
@@ -723,7 +745,7 @@ class SHOGunApplicationUtil<
     return timeLayer;
   }
 
-  parseXYZLayer(layer: S, projection: OlProjectionLike = 'EPSG:3857') {
+  parseXYZLayer(layer: S) {
     const {
       attribution,
       tileSize = 256,
@@ -738,20 +760,19 @@ class SHOGunApplicationUtil<
       opacity
     } = layer.clientConfig || {};
 
-    const sourceConfig: OlSourceXYZOptions = {
+    // TODO Apply loader function only if useBearerToken is true?
+
+    const source = new OlSourceImageTile({
       attributions: attribution,
-      crossOrigin,
-      projection,
       tileSize,
-      url
-    };
-
-    if (useBearerToken) {
-      sourceConfig.tileLoadFunction = (imageTile: OlTile, src: string) =>
-        this.bearerTokenLoadFunction(imageTile, src, true);
-    }
-
-    const source = new OlSourceXYZ(sourceConfig);
+      crossOrigin: crossOrigin as OlCrossOriginAttribute,
+      // TODO This should be configurable -> it is not the projection of the
+      // application, but the projection of the layer (the tiles)
+      // projection: projection,
+      loader: async (z, x, y, opts) => {
+        return this.xyzLoaderFunction(url, z, x, y, opts.maxY, opts.crossOrigin, useBearerToken);
+      }
+    });
 
     const xyzLayer = new OlTileLayer({
       source,
@@ -777,9 +798,10 @@ class SHOGunApplicationUtil<
       projection
     });
 
+    // TODO This seems not be tested yet
     if (!_isNil(useBearerToken)) {
       source.setTileLoadFunction((imageTile: OlTile, src: string) =>
-        this.bearerTokenLoadFunction(imageTile, src, true));
+        this.tileImageLoadFunction(imageTile, src, true));
     }
 
     const mvtLayer = new OlVectorTileLayer({
@@ -787,6 +809,7 @@ class SHOGunApplicationUtil<
     });
 
     this.setLayerProperties(mvtLayer, layer);
+
     return mvtLayer;
   }
 
@@ -913,36 +936,95 @@ class SHOGunApplicationUtil<
     }
   }
 
-  private async bearerTokenLoadFunction(imageTile: OlTile | OlImage, src: string, useBearerToken = false) {
+  private async tileImageLoadFunction(imageTile: OlTile, src: string, useBearerToken = false) {
     try {
-      const response = await fetch(src, {
-        headers: useBearerToken ? {
-          ...getBearerTokenHeader(this.client?.getKeycloak())
-        } : {}
-      });
-
-      const imageElement = (imageTile as OlImageTile).getImage() as HTMLImageElement;
-
-      if (!response.ok) {
-        throw new Error(`No successful response: ${response.status}`);
+      // TODO Check for mvt layers
+      if (!(imageTile instanceof OlImageTile)) {
+        throw new Error('ImageTile expected');
       }
 
-      const blob = await response.blob();
+      // if (imageTile instanceof OlVectorTile) {
+      //   imageTile.getI
+      // }
 
-      if (!/image\/*/.test(blob.type)) {
-        throw new Error(`Unexpected format ${blob.type} returned`);
+      const imageElement = imageTile.getImage();
+
+      if (!(imageElement instanceof HTMLImageElement)) {
+        throw new Error('HTMLImageElement expected');
       }
 
-      imageElement.src = URL.createObjectURL(blob);
+      const blob = await this.getImgBlob(src, useBearerToken);
+
+      const objectUrl = URL.createObjectURL(blob);
+      imageElement.src = objectUrl;
 
       imageElement.onload = () => {
-        URL.revokeObjectURL(src);
+        URL.revokeObjectURL(objectUrl);
       };
     } catch (error) {
       Logger.error('Error while loading an image tile: ', error);
-      (imageTile as OlImageTile).setState(OlTileState.ERROR);
+
+      imageTile.setState(OlTileState.ERROR);
     }
   }
+
+  private async imageLoadFunction(imageElement: HTMLImageElement, src: string, useBearerToken = false) {
+    try {
+      const blob = await this.getImgBlob(src, useBearerToken);
+
+      const objectUrl = URL.createObjectURL(blob);
+      imageElement.src = objectUrl;
+
+      imageElement.onload = () => {
+        URL.revokeObjectURL(objectUrl);
+      };
+
+      await imageElement.decode();
+
+      return imageElement;
+    } catch (error) {
+      if (imageElement.complete && imageElement.width) {
+        return imageElement;
+      }
+
+      throw new Error('Error while loading image: ' + error);
+    }
+  }
+
+  private async xyzLoaderFunction(url: string, z: number, x: number, y: number,
+    maxY?: number, crossOrigin?: string, useBearerToken = false) {
+    try {
+      const imageElement = new Image();
+
+      imageElement.crossOrigin = crossOrigin ?? null;
+
+      const src = renderXYZTemplate(url, z, x, y, maxY);
+
+      return await this.imageLoadFunction(imageElement, src, useBearerToken);
+    } catch (error) {
+      throw new Error('Error while loading XYZ image tile: ' + error);
+    }
+  }
+
+  private async getImgBlob(src: string, useBearerToken = false) {
+    const response = await fetch(src, {
+      headers: useBearerToken ? {
+        ...getBearerTokenHeader(this.client?.getKeycloak())
+      } : {}
+    });
+
+    if (!response.ok) {
+      throw new Error(`No successful response: ${response.status}`);
+    }
+
+    const blob = await response.blob();
+
+    if (!/image\/*/.test(blob.type)) {
+      throw new Error(`Unexpected format ${blob.type} returned`);
+    }
+
+    return blob;
+  };
 }
 
 export default SHOGunApplicationUtil;
