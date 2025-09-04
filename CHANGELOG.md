@@ -1,3 +1,10 @@
+# [10.8.0](https://github.com/terrestris/shogun-util/compare/v10.7.0...v10.8.0) (2025-09-04)
+
+
+### Features
+
+* add theme entry toolMenuWidth ([3590c21](https://github.com/terrestris/shogun-util/commit/3590c216f9a7259bbafcab8c510d5538ff398765))
+
 # [10.7.0](https://github.com/terrestris/shogun-util/compare/v10.6.0...v10.7.0) (2025-06-02)
 
 
