@@ -28,6 +28,7 @@ export interface DefaultApplicationTheme {
   complementaryColor?: string;
   logoPath?: string;
   faviconPath?: string;
+  toolMenuWidth?: number;
 }
 
 export interface DefaultApplicationToolConfig {
