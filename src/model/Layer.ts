@@ -72,6 +72,7 @@ export interface DefaultLayerClientConfig {
   propertyConfig?: DefaultLayerPropertyConfig[];
   searchConfig?: SearchConfig;
   searchable?: boolean;
+  styleUrl?: string;
 }
 
 export interface LayerArgs<
