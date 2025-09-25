@@ -1,5 +1,6 @@
 import BaseEntity from '../../model/BaseEntity';
 import { Page } from '../../model/Page';
+import { RevisionEntry, RevisionResponse } from '../../model/Revision';
 import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
 import { GenericServiceOpts, PageOpts } from '../GenericService';
@@ -67,7 +68,7 @@ export abstract class GenericEntityService<T extends BaseEntity> extends Permiss
     }
   }
 
-  async findAllRevisions(id: string | number, fetchOpts?: RequestInit): Promise<T[]> {
+  async findAllRevisions(id: string | number, fetchOpts?: RequestInit): Promise<RevisionEntry<T>[]> {
     try {
       const response = await fetch(`${this.basePath}/${id}/rev`, {
         method: 'GET',
@@ -77,9 +78,9 @@ export abstract class GenericEntityService<T extends BaseEntity> extends Permiss
         ...fetchOpts
       });
 
-      const revisions: T[] = await response.json();
+      const json: RevisionResponse<T> = await response.json();
 
-      return revisions;
+      return json.content;
     } catch (error) {
       throw new Error(`Error while requesting revisions: ${error}`);
     }
@@ -114,16 +115,6 @@ export abstract class GenericEntityService<T extends BaseEntity> extends Permiss
         },
         ...fetchOpts
       });
-
-      // const {
-      //   entityAtRevision
-      // } = await this.client.graphql().sendQuery<T>({
-      //   query: entityByRevision,
-      //   variables: {
-      //     id: id,
-      //     revision: revision
-      //   }
-      // });
 
       const json: T = await response.json();
 
