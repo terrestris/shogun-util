@@ -1,3 +1,10 @@
+## [10.8.1](https://github.com/terrestris/shogun-util/compare/v10.8.0...v10.8.1) (2025-09-29)
+
+
+### Bug Fixes
+
+* add prop styleUrl ([fe32909](https://github.com/terrestris/shogun-util/commit/fe32909200edd348c26e92433b33a86dffefb2ea))
+
 # [10.8.0](https://github.com/terrestris/shogun-util/compare/v10.7.0...v10.8.0) (2025-09-04)
 
 
