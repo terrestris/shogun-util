@@ -1,5 +1,6 @@
 import BaseEntity from '../../model/BaseEntity';
 import { Page } from '../../model/Page';
+import { RevisionEntry, RevisionResponse } from '../../model/Revision';
 import { getBearerTokenHeader } from '../../security/getBearerTokenHeader';
 import { getCsrfTokenHeader } from '../../security/getCsrfTokenHeader';
 import { GenericServiceOpts, PageOpts } from '../GenericService';
@@ -67,6 +68,24 @@ export abstract class GenericEntityService<T extends BaseEntity> extends Permiss
     }
   }
 
+  async findAllRevisions(id: string | number, fetchOpts?: RequestInit): Promise<RevisionEntry<T>[]> {
+    try {
+      const response = await fetch(`${this.basePath}/${id}/rev`, {
+        method: 'GET',
+        headers: {
+          ...getBearerTokenHeader(this.keycloak)
+        },
+        ...fetchOpts
+      });
+
+      const json: RevisionResponse<T> = await response.json();
+
+      return json.content;
+    } catch (error) {
+      throw new Error(`Error while requesting revisions: ${error}`);
+    }
+  }
+
   async findOne(id: string | number, fetchOpts?: RequestInit): Promise<T> {
     try {
       const response = await fetch(`${this.basePath}/${id}`, {
@@ -84,6 +103,24 @@ export abstract class GenericEntityService<T extends BaseEntity> extends Permiss
       return await response.json();
     } catch (error) {
       throw new Error(`Error while requesting a single entity: ${error}`);
+    }
+  }
+
+  async findRevision(id: string | number, revision: number, fetchOpts?: RequestInit): Promise<T> {
+    try {
+      const response = await fetch(`${this.basePath}/${id}/rev/${revision}`, {
+        method: 'GET',
+        headers: {
+          ...getBearerTokenHeader(this.keycloak)
+        },
+        ...fetchOpts
+      });
+
+      const json: T = await response.json();
+
+      return json;
+    } catch (error) {
+      throw new Error(`Error while requesting a single entity revision: ${error}`);
     }
   }
 
