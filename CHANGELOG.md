@@ -1,3 +1,16 @@
+# [10.9.0](https://github.com/terrestris/shogun-util/compare/v10.8.1...v10.9.0) (2025-10-20)
+
+
+### Bug Fixes
+
+* cleanup and add types ([5a194ca](https://github.com/terrestris/shogun-util/commit/5a194ca759cd7b3883c8d44aac72916a24a9fdd6))
+* remove client from generic service ([570dca3](https://github.com/terrestris/shogun-util/commit/570dca303e2a55ac9f368116fa631a827318667e))
+
+
+### Features
+
+* add methods for revisions ([fad1b98](https://github.com/terrestris/shogun-util/commit/fad1b98510ee529d2a90b3486293b3aaea89216c))
+
 ## [10.8.1](https://github.com/terrestris/shogun-util/compare/v10.8.0...v10.8.1) (2025-09-29)
 
 
