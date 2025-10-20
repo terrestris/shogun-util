@@ -78,6 +78,7 @@ export interface DefaultApplicationClientConfig<
   theme?: ApplicationTheme;
   defaultLanguage?: string;
   printApp?: string;
+  newsTextIds?: number[];
 }
 
 export interface ApplicationArgs<
