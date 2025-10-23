@@ -1,17 +1,15 @@
 import BaseEntity, { BaseEntityArgs } from './BaseEntity';
 
-import CategoryType from './enum/CategoryType';
-
 export interface TextualContentsArgs extends BaseEntityArgs {
   title?: string;
   markdown?: string;
-  category?: CategoryType;
+  category?: string;
 }
 
 export default class TextualContent extends BaseEntity {
   title?: string;
   markdown?: string;
-  category?: CategoryType;
+  category?: string;
 
   constructor({
     id,
