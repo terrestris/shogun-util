@@ -6,6 +6,7 @@ import Group, { ProviderGroupDetails } from '../model/Group';
 import ImageFile from '../model/ImageFile';
 import Layer from '../model/Layer';
 import Role, { ProviderRoleDetails } from '../model/Role';
+import TextualContent from '../model/TextualContent';
 import User, { ProviderUserDetails } from '../model/User';
 
 import AppInfoService from './AppInfoService';
@@ -19,6 +20,7 @@ import ImageFileService from './ImageFileService';
 import LayerService from './LayerService';
 import OpenAPIService from './OpenAPIService';
 import RoleService from './RoleService';
+import TextualContentService from './TextualContentService';
 import UserService from './UserService';
 
 export interface SHOGunAPIClientOpts {
@@ -50,6 +52,7 @@ export class SHOGunAPIClient {
   private authService?: AuthService;
   private graphqlService?: GraphQLService;
   private openapiService?: OpenAPIService;
+  private textualContentService?: TextualContentService<any>;
 
   constructor(opts: SHOGunAPIClientOpts = {
     url: '/'
@@ -155,6 +158,17 @@ export class SHOGunAPIClient {
     }
 
     return this.imageFileService;
+  }
+
+  textualContent<T extends TextualContent>(): TextualContentService<T> {
+    if (!this.textualContentService) {
+      this.textualContentService = new TextualContentService<T>({
+        basePath: `${this.basePath}textualcontents`,
+        keycloak: this.keycloak
+      });
+    }
+
+    return this.textualContentService;
   }
 
   auth(): AuthService {

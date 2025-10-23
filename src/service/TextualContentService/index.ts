@@ -4,7 +4,7 @@ import {
 } from '../GenericEntityService';
 
 
-class TextualContentService extends GenericEntityService<TextualContent> {
+class TextualContentService<T extends TextualContent> extends GenericEntityService<T> {
   constructor(opts: GenericEntityServiceOpts = {
     basePath: '/textualcontents'
   }) {

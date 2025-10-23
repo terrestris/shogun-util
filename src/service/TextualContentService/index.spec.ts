@@ -1,11 +1,12 @@
+import TextualContent from '../../model/TextualContent';
 import GenericEntityService from '../GenericEntityService';
 import TextualContentService from '.';
 
 describe('TextualContentService', () => {
-  let service: TextualContentService;
+  let service: TextualContentService<TextualContent>;
 
   beforeEach(() => {
-    service = new TextualContentService();
+    service = new TextualContentService<TextualContent>();
   });
 
   it('is defined', () => {
