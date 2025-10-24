@@ -1,3 +1,16 @@
+# [10.10.0](https://github.com/terrestris/shogun-util/compare/v10.9.0...v10.10.0) (2025-10-24)
+
+
+### Bug Fixes
+
+* remove enum ([e255954](https://github.com/terrestris/shogun-util/commit/e2559546f025796bafbefd0bf1aa662b7125db8e))
+* textualContentService ([5cd4568](https://github.com/terrestris/shogun-util/commit/5cd4568007f2840f78b3504b5a8b32d28e95509f))
+
+
+### Features
+
+* add textual contents ([042b50c](https://github.com/terrestris/shogun-util/commit/042b50c15cfbd4b1a606429dbc24c12882d7beeb))
+
 # [10.9.0](https://github.com/terrestris/shogun-util/compare/v10.8.1...v10.9.0) (2025-10-20)
 
 
