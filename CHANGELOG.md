@@ -1,3 +1,10 @@
+# [10.11.0](https://github.com/terrestris/shogun-util/compare/v10.10.0...v10.11.0) (2025-10-27)
+
+
+### Features
+
+* introduce getLocalizedString ([7e513de](https://github.com/terrestris/shogun-util/commit/7e513de2b27f0d5e1ecb13af3bf9786d3bda8b9d))
+
 # [10.10.0](https://github.com/terrestris/shogun-util/compare/v10.9.0...v10.10.0) (2025-10-24)
 
 
