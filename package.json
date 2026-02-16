@@ -71,7 +71,7 @@
     "ol": "^10.7.0",
     "ol-mapbox-style": "^12.4.1",
     "openapi-types": "^12.1.3",
-    "rimraf": "^6.1.2",
+    "rimraf": "^6.1.3",
     "semantic-release": "^25.0.3",
     "typedoc": "^0.28.16",
     "typescript": "^5.9.3",
