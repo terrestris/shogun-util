@@ -1,3 +1,11 @@
+## [10.11.1](https://github.com/terrestris/shogun-util/compare/v10.11.0...v10.11.1) (2026-03-09)
+
+
+### Bug Fixes
+
+* remove NPM_TOKEN to enable trusted publishing ([8bdf294](https://github.com/terrestris/shogun-util/commit/8bdf29466c3843cadd3e846123e2cba16e011005))
+* set required permissions ([703183f](https://github.com/terrestris/shogun-util/commit/703183f3c098355f191d7f8c23eae7b6142bf1d5))
+
 # [10.11.0](https://github.com/terrestris/shogun-util/compare/v10.10.0...v10.11.0) (2025-10-27)
 
 
