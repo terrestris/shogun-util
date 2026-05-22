@@ -1,3 +1,15 @@
+# [10.12.0](https://github.com/terrestris/shogun-util/compare/v10.11.1...v10.12.0) (2026-05-22)
+
+
+### Bug Fixes
+
+* avoid unnecessary request for empty page ([fbb21b1](https://github.com/terrestris/shogun-util/commit/fbb21b196bbce705baa3b14fd370842bcba0fcde))
+
+
+### Features
+
+* make page size for findAllNoPaging configurable ([ad2884c](https://github.com/terrestris/shogun-util/commit/ad2884c4f80b077896ea351027aad5239fac56e6))
+
 ## [10.11.1](https://github.com/terrestris/shogun-util/compare/v10.11.0...v10.11.1) (2026-03-09)
 
 
