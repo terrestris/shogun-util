@@ -14,10 +14,10 @@ export abstract class GenericEntityService<T extends BaseEntity> extends Permiss
     super(opts);
   }
 
-  async findAllNoPaging(fetchOpts?: RequestInit): Promise<T[]> {
+  async findAllNoPaging(fetchOpts?: RequestInit, pageSize = 10): Promise<T[]> {
     const pageOpts: PageOpts = {
       page: 0,
-      size: 10
+      size: pageSize
     };
     let list: T[] = [];
     try {
@@ -36,7 +36,7 @@ export abstract class GenericEntityService<T extends BaseEntity> extends Permiss
 
         const result = await response.json() as Page<T>;
         list = list.concat(result.content);
-        if ((pageOpts.page as number) < result.totalPages) {
+        if ((pageOpts.page as number + 1) < result.totalPages) {
           (pageOpts.page as number) += 1;
         } else {
           break;
