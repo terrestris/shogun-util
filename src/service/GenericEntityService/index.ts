@@ -36,7 +36,7 @@ export abstract class GenericEntityService<T extends BaseEntity> extends Permiss
 
         const result = await response.json() as Page<T>;
         list = list.concat(result.content);
-        if ((pageOpts.page as number) < result.totalPages) {
+        if ((pageOpts.page as number + 1) < result.totalPages) {
           (pageOpts.page as number) += 1;
         } else {
           break;
