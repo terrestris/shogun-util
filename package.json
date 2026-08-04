@@ -44,7 +44,7 @@
     "@babel/core": "^7.29.7",
     "@babel/preset-env": "^7.29.7",
     "@babel/preset-typescript": "^7.29.7",
-    "@eslint/eslintrc": "^3.3.5",
+    "@eslint/eslintrc": "^3.3.6",
     "@eslint/js": "^9.39.2",
     "@commitlint/cli": "^21.2.1",
     "@commitlint/config-conventional": "^21.0.2",
