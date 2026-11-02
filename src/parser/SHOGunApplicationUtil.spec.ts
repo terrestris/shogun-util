@@ -6,6 +6,8 @@ import { bbox as olStrategyBbox } from 'ol/loadingstrategy';
 import OlSourceImageWMS from 'ol/source/ImageWMS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlSourceVector from 'ol/source/Vector';
+import OlSourceWMTS from 'ol/source/WMTS';
+import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceXYZ from 'ol/source/XYZ';
 import OlTileGrid from 'ol/tilegrid/TileGrid';
 import OlCollection from 'ol/Collection';
@@ -419,6 +421,161 @@ describe('SHOGunApplicationUtil', () => {
       expect(layer.get('shogunId')).toBe(myLayer.id);
       expect(layer.get('name')).toBe(myLayer.name);
       expect(layer.get('type')).toBe(myLayer.type);
+    });
+  });
+
+  describe('parseWMTSLayer', () => {
+    const originalFetch = global.fetch;
+
+    // This tile grid is based on the DE_EPSG_3857_ADV matrix set from the Basemap.de WMTS service.
+    const tileGrid = {
+      origins: Array(14).fill([-20037508.3427892, 20037508.3427892]),
+      resolutions: [
+        4891.979594210469,
+        2445.9897971052346,
+        1222.9948985526173,
+        611.4974492763087,
+        305.74872463815433,
+        152.87436231907765,
+        76.43718115953862,
+        38.21859057976927,
+        19.10929528988468,
+        9.554647644942323,
+        4.777323822471167,
+        2.3886619112355834,
+        1.1943309556177917,
+        0.5971654778088948
+      ],
+      matrixIds: ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13'],
+      matrixSizes: [
+        [32, 32], [64, 64], [128, 128], [256, 256], [512, 512], [1024, 1024], [2048, 2048],
+        [4096, 4096], [8192, 8192], [16384, 16384], [32768, 32768], [65536, 65536],
+        [131072, 131072], [262144, 262144]
+      ],
+      tileSizes: Array(14).fill([256, 256])
+    };
+
+    const createWMTSLayer = (sourceConfigOverrides: Record<string, unknown> = {}): Layer => ({
+      id: 42,
+      name: 'WMTS Layer',
+      type: 'WMTS',
+      clientConfig: {
+        crossOrigin: 'anonymous',
+        opacity: 0.5
+      },
+      sourceConfig: {
+        useBearerToken: false,
+        format: 'image/png',
+        matrixSet: 'DE_EPSG_3857_ADV',
+        projection: 'EPSG:3857',
+        requestEncoding: 'REST',
+        tileGrid,
+        urls: [
+          'https://sgx.geodatenzentrum.de/wmts_basemapde/wmts/1.0.0/wmts/tile/1.0.0/de_basemapde_web_raster_farbe/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png'
+        ],
+        wmtsLayerName: 'de_basemapde_web_raster_farbe',
+        wmtsStyle: 'default',
+        ...sourceConfigOverrides
+      }
+    } as unknown as Layer);
+
+    beforeEach(() => {
+      global.fetch = jest.fn().mockRejectedValue(new Error('network disabled in tests'));
+    });
+
+    afterEach(() => {
+      global.fetch = originalFetch;
+    });
+
+    it('creates the layer from the config without fetching capabilities', async () => {
+      const layer = await util.parseWMTSLayer(createWMTSLayer(), 'EPSG:3857', false);
+
+      expect(global.fetch).not.toHaveBeenCalled();
+      expect(layer).toBeDefined();
+
+      const source = layer!.getSource() as OlSourceWMTS;
+      expect(source).toBeInstanceOf(OlSourceWMTS);
+      expect(source.getLayer()).toBe('de_basemapde_web_raster_farbe');
+      expect(source.getMatrixSet()).toBe('DE_EPSG_3857_ADV');
+      expect(source.getStyle()).toBe('default');
+      expect(source.getFormat()).toBe('image/png');
+      expect(source.getRequestEncoding()).toBe('REST');
+      expect(source.getUrls()).toEqual([
+        'https://sgx.geodatenzentrum.de/wmts_basemapde/wmts/1.0.0/wmts/tile/1.0.0/de_basemapde_web_raster_farbe/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png'
+      ]);
+      expect(source.get('legendUrl')).toBe('');
+      expect(source.get('matrixSizes')).toEqual(tileGrid.matrixSizes);
+      expect(source.getTileGrid()?.getResolutions()).toEqual(tileGrid.resolutions);
+      expect((source.getTileGrid() as OlTileGridWMTS).getMatrixIds()).toEqual(tileGrid.matrixIds);
+      expect(layer!.getOpacity()).toBe(0.5);
+    });
+
+    it('passes the configured WMTS dimensions to the source', async () => {
+      const layer = await util.parseWMTSLayer(
+        createWMTSLayer({ wmtsDimensions: { time: '2026' } }),
+        'EPSG:3857',
+        false
+      );
+
+      expect((layer!.getSource() as OlSourceWMTS).getDimensions()).toEqual({ time: '2026' });
+    });
+
+    it('uses the configured tile sizes', async () => {
+      const layer = await util.parseWMTSLayer(
+        createWMTSLayer({ tileGrid: { ...tileGrid, tileSizes: Array(14).fill([512, 512]) } }),
+        'EPSG:3857',
+        false
+      );
+
+      const grid = (layer!.getSource() as OlSourceWMTS).getTileGrid();
+      expect(grid?.getTileSize(0)).toEqual([512, 512]);
+    });
+
+    it('defaults the tile size to 256 for every resolution when none is configured', async () => {
+      const { tileSizes, ...tileGridWithoutTileSizes } = tileGrid;
+      const layer = await util.parseWMTSLayer(
+        createWMTSLayer({ tileGrid: tileGridWithoutTileSizes }),
+        'EPSG:3857',
+        false
+      );
+
+      const grid = (layer!.getSource() as OlSourceWMTS).getTileGrid();
+      expect(grid?.getTileSize(0)).toEqual([256, 256]);
+      expect(grid?.getTileSize(13)).toEqual([256, 256]);
+    });
+
+    it('uses the projection from the config over the given one', async () => {
+      const layer = await util.parseWMTSLayer(createWMTSLayer(), 'EPSG:4326', false);
+
+      expect((layer!.getSource() as OlSourceWMTS).getProjection()?.getCode()).toBe('EPSG:3857');
+    });
+
+    it('falls back to the given projection when the config has none', async () => {
+      const layer = await util.parseWMTSLayer(
+        createWMTSLayer({ projection: undefined }),
+        'EPSG:4326',
+        false
+      );
+
+      expect((layer!.getSource() as OlSourceWMTS).getProjection()?.getCode()).toBe('EPSG:4326');
+    });
+
+    it.each([
+      ['tileGrid is missing', { tileGrid: undefined }, 'incomplete tileGrid configuration'],
+      ['matrixIds are missing', { tileGrid: { ...tileGrid, matrixIds: undefined } }, 'incomplete tileGrid configuration'],
+      ['urls are missing', { urls: [] }, 'incomplete source configuration'],
+      ['wmtsStyle is missing', { wmtsStyle: undefined }, 'incomplete source configuration']
+    ])('throws a descriptive error when %s', async (_, overrides, expectedMessage) => {
+      await expect(
+        util.parseWMTSLayer(createWMTSLayer(overrides), 'EPSG:3857', false)
+      ).rejects.toThrow(expectedMessage);
+    });
+
+    it('fetches the capabilities by default', async () => {
+      const layer = await util.parseWMTSLayer(createWMTSLayer());
+
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(layer).toBeUndefined();
     });
   });
 

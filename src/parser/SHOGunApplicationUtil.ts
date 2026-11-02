@@ -60,7 +60,7 @@ import { defaultProj4CrsDefinitions, ProjectionUtil } from '@terrestris/ol-util/
 
 import { allLayersByIds } from '../graphqlqueries/Layers';
 import Application, { DefaultLayerTree, MapInteraction } from '../model/Application';
-import Layer from '../model/Layer';
+import Layer, { DefaultLayerSourceConfigWMTS } from '../model/Layer';
 import { getBearerTokenHeader } from '../security/getBearerTokenHeader';
 import SHOGunAPIClient from '../service/SHOGunAPIClient';
 
@@ -282,7 +282,7 @@ class SHOGunApplicationUtil<
     return folder;
   }
 
-  async parseLayer(layer: S, projection?: OlProjectionLike) {
+  async parseLayer(layer: S, projection?: OlProjectionLike, parseFromCapabilities = true) {
     if (layer.type === 'WMS') {
       return this.parseImageLayer(layer);
     }
@@ -292,7 +292,7 @@ class SHOGunApplicationUtil<
     }
 
     if (layer.type === 'WMTS') {
-      return await this.parseWMTSLayer(layer, projection);
+      return await this.parseWMTSLayer(layer, projection, parseFromCapabilities);
     }
 
     if (layer.type === 'WFS') {
@@ -431,7 +431,7 @@ class SHOGunApplicationUtil<
     return tileLayer;
   }
 
-  async parseWMTSLayer(layer: S, projection: OlProjectionLike = 'EPSG:3857') {
+  async parseWMTSLayer(layer: S, projection: OlProjectionLike = 'EPSG:3857', parseFromCapabilities = true) {
     const {
       attribution,
       url,
@@ -447,111 +447,153 @@ class SHOGunApplicationUtil<
       opacity
     } = layer.clientConfig || {};
 
-    const wmtsCapabilitiesParser = new OlWMTSCapabilities();
+    let wmtsSource: OlSourceWMTS | undefined;
 
-    const capabilitiesUrl = UrlUtil.createValidGetCapabilitiesRequest(url, 'WMTS');
+    if (parseFromCapabilities) {
+      const wmtsCapabilitiesParser = new OlWMTSCapabilities();
 
-    let capabilities;
-    try {
-      const capabilitiesResponse = await fetch(capabilitiesUrl);
-      const capabilitiesResponseText = await capabilitiesResponse.text();
+      const capabilitiesUrl = UrlUtil.createValidGetCapabilitiesRequest(url, 'WMTS');
 
-      capabilities = wmtsCapabilitiesParser.read(capabilitiesResponseText);
-    } catch (error) {
-      Logger.error(
-        `WMTS layer '${layerNames}' could not be created, error while ` +
+      let capabilities;
+      try {
+        const capabilitiesResponse = await fetch(capabilitiesUrl);
+        const capabilitiesResponseText = await capabilitiesResponse.text();
+
+        capabilities = wmtsCapabilitiesParser.read(capabilitiesResponseText);
+      } catch (error) {
+        Logger.error(
+          `WMTS layer '${layerNames}' could not be created, error while ` +
           `reading the WMTS GetCapabilities: ${error}`
-      );
-      return;
-    }
+        );
+        return;
+      }
 
-    let optionsConfig: any = {
-      layer: layerNames,
-      projection: projection
-    };
-
-    if (matrixSet) {
-      optionsConfig = {
-        matrixSet,
-        ...optionsConfig
+      let optionsConfig: any = {
+        layer: layerNames,
+        projection: projection
       };
-    }
 
-    const options = optionsFromCapabilities(capabilities, optionsConfig);
-
-    if (!options) {
-      throw new Error('Could not get the options from the capabilities');
-    }
-
-    const tileGrid = options.tileGrid;
-
-    if (!tileGrid || !(tileGrid instanceof OlTileGridWMTS)) {
-      throw new Error('Cannot build WMTS source without a valid tileGrid instance');
-    }
-
-    // update matrix sizes since these can differ from default set (Math.pow(2, x)),
-    // which is usually used with EPSG:3857 based tile grids
-    const resolutions: number[] = tileGrid.getResolutions();
-    const minZoom = tileGrid.getMinZoom();
-    const matrixSizes = new Array(length);
-    const origins = new Array(length);
-    const tileSizes = new Array(length);
-    for (let zoomLevel = minZoom; zoomLevel < resolutions?.length; ++zoomLevel) {
-      matrixSizes[zoomLevel] = tileGrid.getFullTileRange(zoomLevel)?.getSize();
-      origins[zoomLevel] = tileGrid.getOrigin(zoomLevel);
-      tileSizes[zoomLevel] = tileGrid.getTileSize(zoomLevel);
-    }
-
-    if (wmtsDimensions) {
-      for (const [key, value] of Object.entries(wmtsDimensions)) {
-        if (!options?.dimensions?.[key]) {
-          throw new Error(`Layer has wmtsDimension ${key} configured but the capabilities of the layer only offer ` +
-            `dimensions ${Object.keys(options?.dimensions).join(', ')}.`);
-        }
-        options.dimensions[key] = value;
+      if (matrixSet) {
+        optionsConfig = {
+          matrixSet,
+          ...optionsConfig
+        };
       }
-    }
 
-    const source = new OlSourceWMTS({
-      ...options,
-      ...{
-        tileGrid: new OlTileGridWMTS({
-          resolutions: tileGrid.getResolutions(),
-          matrixIds: tileGrid.getMatrixIds(),
-          extent: tileGrid.getExtent(),
-          sizes: matrixSizes,
-          origins,
-          tileSizes
-        }),
-        attributions: attribution,
-        crossOrigin
+      const options = optionsFromCapabilities(capabilities, optionsConfig);
+
+      if (!options) {
+        throw new Error('Could not get the options from the capabilities');
       }
-    });
 
-    source.set('matrixSizes', matrixSizes);
+      const tileGrid = options.tileGrid;
 
-    let legendUrl = '';
-    capabilities.Contents?.Layer?.forEach((l: any) => {
-      if (l.Identifier === layerNames) {
-        l.Style?.forEach((s: any) => {
-          if (s.LegendURL) {
-            legendUrl = s.LegendURL[0].href;
+      if (!tileGrid || !(tileGrid instanceof OlTileGridWMTS)) {
+        throw new Error('Cannot build WMTS source without a valid tileGrid instance');
+      }
+
+      // update matrix sizes since these can differ from default set (Math.pow(2, x)),
+      // which is usually used with EPSG:3857 based tile grids
+      const resolutions: number[] = tileGrid.getResolutions();
+      const minZoom = tileGrid.getMinZoom();
+      const matrixSizes = new Array(length);
+      const origins = new Array(length);
+      const tileSizes = new Array(length);
+      for (let zoomLevel = minZoom; zoomLevel < resolutions?.length; ++zoomLevel) {
+        matrixSizes[zoomLevel] = tileGrid.getFullTileRange(zoomLevel)?.getSize();
+        origins[zoomLevel] = tileGrid.getOrigin(zoomLevel);
+        tileSizes[zoomLevel] = tileGrid.getTileSize(zoomLevel);
+      }
+
+      if (wmtsDimensions) {
+        for (const [key, value] of Object.entries(wmtsDimensions)) {
+          if (!options?.dimensions?.[key]) {
+            throw new Error(`Layer has wmtsDimension ${key} configured but the capabilities of the layer only offer ` +
+              `dimensions ${Object.keys(options?.dimensions).join(', ')}.`);
           }
-        });
+          options.dimensions[key] = value;
+        }
       }
-    });
 
-    source.set('legendUrl', legendUrl);
+      wmtsSource = new OlSourceWMTS({
+        ...options,
+        ...{
+          tileGrid: new OlTileGridWMTS({
+            resolutions: tileGrid.getResolutions(),
+            matrixIds: tileGrid.getMatrixIds(),
+            extent: tileGrid.getExtent(),
+            sizes: matrixSizes,
+            origins,
+            tileSizes
+          }),
+          attributions: attribution,
+          crossOrigin
+        }
+      });
+
+      let legendUrl = '';
+      capabilities.Contents?.Layer?.forEach((l: any) => {
+        if (l.Identifier === layerNames) {
+          l.Style?.forEach((s: any) => {
+            if (s.LegendURL) {
+              legendUrl = s.LegendURL[0].href;
+            }
+          });
+        }
+      });
+
+      wmtsSource.set('matrixSizes', matrixSizes);
+      wmtsSource.set('legendUrl', legendUrl);
+    } else {
+      const wmtsCfg = layer.sourceConfig as unknown as DefaultLayerSourceConfigWMTS;
+      const tileGridCfg = wmtsCfg.tileGrid;
+
+      if (!tileGridCfg?.origins || !tileGridCfg.resolutions || !tileGridCfg.matrixIds || !tileGridCfg.matrixSizes) {
+        throw new Error(`WMTS layer '${layerNames}' has an incomplete tileGrid configuration.`);
+      }
+
+      if (!wmtsCfg.urls?.length || !wmtsCfg.matrixSet || !wmtsCfg.wmtsLayerName || !wmtsCfg.wmtsStyle) {
+        throw new Error(`WMTS layer '${layerNames}' has an incomplete source configuration.`);
+      }
+
+      const wmtsTileGrid = new OlTileGridWMTS({
+        origins: tileGridCfg.origins,
+        resolutions: tileGridCfg.resolutions,
+        matrixIds: tileGridCfg.matrixIds,
+        sizes: tileGridCfg.matrixSizes,
+        tileSizes: tileGridCfg.tileSizes ?? tileGridCfg.resolutions.map(() => [256, 256])
+      });
+
+      wmtsSource = new OlSourceWMTS({
+        attributions: attribution,
+        crossOrigin,
+        dimensions: wmtsDimensions,
+        format: wmtsCfg.format || 'image/png',
+        layer: wmtsCfg.wmtsLayerName,
+        matrixSet: wmtsCfg.matrixSet,
+        projection: wmtsCfg.projection ?? projection,
+        requestEncoding: wmtsCfg.requestEncoding,
+        style: wmtsCfg.wmtsStyle,
+        tileGrid: wmtsTileGrid,
+        urls: wmtsCfg.urls
+      });
+
+      wmtsSource.set('matrixSizes', tileGridCfg.matrixSizes);
+      wmtsSource.set('legendUrl', wmtsCfg.legendUrl ?? '');
+    }
+
+    if (!wmtsSource || !(wmtsSource instanceof OlSourceWMTS)) {
+      throw new Error('Cannot build WMTS source');
+    }
 
     const wmtsLayer = new OlTileLayer({
-      source,
+      source: wmtsSource,
       minResolution,
       maxResolution,
       opacity
     });
 
     this.setLayerProperties(wmtsLayer, layer);
-
     return wmtsLayer;
   }
 
