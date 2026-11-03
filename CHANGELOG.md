@@ -1,3 +1,10 @@
+## [10.13.1](https://github.com/terrestris/shogun-util/compare/v10.13.0...v10.13.1) (2026-11-03)
+
+
+### Bug Fixes
+
+* **deps:** bump undici ([#1405](https://github.com/terrestris/shogun-util/issues/1405)) ([7c5d269](https://github.com/terrestris/shogun-util/commit/7c5d269d2a8e17b33ca5a8cc02350bb4600bf3f4))
+
 # [10.13.0](https://github.com/terrestris/shogun-util/compare/v10.12.0...v10.13.0) (2026-11-03)
 
 
