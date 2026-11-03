@@ -565,17 +565,41 @@ describe('SHOGunApplicationUtil', () => {
       ['matrixIds are missing', { tileGrid: { ...tileGrid, matrixIds: undefined } }, 'incomplete tileGrid configuration'],
       ['urls are missing', { urls: [] }, 'incomplete source configuration'],
       ['wmtsStyle is missing', { wmtsStyle: undefined }, 'incomplete source configuration']
-    ])('throws a descriptive error when %s', async (_, overrides, expectedMessage) => {
-      await expect(
-        util.parseWMTSLayer(createWMTSLayer(overrides), 'EPSG:3857', false)
-      ).rejects.toThrow(expectedMessage);
+    ])('returns undefined and logs an error when %s', async (_, overrides, expectedMessage) => {
+      const loggerError = jest.spyOn(Logger, 'error').mockImplementation(() => {});
+
+      const layer = await util.parseWMTSLayer(createWMTSLayer(overrides), 'EPSG:3857', false);
+
+      expect(layer).toBeUndefined();
+      expect(loggerError).toHaveBeenCalledWith(expect.stringContaining(expectedMessage));
+
+      loggerError.mockRestore();
     });
 
-    it('fetches the capabilities by default', async () => {
+    it('fetches the capabilities by default and returns undefined if this fails', async () => {
+      const loggerError = jest.spyOn(Logger, 'error').mockImplementation(() => {});
+
       const layer = await util.parseWMTSLayer(createWMTSLayer());
 
       expect(global.fetch).toHaveBeenCalledTimes(1);
       expect(layer).toBeUndefined();
+      expect(loggerError).toHaveBeenCalledWith(expect.stringContaining('error while reading the WMTS GetCapabilities'));
+
+      loggerError.mockRestore();
+    });
+
+    it('returns undefined and logs an error if the capabilities do not contain the layer', async () => {
+      const loggerError = jest.spyOn(Logger, 'error').mockImplementation(() => {});
+      global.fetch = jest.fn().mockResolvedValue({
+        text: async () => '<Capabilities xmlns="http://www.opengis.net/wmts/1.0" version="1.0.0"><Contents/></Capabilities>'
+      });
+
+      const layer = await util.parseWMTSLayer(createWMTSLayer());
+
+      expect(layer).toBeUndefined();
+      expect(loggerError).toHaveBeenCalledWith('Could not get the options from the capabilities');
+
+      loggerError.mockRestore();
     });
   });
 

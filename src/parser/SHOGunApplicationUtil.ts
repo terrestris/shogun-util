@@ -483,13 +483,15 @@ class SHOGunApplicationUtil<
       const options = optionsFromCapabilities(capabilities, optionsConfig);
 
       if (!options) {
-        throw new Error('Could not get the options from the capabilities');
+        Logger.error('Could not get the options from the capabilities');
+        return;
       }
 
       const tileGrid = options.tileGrid;
 
       if (!tileGrid || !(tileGrid instanceof OlTileGridWMTS)) {
-        throw new Error('Cannot build WMTS source without a valid tileGrid instance');
+        Logger.error('Cannot build WMTS source without a valid tileGrid instance');
+        return;
       }
 
       // update matrix sizes since these can differ from default set (Math.pow(2, x)),
@@ -508,8 +510,9 @@ class SHOGunApplicationUtil<
       if (wmtsDimensions) {
         for (const [key, value] of Object.entries(wmtsDimensions)) {
           if (!options?.dimensions?.[key]) {
-            throw new Error(`Layer has wmtsDimension ${key} configured but the capabilities of the layer only offer ` +
-              `dimensions ${Object.keys(options?.dimensions).join(', ')}.`);
+            Logger.error(`WMTS layer '${layerNames}' has wmtsDimension ${key} configured but the capabilities ` +
+              `of the layer only offer dimensions ${Object.keys(options?.dimensions ?? {}).join(', ')}.`);
+            return;
           }
           options.dimensions[key] = value;
         }
@@ -549,11 +552,13 @@ class SHOGunApplicationUtil<
       const tileGridCfg = wmtsCfg.tileGrid;
 
       if (!tileGridCfg?.origins || !tileGridCfg.resolutions || !tileGridCfg.matrixIds || !tileGridCfg.matrixSizes) {
-        throw new Error(`WMTS layer '${layerNames}' has an incomplete tileGrid configuration.`);
+        Logger.error(`WMTS layer '${layerNames}' has an incomplete tileGrid configuration.`);
+        return;
       }
 
       if (!wmtsCfg.urls?.length || !wmtsCfg.matrixSet || !wmtsCfg.wmtsLayerName || !wmtsCfg.wmtsStyle) {
-        throw new Error(`WMTS layer '${layerNames}' has an incomplete source configuration.`);
+        Logger.error(`WMTS layer '${layerNames}' has an incomplete source configuration.`);
+        return;
       }
 
       const wmtsTileGrid = new OlTileGridWMTS({
@@ -583,7 +588,8 @@ class SHOGunApplicationUtil<
     }
 
     if (!wmtsSource || !(wmtsSource instanceof OlSourceWMTS)) {
-      throw new Error('Cannot build WMTS source');
+      Logger.error('Could not create a valid WMTS source');
+      return;
     }
 
     const wmtsLayer = new OlTileLayer({
