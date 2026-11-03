@@ -292,7 +292,31 @@ class SHOGunApplicationUtil<
     }
 
     if (layer.type === 'WMTS') {
-      return await this.parseWMTSLayer(layer, projection);
+      try {
+        return await this.parseWMTSLayer(layer, projection);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
+        const wmtsSource = new OlSourceWMTS({
+          layer: layer?.sourceConfig?.layerNames,
+          matrixSet: 'dummyMatrixSet',
+          style: 'dummyStyle',
+          tileGrid: new OlTileGridWMTS({
+            matrixIds: [],
+            resolutions: [],
+            origin: [0, 0]
+          })
+        });
+
+        const dummyLayer = new OlTileLayer({
+          source: wmtsSource
+        });
+
+        this.setLayerProperties(dummyLayer, layer);
+
+        Logger.warn('Returning dummy WMTS layer as capabilities could not be parsed.');
+
+        return dummyLayer;
+      }
     }
 
     if (layer.type === 'WFS') {
