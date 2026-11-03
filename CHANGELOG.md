@@ -1,3 +1,15 @@
+# [10.13.0](https://github.com/terrestris/shogun-util/compare/v10.12.0...v10.13.0) (2026-11-03)
+
+
+### Bug Fixes
+
+* return undefied rather than error ([b9d2666](https://github.com/terrestris/shogun-util/commit/b9d2666071c38087dc49e26a75286f3bd666a955))
+
+
+### Features
+
+* adds option to create WMTS layer without fetching capabilities ([4217fa8](https://github.com/terrestris/shogun-util/commit/4217fa8391dd5d4f5af12203ca14c749338eea69))
+
 # [10.12.0](https://github.com/terrestris/shogun-util/compare/v10.11.1...v10.12.0) (2026-05-22)
 
 
