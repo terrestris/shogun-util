@@ -1,5 +1,9 @@
 import { FeatureCollection } from 'geojson';
 
+import { Coordinate as OlCoordinate } from 'ol/coordinate';
+import { ProjectionLike as OlProjectionLike } from 'ol/proj';
+import { Size as OlSize } from 'ol/size';
+
 import BaseEntity, { BaseEntityArgs } from './BaseEntity';
 import EditFormComponentType from './enum/EditFormComponentType';
 import LayerType from './enum/LayerType';
@@ -18,6 +22,25 @@ export interface DefaultLayerSourceConfig {
   url: string;
   useBearerToken?: boolean;
   wmtsDimensions?: Record<string, string>;
+}
+
+export interface DefaultLayerSourceConfigWMTS
+  extends Omit<DefaultLayerSourceConfig, 'layerNames' | 'tileOrigin' | 'tileSize' | 'resolutions' | 'matrixSet'> {
+  format?: string;
+  matrixSet: string;
+  projection?: OlProjectionLike;
+  requestEncoding?: 'REST' | 'KVP';
+  tileGrid: {
+    origins: OlCoordinate[];
+    resolutions: number[];
+    matrixIds: string[];
+    tileSizes?: OlSize[];
+    matrixSizes: OlSize[];
+  };
+  urls: string[];
+  wmtsLayerName: string;
+  wmtsStyle: string;
+  wmsFeatureType?: string;
 }
 
 export interface DefaultLayerPropertyConfig {
