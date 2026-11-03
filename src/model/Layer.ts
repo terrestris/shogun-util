@@ -12,6 +12,7 @@ export type DefaultRequestParams = Record<string, string | number | boolean>;
 
 export interface DefaultLayerSourceConfig {
   attribution?: string;
+  crossOrigin?: string;
   layerNames: string;
   legendUrl?: string;
   matrixSet?: string;
