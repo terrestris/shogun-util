@@ -1,3 +1,10 @@
+## [10.13.2](https://github.com/terrestris/shogun-util/compare/v10.13.1...v10.13.2) (2026-11-17)
+
+
+### Bug Fixes
+
+* **deps-dev:** bump fast-xml-parser from 5.7.1 to 5.12.0 ([76ab72a](https://github.com/terrestris/shogun-util/commit/76ab72a8890866320d7c0099f5358f5c88a840ea))
+
 ## [10.13.1](https://github.com/terrestris/shogun-util/compare/v10.13.0...v10.13.1) (2026-11-03)
 
 
